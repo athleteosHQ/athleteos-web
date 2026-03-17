@@ -12,20 +12,45 @@ export function NavBar() {
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2.5">
-          <svg width="28" height="28" viewBox="0 0 56 56" fill="none" aria-hidden="true" style={{ filter: 'drop-shadow(0 0 6px rgba(255,122,47,0.28))' }}>
-            <circle cx="28" cy="28" r="17" stroke="#FF7A2F" strokeWidth="1.4" opacity="0.22"/>
-            <g>
-              <animateTransform attributeName="transform" type="rotate" from="0 28 28" to="360 28 28" dur="3.2s" repeatCount="indefinite"/>
-              <circle cx="28" cy="11" r="3.2" fill="#FF7A2F">
-                <animate attributeName="opacity" values="0.55;1;0.55" dur="2s" begin="0s" repeatCount="indefinite"/>
-              </circle>
-            </g>
-            <circle cx="28" cy="28" r="5" fill="#FF7A2F" opacity="0.7"/>
-          </svg>
-          <span className="font-bold tracking-tight text-foreground">
-            athlete<span className="text-accent">OS</span>
-          </span>
+        <a href="/" className="flex items-center gap-3 group">
+          {/* Icon mark */}
+          <div
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,122,47,0.25) 0%, rgba(255,122,47,0.08) 100%)',
+              border: '1px solid rgba(255,122,47,0.35)',
+              boxShadow: '0 0 16px rgba(255,122,47,0.20), inset 0 1px 0 rgba(255,255,255,0.08)',
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+              <circle cx="28" cy="28" r="17" stroke="#FF7A2F" strokeWidth="1.8" opacity="0.35"/>
+              <g>
+                <animateTransform attributeName="transform" type="rotate" from="0 28 28" to="360 28 28" dur="3.2s" repeatCount="indefinite"/>
+                <circle cx="28" cy="11" r="3.8" fill="#FF7A2F">
+                  <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+                </circle>
+              </g>
+              <circle cx="28" cy="28" r="5.5" fill="#FF7A2F"/>
+            </svg>
+            {/* Glow behind icon */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ background: 'rgba(255,122,47,0.12)' }}
+            />
+          </div>
+
+          {/* Wordmark */}
+          <div className="flex flex-col leading-none">
+            <span
+              className="text-lg font-bold tracking-tight"
+              style={{ fontFamily: 'var(--font-jakarta)', letterSpacing: '-0.02em' }}
+            >
+              <span className="text-foreground">athlete</span><span className="text-accent">OS</span>
+            </span>
+            <span className="font-mono-label text-muted-foreground" style={{ marginTop: 1 }}>
+              Performance Diagnostic
+            </span>
+          </div>
         </a>
 
         <div className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">

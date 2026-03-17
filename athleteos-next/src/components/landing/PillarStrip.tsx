@@ -1,9 +1,21 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { BarChart2, Flame, Zap } from 'lucide-react'
+import { BarChart2, Flame, Zap, TrendingDown } from 'lucide-react'
+import type { ReactNode } from 'react'
 
-const PILLARS = [
+interface Pillar {
+  icon: React.ElementType
+  label: string
+  title: string
+  sub: string
+  accent: boolean
+  stat: ReactNode
+  statLabel: string
+  statColor?: string
+}
+
+const PILLARS: Pillar[] = [
   {
     icon: BarChart2,
     label: 'Input Layer',
@@ -19,8 +31,14 @@ const PILLARS = [
     title: 'Nutrition',
     sub: 'IFCT-verified Indian food data',
     accent: false,
-    stat: '∅ 23%',
-    statLabel: 'MFP protein error',
+    stat: (
+      <span className="inline-flex items-center gap-1">
+        <TrendingDown size={16} className="text-destructive" />
+        <span>23%</span>
+      </span>
+    ),
+    statLabel: 'MFP protein undercount',
+    statColor: 'text-destructive',
   },
   {
     icon: Zap,
@@ -49,7 +67,7 @@ export function PillarStrip() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          {PILLARS.map(({ icon: Icon, label, title, sub, accent, stat, statLabel }, i) => (
+          {PILLARS.map(({ icon: Icon, label, title, sub, accent, stat, statLabel, statColor }, i) => (
             <div
               key={title}
               className={`relative p-6 text-center sm:p-8 card-lift ${i < 2 ? 'border-r' : ''}`}
@@ -65,7 +83,7 @@ export function PillarStrip() {
                 />
               )}
               <div
-                className={`relative mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-xl`}
+                className="relative mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-xl"
                 style={accent
                   ? { border: '1px solid rgba(255,122,47,0.35)', background: 'rgba(255,122,47,0.12)' }
                   : { border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.04)' }
@@ -79,7 +97,9 @@ export function PillarStrip() {
               <p className="mt-1.5 text-base font-bold text-foreground">{title}</p>
               <p className={`mt-1 text-xs ${accent ? 'text-accent-light/70' : 'text-muted-foreground'}`}>{sub}</p>
               <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                <p className={`font-mono text-lg font-bold ${accent ? 'text-accent' : 'text-foreground'}`}>{stat}</p>
+                <p className={`font-mono text-lg font-bold ${statColor ?? (accent ? 'text-accent' : 'text-foreground')}`}>
+                  {stat}
+                </p>
                 <p className="font-mono-label text-muted-foreground mt-0.5">{statLabel}</p>
               </div>
             </div>

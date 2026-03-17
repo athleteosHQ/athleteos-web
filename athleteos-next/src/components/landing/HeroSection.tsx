@@ -97,14 +97,6 @@ export function HeroSection() {
             ))}
           </motion.div>
 
-          <motion.div {...fadeUp(0.5)} className="mt-8 flex items-center gap-3">
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <span className="font-mono tabular-nums text-foreground font-semibold">₹199</span>
-              <span>trial ·</span>
-              <span className="font-mono tabular-nums text-accent font-semibold">₹4,999/yr</span>
-              <span className="font-mono-label text-accent border border-accent/25 bg-accent/8 px-2 py-0.5 rounded">founding</span>
-            </div>
-          </motion.div>
         </div>
 
         {/* Right: Diagnostic Card */}
