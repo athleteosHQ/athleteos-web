@@ -134,6 +134,13 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <!-- html2canvas: add integrity="sha512-…" + crossorigin="anonymous" before shipping to production -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const _sb = window.supabase.createClient(
+      'https://rhdkjryuidmfqkjtarhv.supabase.co',
+      'sb_publishable_tuL7gbxyJ3v7SF3ybwytKg_6DlbvZUn'
+    );
+  </script>
 
   <style>
     * { box-sizing: border-box; }
@@ -540,27 +547,41 @@
     }
     .rank-gate-shell {
       border: 1px solid rgba(255,122,47,0.22);
-      background: linear-gradient(180deg, rgba(255,122,47,0.10), rgba(255,255,255,0.03));
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+      background: #0D1421;
+      border-radius: 16px;
+      padding: 20px 24px;
     }
-    .rank-gate-grid {
-      display: grid;
-      gap: 1rem;
+    .rank-gate-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 14px 0;
     }
-    @media (min-width: 640px) {
-      .rank-gate-grid {
-        grid-template-columns: minmax(0, 1fr) auto;
-        align-items: start;
-      }
-    }
-    .rank-gate-formline {
+    .rank-gate-fields {
       display: flex;
-      gap: 0.5rem;
       flex-wrap: wrap;
-      justify-content: flex-start;
+      gap: 0.5rem;
     }
+    .rank-gate-fields .rank-input {
+      flex: 1 1 140px;
+      min-width: 120px;
+    }
+    .rank-gate-cta {
+      margin-top: 8px;
+      width: 100%;
+      background: #FF7A2F;
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.82rem;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .rank-gate-cta:hover { background: #FF9A5C; }
+    .rank-gate-cta:disabled { opacity: 0.5; cursor: default; }
     .text-brand-success { color: #2DDC8F; }
     .text-brand-warn { color: #F59E0B; }
     .text-brand-crit { color: #E24B4A; }
@@ -734,12 +755,12 @@
           </div>
 
           <h1 class="h-entry-2 font-display max-w-xl text-[3.6rem] leading-[1.0] tracking-[-0.025em] text-white sm:text-7xl lg:text-[5.2rem]">
-            Your lifts stalled.<br>
-            <em class="not-italic hero-gradient-text">athleteOS shows why.</em>
+            You're not stuck.<br>
+            <em class="not-italic hero-gradient-text">You're missing the signal.</em>
           </h1>
 
           <p class="h-entry-3 mt-5 max-w-md text-lg leading-[1.65] text-slate-300">
-            Know where you stand. Know why you're stuck.<br>Fix it before everyone else does.
+            Most athletes track everything and understand nothing.<br>athleteOS gives you one number that explains it all.
           </p>
 
           <!-- 3-step ladder -->
@@ -776,7 +797,7 @@
               class="cta-glow inline-flex items-center justify-center gap-2 rounded-xl bg-brand-saffron px-7 py-4 text-center text-base font-bold text-white transition hover:bg-brand-light"
               style="box-shadow:0 0 30px rgba(255,122,47,0.28)"
             >
-              Start with your rank →
+              Get Your Athlete Score →
             </a>
             <div class="flex items-center gap-3 px-1 text-sm text-slate-500">
               <span class="metric font-bold text-slate-300">₹199</span> trial ·
@@ -901,7 +922,7 @@
               </div>
               <div class="metric text-[0.58rem] uppercase tracking-[0.2em] text-brand-saffron">Output</div>
               <div class="mt-1.5 text-lg font-bold text-white">Diagnosis</div>
-              <p class="mt-1 text-xs text-brand-light/55">Train precisely. Progress clearly.</p>
+              <p class="mt-1 text-xs text-brand-light/55">Stop tracking. Start understanding.</p>
             </div>
           </div>
         </div>
@@ -1055,48 +1076,79 @@
         </div>
 
         <div id="rank-email-gate" class="hidden mt-5 rank-gate-shell">
-          <!-- Form state -->
+
+          <!-- ── Form state ── -->
           <div id="rank-gate-form-wrap">
-            <div class="rank-gate-grid">
-              <div class="min-w-0">
-                <div class="text-sm font-bold text-white">Want to know why you're at this level?</div>
-                <p class="mt-0.5 text-xs text-slate-400">Join the diagnosis waitlist. Ranking shows where you stand. athleteOS shows what is holding you there.</p>
+
+            <!-- Price callout -->
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:3px">
+              <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.72rem;letter-spacing:0.1em;color:#94a3b8;text-transform:uppercase">Founding Access</span>
+              <span style="font-family:'Space Mono',monospace;font-size:1.35rem;font-weight:700;color:#FF7A2F;line-height:1">₹4,999<span style="font-size:0.62rem;color:#475569;font-weight:400">/yr</span></span>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;color:#334155;text-decoration:line-through">₹6,999</span>
+              <span style="font-family:'Space Mono',monospace;font-size:0.6rem;background:rgba(255,122,47,0.12);color:#FF7A2F;padding:2px 8px;border-radius:4px;letter-spacing:0.05em;border:1px solid rgba(255,122,47,0.2)">29% OFF</span>
+            </div>
+            <div style="font-family:'Space Mono',monospace;font-size:0.62rem;color:#334155;margin-bottom:14px">₹416/mo effective · price locks on signup</div>
+
+            <hr class="rank-gate-divider">
+
+            <!-- Form -->
+            <form id="rank-gate-form">
+              <div class="rank-gate-fields">
+                <input type="text"  id="rank-gate-name"     class="rank-input" placeholder="Name"      autocomplete="name" />
+                <input type="email" id="rank-gate-email"    class="rank-input" placeholder="Email"     autocomplete="email" />
+                <input type="tel"   id="rank-gate-whatsapp" class="rank-input" placeholder="WhatsApp"  autocomplete="tel" />
               </div>
-              <div class="flex flex-col gap-1 shrink-0">
-                <form id="rank-gate-form" class="rank-gate-formline">
-                  <input type="email" id="rank-gate-email" class="rank-input w-44 sm:w-52" placeholder="you@domain.com" autocomplete="email" />
-                  <button id="rank-gate-btn" type="submit" class="shrink-0 rounded-xl bg-brand-saffron px-4 py-2 text-xs font-bold text-white transition hover:bg-brand-light disabled:opacity-50">Get diagnosis access →</button>
-                </form>
-                <div id="rank-gate-error" class="form-error">Enter a valid email address.</div>
-                <p class="text-[0.62rem] text-slate-600">No spam. <a href="/privacy" class="underline hover:text-slate-400 transition">Privacy Policy</a>.</p>
+              <button id="rank-gate-btn" type="submit" class="rank-gate-cta">Lock founding price — ₹4,999/year →</button>
+              <div style="margin-top:8px;display:flex;flex-direction:column;gap:2px">
+                <div id="rank-gate-name-error"     class="form-error">Enter your name.</div>
+                <div id="rank-gate-whatsapp-error" class="form-error">Enter a valid WhatsApp number.</div>
+                <div id="rank-gate-error"          class="form-error">Enter a valid email address.</div>
               </div>
+            </form>
+
+            <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:#334155;margin-top:12px">
+              Founding pricing ends before public launch
             </div>
           </div>
-          <!-- Success state -->
+
+          <!-- ── Success state ── -->
           <div id="rank-gate-success" class="hidden">
-            <div class="flex items-start gap-3">
-              <div class="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brand-success/15">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6l2.5 2.5 4.5-5" stroke="#2DDC8F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+            <!-- Position row -->
+            <div style="display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:14px">
+              <div>
+                <div style="font-family:'Space Mono',monospace;font-size:0.58rem;color:#475569;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px">Base spot</div>
+                <div id="rank-founder-number" style="font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:#64748b;line-height:1">#—</div>
               </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-sm font-bold text-white">You're in. Here's what happens next.</div>
-                <ul class="mt-2.5 space-y-2">
-                  <li class="flex items-start gap-2 text-xs text-slate-400">
-                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-brand-success/15 flex items-center justify-center text-[0.55rem] font-bold text-brand-success">1</span>
-                    <span><span class="text-white font-semibold">Your rank card is saved.</span> Download it anytime from the card above.</span>
-                  </li>
-                  <li class="flex items-start gap-2 text-xs text-slate-400">
-                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-brand-saffron/15 flex items-center justify-center text-[0.55rem] font-bold text-brand-saffron">2</span>
-                    <span><span class="text-white font-semibold">Diagnosis invite coming.</span> We'll email you when athleteOS opens the bottleneck finder.</span>
-                  </li>
-                  <li class="flex items-start gap-2 text-xs text-slate-400">
-                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-white/5 flex items-center justify-center text-[0.55rem] font-bold text-slate-500">3</span>
-                    <span><span class="text-slate-300 font-semibold">Share to move up.</span> Your rank card helps you earn earlier diagnosis access.</span>
-                  </li>
-                </ul>
+              <div style="font-family:'Space Mono',monospace;font-size:1.4rem;color:#334155;line-height:1;padding-bottom:3px">→</div>
+              <div>
+                <div style="font-family:'Space Mono',monospace;font-size:0.58rem;color:#FF7A2F;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px">Effective position</div>
+                <div id="rank-effective-pos" style="font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:#FF7A2F;line-height:1">#—</div>
               </div>
             </div>
+
+            <!-- Price lock -->
+            <div style="font-size:0.78rem;font-weight:700;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:2px">Price locked at ₹4,999/year.</div>
+            <div style="font-family:'Space Mono',monospace;font-size:0.62rem;color:#334155;margin-bottom:14px">Even if we raise at launch, yours stays fixed. Beta invite coming.</div>
+
+            <hr class="rank-gate-divider">
+
+            <!-- Share to boost section -->
+            <div id="rg-boost-section">
+              <div style="font-family:'Space Mono',monospace;font-size:0.62rem;color:#64748b;margin-bottom:10px">Each share moves you <span style="color:#fff">100 spots forward</span> · max 3 boosts</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button id="rg-share-x"  style="background:transparent;border:1px solid rgba(255,255,255,0.12);color:#94a3b8;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.7rem;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all 0.2s">Share on X →</button>
+                <button id="rg-share-wa" style="background:transparent;border:1px solid rgba(255,255,255,0.12);color:#94a3b8;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.7rem;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all 0.2s">Share on WhatsApp →</button>
+              </div>
+              <button id="rg-claim-btn" style="display:none;margin-top:10px;background:rgba(255,122,47,0.1);border:1px solid rgba(255,122,47,0.4);color:#FF7A2F;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.72rem;padding:8px 16px;border-radius:8px;cursor:pointer;width:100%;transition:all 0.2s">Claim boost — move up 100 spots →</button>
+              <div id="rg-boost-count" style="font-family:'Space Mono',monospace;font-size:0.58rem;color:#1e293b;margin-top:10px">0 of 3 boosts used</div>
+            </div>
+
+            <!-- All boosts maxed -->
+            <div id="rg-boost-maxed" style="display:none;font-family:'Space Mono',monospace;font-size:0.62rem;color:#475569">3 / 3 boosts claimed. Maximum queue priority reached.</div>
+
           </div>
+
         </div>
 
       </div>
@@ -1375,18 +1427,18 @@
     <section id="waitlist" class="px-4 py-16 sm:px-6">
       <div class="mx-auto max-w-4xl">
         <div class="reveal rounded-[32px] border border-brand-saffron/20 bg-[linear-gradient(180deg,rgba(255,122,47,0.12),rgba(255,255,255,0.03))] p-8 shadow-[0_30px_120px_rgba(0,0,0,0.3)] sm:p-10">
-          <p class="metric text-xs uppercase tracking-[0.22em] text-brand-light">Step 3 · Join the Founding 500</p>
+          <p class="metric text-xs uppercase tracking-[0.22em] text-brand-light">Step 3 · Founding Access</p>
           <h2 class="mt-3 font-display text-3xl tracking-[-0.02em] text-white sm:text-4xl">
-            Know your level. Fix the bottleneck.
+            athleteOS is not a tracker.<br>It's a diagnostic system.
           </h2>
-          <p class="mt-3 text-base text-slate-400">You've seen where you rank. The full athleteOS system shows you what's holding you there — and how to break past it before everyone else does.</p>
+          <p class="mt-3 text-base text-slate-400">You've seen where you rank. athleteOS diagnoses what's holding you there — training gaps, nutrition blind spots, recovery debt. One system. One answer.</p>
+          <p class="mt-2 text-sm text-slate-600">Built for serious athletes. Not for casual gym-goers.</p>
 
           <!-- Founding member highlight -->
           <div class="mt-6 relative overflow-hidden rounded-2xl border p-5" style="border-color:rgba(255,122,47,0.35);background:linear-gradient(135deg,rgba(255,122,47,0.14),rgba(255,122,47,0.06) 50%,rgba(255,255,255,0.02))">
             <div class="absolute right-4 top-4">
-              <div class="metric flex items-center gap-1.5 rounded-full bg-brand-saffron px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.18em] text-white">
-                <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="3" fill="white" opacity="0.9"/></svg>
-                Limited slots
+              <div class="metric flex items-center gap-1.5 rounded-full border border-brand-saffron/30 bg-brand-saffron/10 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.18em] text-brand-saffron">
+                Founding price
               </div>
             </div>
             <div class="metric text-xs uppercase tracking-[0.2em] text-brand-light">Founding Annual</div>
@@ -1436,7 +1488,7 @@
                 <div class="h-7 w-7 rounded-full border-2 border-[#0C1520] bg-brand-success/20 flex items-center justify-center text-[0.55rem] font-bold text-brand-success">RK</div>
                 <div class="h-7 w-7 rounded-full border-2 border-[#0C1520] bg-white/10 flex items-center justify-center text-[0.55rem] font-bold text-slate-400">PV</div>
               </div>
-              <span class="text-xs text-slate-400"><span class="font-bold text-white">Founder-led rollout.</span> First 500 get the founding annual.</span>
+              <span class="text-xs text-slate-400"><span class="font-bold text-white">Founder-led rollout.</span> Founding pricing ends before public launch.</span>
             </div>
             <span class="inline-flex items-center gap-1.5 text-[0.6rem] uppercase tracking-[0.14em] text-slate-500">
               <svg width="9" height="9" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="3.5" stroke="#2DDC8F" stroke-width="1"/><path d="M2.5 4l1 1 2-2" stroke="#2DDC8F" stroke-width="1" stroke-linecap="round"/></svg>
@@ -1496,10 +1548,10 @@
               </button>
             </form>
             <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
-              <p id="founding-spots-counter" class="metric uppercase tracking-[0.18em] text-brand-light">137 / 500 founding spots left</p>
-              <p class="text-slate-500">Founder contact: Swetabh Subham · WhatsApp 6005109043</p>
+              <p class="metric uppercase tracking-[0.18em] text-slate-600">Founding pricing ends before public launch</p>
+              <p class="text-slate-600">Contact: WhatsApp 6005109043</p>
             </div>
-            <p class="mt-2 text-[0.68rem] text-slate-600">No spam. Unsubscribe anytime. <a href="/privacy" class="underline hover:text-slate-400 transition">Privacy Policy</a>.</p>
+            <p class="mt-2 text-[0.68rem] text-slate-600">Price locks on signup. <a href="/privacy" class="underline hover:text-slate-400 transition">Privacy Policy</a>.</p>
           </div>
 
           <div id="success-msg" class="mt-5 hidden rounded-2xl border border-brand-success/15 bg-brand-success/5 p-5">
@@ -1508,25 +1560,21 @@
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="#2DDC8F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
               <div class="flex-1 min-w-0">
-                <div class="text-sm font-bold text-white">You're on the founding list.</div>
+                <div class="text-sm font-bold text-white">You're in the first performance cohort.</div>
                 <ul class="mt-3 space-y-3">
                   <li class="flex items-start gap-2.5 text-xs text-slate-400">
-                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-brand-success/15 flex items-center justify-center text-[0.55rem] font-bold text-brand-success">✓</span>
-                    <span><span class="text-white font-semibold">Founding price locked at ₹4,999/year.</span> Even if we raise prices at launch, yours stays fixed.</span>
+                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-brand-saffron/15 flex items-center justify-center text-[0.55rem] font-bold text-brand-saffron">✓</span>
+                    <span><span class="text-white font-semibold">₹4,999/year locked.</span> Price stays fixed at launch, regardless of what we charge publicly.</span>
                   </li>
                   <li class="flex items-start gap-2.5 text-xs text-slate-400">
-                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-brand-saffron/15 flex items-center justify-center text-[0.55rem] font-bold text-brand-saffron">2</span>
-                    <span><span class="text-white font-semibold">Private beta invite coming.</span> You'll test the diagnosis engine before anyone else.</span>
-                  </li>
-                  <li class="flex items-start gap-2.5 text-xs text-slate-400">
-                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-white/5 flex items-center justify-center text-[0.55rem] font-bold text-slate-500">3</span>
-                    <span><span class="text-slate-300 font-semibold">Share to move up the queue.</span> Every share of your rank card moves you 100 spots higher.</span>
+                    <span class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-full bg-white/5 flex items-center justify-center text-[0.55rem] font-bold text-slate-500">2</span>
+                    <span><span class="text-white font-semibold">Beta access before public launch.</span> You'll run the diagnosis engine before anyone outside this cohort.</span>
                   </li>
                 </ul>
                 <div class="mt-4">
                   <button id="wl-share-x" class="rank-share-btn rank-btn-x text-xs">
                     <svg width="11" height="11" viewBox="0 0 1200 1227" fill="currentColor"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/></svg>
-                    Share on X to move up 100 spots
+                    Share your rank card on X
                   </button>
                 </div>
               </div>
@@ -1654,7 +1702,7 @@
     })();
 
     // ── Waitlist form ──
-    document.getElementById('waitlist-form').addEventListener('submit', function (event) {
+    document.getElementById('waitlist-form').addEventListener('submit', async function (event) {
       event.preventDefault();
       const nameInput  = document.getElementById('name-input');
       const phoneInput = document.getElementById('whatsapp-input');
@@ -1671,17 +1719,29 @@
       if (!isValidWhatsApp(phoneInput.value)) { showInlineError(phoneErrEl, phoneInput); return; }
       if (!isValidEmail(emailInput.value)) { showInlineError(errEl, emailInput); return; }
       showBtnSpinner(btn, 'Processing…');
-      setTimeout(function () {
-        localStorage.setItem('aos_waitlist', '1');
-        if (!localStorage.getItem('aos_waitlist_claimed_spot')) {
-          const updated = Math.max(0, getFoundingSpotsLeft() - 1);
-          localStorage.setItem('aos_founding_spots_left', String(updated));
-          localStorage.setItem('aos_waitlist_claimed_spot', '1');
-        }
-        renderFoundingSpotsCounter();
-        document.getElementById('waitlist-form-wrap').style.display = 'none';
-        successMsg.classList.remove('hidden');
-      }, 1200);
+      const { error } = await _sb.from('founders_waitlist').insert({
+        name:     nameInput.value.trim(),
+        email:    emailInput.value.trim(),
+        whatsapp: phoneInput.value.trim(),
+        source:   'waitlist',
+      });
+      if (error) {
+        console.error(error);
+        btn.disabled = false;
+        btn.innerHTML = 'Claim founding spot — ₹4,999/year';
+        showInlineError(errEl, emailInput);
+        errEl.textContent = error.message;
+        return;
+      }
+      localStorage.setItem('aos_waitlist', '1');
+      if (!localStorage.getItem('aos_waitlist_claimed_spot')) {
+        const updated = Math.max(0, getFoundingSpotsLeft() - 1);
+        localStorage.setItem('aos_founding_spots_left', String(updated));
+        localStorage.setItem('aos_waitlist_claimed_spot', '1');
+      }
+      renderFoundingSpotsCounter();
+      document.getElementById('waitlist-form-wrap').style.display = 'none';
+      successMsg.classList.remove('hidden');
     });
 
     // ── Waitlist post-signup share button ──
@@ -2099,19 +2159,121 @@
       }
     })();
 
-    document.getElementById('rank-gate-form').addEventListener('submit', function(e) {
+
+    // ── Rank gate: founder state ──
+    const MAX_BOOSTS   = 3;
+    const BOOST_SPOTS  = 100;
+    let _founder = { id: null, num: 0, shareCount: 0 };
+    let _claimTimer = null;
+
+    function renderBoostState() {
+      const effective = Math.max(1, _founder.num - _founder.shareCount * BOOST_SPOTS);
+      document.getElementById('rank-founder-number').textContent = '#' + _founder.num;
+      document.getElementById('rank-effective-pos').textContent  = '#' + effective;
+      document.getElementById('rg-boost-count').textContent =
+        _founder.shareCount + ' of ' + MAX_BOOSTS + ' boosts used';
+      if (_founder.shareCount >= MAX_BOOSTS) {
+        document.getElementById('rg-boost-section').style.display = 'none';
+        document.getElementById('rg-boost-maxed').style.display   = 'block';
+      }
+    }
+
+    function scheduleClaimBtn() {
+      if (_founder.shareCount >= MAX_BOOSTS || _claimTimer) return;
+      _claimTimer = setTimeout(function () {
+        document.getElementById('rg-claim-btn').style.display = 'block';
+      }, 2500);
+    }
+
+    // ── Rank gate: restore state on reload ──
+    (function () {
+      const gate = document.getElementById('rank-gate-form-wrap');
+      const suc  = document.getElementById('rank-gate-success');
+      if (!localStorage.getItem('aos_waitlist') || !gate || !suc) return;
+      gate.style.display = 'none';
+      suc.classList.remove('hidden');
+      const saved = JSON.parse(localStorage.getItem('aos_founder_data') || 'null');
+      if (saved && saved.num) { _founder = saved; renderBoostState(); }
+    })();
+
+    // ── Rank gate: share + claim clicks ──
+    document.addEventListener('click', async function (e) {
+      const id = e.target && e.target.id;
+
+      if (id === 'rg-share-x') {
+        const txt = encodeURIComponent(
+          'Just locked Founding Member #' + _founder.num + ' on @athleteos_in — ₹4,999/year before launch.\nCheck your India strength rank: athleteos.in/rank'
+        );
+        window.open('https://twitter.com/intent/tweet?text=' + txt, '_blank');
+        scheduleClaimBtn();
+      }
+
+      if (id === 'rg-share-wa') {
+        const txt = encodeURIComponent(
+          'Just locked my founding spot on athleteOS — ₹4,999/year, price fixed forever.\nCheck your India strength rank here: https://athleteos.in/rank'
+        );
+        window.open('https://wa.me/?text=' + txt, '_blank');
+        scheduleClaimBtn();
+      }
+
+      if (id === 'rg-claim-btn') {
+        if (!_founder.id || _founder.shareCount >= MAX_BOOSTS) return;
+        const btn = document.getElementById('rg-claim-btn');
+        btn.disabled    = true;
+        btn.textContent = 'Claiming…';
+        const { data, error } = await _sb
+          .rpc('increment_share_count', { row_id: _founder.id });
+        if (error) {
+          console.error(error);
+          btn.disabled    = false;
+          btn.textContent = 'Claim boost — move up 100 spots →';
+          return;
+        }
+        _founder.shareCount = data;
+        _claimTimer = null;
+        localStorage.setItem('aos_founder_data', JSON.stringify(_founder));
+        btn.style.display = 'none';
+        renderBoostState();
+      }
+    });
+
+    // ── Rank gate: form submit ──
+    document.getElementById('rank-gate-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const emailInput = document.getElementById('rank-gate-email');
-      const errEl      = document.getElementById('rank-gate-error');
-      const btn        = document.getElementById('rank-gate-btn');
+      const nameInput     = document.getElementById('rank-gate-name');
+      const emailInput    = document.getElementById('rank-gate-email');
+      const whatsappInput = document.getElementById('rank-gate-whatsapp');
+      const nameErrEl     = document.getElementById('rank-gate-name-error');
+      const whatsappErrEl = document.getElementById('rank-gate-whatsapp-error');
+      const errEl         = document.getElementById('rank-gate-error');
+      const btn           = document.getElementById('rank-gate-btn');
+      nameErrEl.classList.remove('visible');
+      whatsappErrEl.classList.remove('visible');
       errEl.classList.remove('visible');
-      if (!isValidEmail(emailInput.value)) { showInlineError(errEl, emailInput); return; }
-      showBtnSpinner(btn, 'Sending…');
-      setTimeout(function () {
-        localStorage.setItem('aos_waitlist', '1');
-        document.getElementById('rank-gate-form-wrap').style.display = 'none';
-        document.getElementById('rank-gate-success').classList.remove('hidden');
-      }, 1200);
+      if (!nameInput.value.trim())               { showInlineError(nameErrEl, nameInput); return; }
+      if (!isValidWhatsApp(whatsappInput.value)) { showInlineError(whatsappErrEl, whatsappInput); return; }
+      if (!isValidEmail(emailInput.value))       { showInlineError(errEl, emailInput); return; }
+      showBtnSpinner(btn, 'Locking price…');
+      const { data, error } = await _sb.from('founders_waitlist').insert({
+        name:     nameInput.value.trim(),
+        email:    emailInput.value.trim(),
+        whatsapp: whatsappInput.value.trim(),
+        source:   'rank-gate',
+      }).select('id, founder_number').single();
+      if (error) {
+        console.error(error);
+        btn.disabled    = false;
+        btn.innerHTML   = 'Lock founding price — ₹4,999/year →';
+        showInlineError(errEl, emailInput);
+        errEl.textContent = error.message;
+        return;
+      }
+      localStorage.setItem('aos_waitlist', '1');
+      _founder = { id: data.id, num: data.founder_number, shareCount: 0 };
+      localStorage.setItem('aos_founder_data', JSON.stringify(_founder));
+      renderBoostState();
+      document.getElementById('rank-gate-form-wrap').style.display = 'none';
+      document.getElementById('rank-gate-success').classList.remove('hidden');
     });
   </script>
 </body>
