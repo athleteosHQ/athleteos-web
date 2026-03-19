@@ -12,44 +12,32 @@ interface FAQ {
 const FAQS: FAQ[] = [
   {
     q: 'Is the rank calculator free?',
-    a: 'Completely. No account, no email, no card. Enter your lifts, get your India percentile rank instantly.',
+    a: 'Yes. No account, no email, no card. Enter your lifts and get your benchmark rank instantly.',
   },
   {
     q: 'How accurate are the percentiles?',
-    a: 'Calibrated against IPF standards and 3,200+ Indian athlete data points. Significantly more accurate than "beginner / intermediate / advanced" labels — not perfect, but a real number.',
+    a: 'They are calibrated against IPF standards and 3,200+ competitive Indian athlete records. Not perfect, but far more useful than vague labels like beginner or advanced.',
   },
   {
-    q: 'What data is the Indian baseline built on?',
-    a: 'IPF-affiliated competition data, state powerlifting meets, and anonymised data from 3,200+ Indian athletes. Nutrition uses IFCT 2017 — the only government-verified Indian food dataset. Most apps use USDA data, which undercounts Indian staples by 15–25%.',
+    q: 'Am I being compared against all of India?',
+    a: 'No. Your result is not against the general population. It is benchmarked against our competitive Indian strength-athlete dataset in your weight class, using meet-calibrated and athlete-submitted records.',
   },
   {
     q: 'I only train one or two lifts. Can I still use it?',
-    a: 'Yes. Leave any lift empty — the system scores what you provide. A full three-lift profile gives a better rank, but partial data still produces a useful result.',
+    a: 'Yes. Leave any lift empty and the system scores what you provide. Three lifts give the strongest benchmark, but partial data still works.',
   },
   {
     q: 'What is the ₹4,999 founding price?',
     a: (
       <>
-        <span>Lowest price athleteOS will ever cost — locked forever for the first 500 members. After launch: ₹999/month or ₹6,999/year. Founding members get direct WhatsApp access to founders and beta access before public launch.</span>
+        <span>It is the lowest annual price athleteOS will ever offer. Founding members join before public launch, keep the founding rate, and get direct access during beta.</span>
         <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>No payment required to reserve. You pay only when you activate.</span>
       </>
     ),
   },
   {
-    q: 'What does "price locked forever" mean?',
-    a: 'Your ₹4,999 annual renewal price never changes, even as we raise list prices — as long as your membership stays active.',
-  },
-  {
-    q: 'Can I cancel?',
-    a: 'Full refund within 7 days of first payment. After that, cancellations take effect at end of your annual cycle. Reserving a spot now charges nothing.',
-  },
-  {
-    q: 'How is this different from MyFitnessPal?',
-    a: 'MFP logs data. athleteOS diagnoses it. MFP says you ate 2,400 calories. athleteOS says your protein is 34g short of what your training load requires.',
-  },
-  {
     q: 'Is my data safe?',
-    a: 'Rank calculation runs entirely in your browser — nothing hits our servers unless you join the waitlist. Waitlist data is stored in Supabase (EU, row-level security). We do not sell or share data.',
+    a: 'The rank check runs in your browser. We only store data if you join the waitlist. Waitlist data is in Supabase with row-level security. We do not sell it.',
   },
 ]
 

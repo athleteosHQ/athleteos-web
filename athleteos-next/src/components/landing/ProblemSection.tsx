@@ -32,10 +32,13 @@ export function ProblemSection() {
             transition={{ duration: 0.5 }}
             className="card-surface p-6 md:p-8"
           >
-            <p className="font-mono-label text-accent mb-3">Step 2 · Data gap</p>
+            <p className="font-mono-label text-accent mb-3">Why most tracking fails</p>
             <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-              MFP under-reports Indian food protein by 20–30%.
+              You&apos;re tracking protein. The numbers are wrong.
             </h2>
+            <p className="body-copy max-w-3xl mb-5">
+              Most Indian athletes track nutrition using MyFitnessPal. The food data is crowd-sourced and consistently wrong for Indian food. athleteOS uses IFCT 2017 — the national reference standard.
+            </p>
             <div className="flex max-w-3xl flex-wrap gap-2.5">
               {IMPACT_CONTEXT.map(({ label, note, color }) => (
                 <div
@@ -62,7 +65,7 @@ export function ProblemSection() {
                 >
                   <p className="font-mono-label text-destructive mb-2">{kicker}</p>
                   <p className="font-display text-3xl font-bold text-foreground">{value}</p>
-                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">{note}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{note}</p>
                 </div>
               ))}
             </div>
@@ -76,48 +79,59 @@ export function ProblemSection() {
           </motion.div>
 
           <motion.div
-            className="card-surface-secondary p-6 md:p-8 h-full"
+            className="card-surface-secondary overflow-hidden relative h-full"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.08 }}
           >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="font-mono-label text-muted-foreground mb-2">Protein tracking drift</p>
-                <p className="font-display text-5xl font-bold text-foreground">27%</p>
-              </div>
-              <div
-                className="rounded-xl px-3 py-2"
-                style={{ background: 'rgba(226,75,74,0.10)', border: '1px solid rgba(226,75,74,0.22)' }}
-              >
-                <span className="font-mono-label text-destructive">Plateau risk ↑</span>
-              </div>
+            {/* Clinical Food Background */}
+            <div className="absolute inset-0 z-0">
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-[0.08] grayscale scale-110"
+                style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80")' }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-secondary/95 via-secondary/80 to-transparent" />
             </div>
-            <div className="mt-8 flex items-end gap-2 h-48">
-              {[32, 40, 36, 45, 49, 49, 49].map((h, i) => (
-                <div
-                  key={i}
-                  className="flex-1 rounded-t-md relative"
-                  style={{
-                    height: `${h * 3.4}px`,
-                    background: i < 4 ? 'rgba(255,255,255,0.09)' : i === 4 ? 'rgba(127,178,255,0.42)' : 'rgba(226,75,74,0.26)',
-                    borderTop: i >= 5 ? '1px dashed rgba(226,75,74,0.55)' : 'none',
-                  }}
-                >
-                  {i === 4 && (
-                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-bold text-white whitespace-nowrap"
-                      style={{ background: '#E24B4A' }}>
-                      Plateau point
-                    </div>
-                  )}
+
+            <div className="relative z-10 p-6 md:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-mono-label text-muted-foreground mb-2">Protein tracking drift</p>
+                  <p className="font-display text-5xl font-bold text-foreground">27%</p>
                 </div>
-              ))}
-            </div>
-            <div className="mt-8 pt-5 border-t border-white/8">
-              <p className="text-base text-muted-foreground leading-relaxed">
-                <span className="font-semibold text-destructive">Critical:</span> you can think you&apos;re hitting 180g protein and still be closer to 145g. That gap compounds for months before it shows up in your lifts.
-              </p>
+                <div
+                  className="rounded-xl px-3 py-2"
+                  style={{ background: 'rgba(226,75,74,0.10)', border: '1px solid rgba(226,75,74,0.22)' }}
+                >
+                  <span className="font-mono-label text-destructive">Plateau risk ↑</span>
+                </div>
+              </div>
+              <div className="mt-8 flex items-end gap-2 h-48">
+                {[32, 40, 36, 45, 49, 49, 49].map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 rounded-t-md relative"
+                    style={{
+                      height: `${h * 3.4}px`,
+                      background: i < 4 ? 'rgba(255,255,255,0.09)' : i === 4 ? 'rgba(127,178,255,0.42)' : 'rgba(226,75,74,0.26)',
+                      borderTop: i >= 5 ? '1px dashed rgba(226,75,74,0.55)' : 'none',
+                    }}
+                  >
+                    {i === 4 && (
+                      <div className="absolute -top-9 left-1/2 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-bold text-white whitespace-nowrap"
+                        style={{ background: '#E24B4A' }}>
+                        Plateau point
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 pt-5 border-t border-white/8">
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  <span className="font-semibold text-destructive">Critical:</span> wrong intake data compounds for months before it shows up in your lifts.
+                </p>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -184,7 +198,7 @@ export function ProblemSection() {
             borderRadius: 4,
           }}
         >
-          TRAINING <span className="text-foreground/40">+</span> NUTRITION <span className="text-foreground/40">+</span> RECOVERY <span className="text-foreground/40">→</span> <span className="text-accent">1_DIAGNOSIS</span>
+          Training <span className="text-foreground/40">+</span> nutrition <span className="text-foreground/40">+</span> recovery <span className="text-foreground/40">→</span> <span className="text-accent">one bottleneck</span>
         </motion.div>
       </div>
     </section>

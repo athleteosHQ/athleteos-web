@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Activity, Check, Users, Download, Share2 } from 'lucide-react'
+import { ArrowRight, Activity, Check, Users } from 'lucide-react'
 import { calculateRank, type RankInput, type RankResult } from '@/lib/rankCalc'
 import { AthleteScoreCard } from './AthleteScoreCard'
 import { insertFounder } from '@/lib/supabase'
-import { RankShareCard } from './RankShareCard'
 
 // ── Shared number input ───────────────────────────────────────────────────────
 function GlassInput({ label, value, onChange, placeholder, min, max, step }: {
@@ -175,9 +174,9 @@ function GhostTierPreview() {
             </div>
           </div>
           <div>
-            <p className="font-mono-label text-accent mb-0.5">India Rank</p>
+            <p className="font-mono-label text-accent mb-0.5">Benchmark rank</p>
             <p className="font-display text-2xl font-bold text-foreground">ADVANCED</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Top 22% nationally</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Top 22% of competitive Indian strength athletes</p>
           </div>
         </div>
 
@@ -216,11 +215,11 @@ function GhostTierPreview() {
         <div>
           <p className="text-sm font-bold text-foreground mb-1">Your diagnosis will appear here</p>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Enter your lifts to see your India percentile rank
+            Enter your lifts to see your percentile within our competitive Indian athlete benchmark
           </p>
         </div>
         <div className="flex gap-3 flex-wrap justify-center">
-          {['IPF-calibrated', '3,200+ Indian athletes'].map(t => (
+          {['IPF-calibrated', '3,200+ competitive Indian athletes'].map(t => (
             <span key={t} className="font-mono-label text-muted-foreground/60" style={{ fontSize: '10px' }}>
               {t}
             </span>
@@ -310,13 +309,13 @@ function InlineSignupGate() {
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <Users className="w-3.5 h-3.5 text-accent" />
-            <span className="font-mono-label text-accent">Founding Cohort · Max 500</span>
+            <span className="font-mono-label text-accent">Founding cohort · 500 spots</span>
           </div>
           <p className="text-lg font-bold text-foreground leading-snug">
-            You&apos;ve seen where you stand.<br className="hidden sm:block" />
-            <span className="gradient-text"> Lock your founding price.</span>
+            Your rank is the starting point.<br className="hidden sm:block" />
+            <span className="gradient-text"> The diagnosis shows what&apos;s holding you back.</span>
           </p>
-          <p className="text-sm text-muted-foreground mt-1">₹4,999/year · price locked forever · no payment now</p>
+          <p className="text-sm text-muted-foreground mt-1">Founding members get first access when we launch · no payment now</p>
         </div>
         <div
           className="flex-shrink-0 rounded-xl px-3 py-1.5 font-mono text-sm font-bold text-accent self-start"
@@ -355,7 +354,7 @@ function InlineSignupGate() {
         >
           {loading ? 'Reserving…' : (
             <>
-              Lock My Founding Price
+              Reserve My Founding Spot — Free
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </>
           )}
@@ -374,48 +373,12 @@ function InlineSignupGate() {
   )
 }
 
-// ── Share helpers ─────────────────────────────────────────────────────────────
-async function captureAndDownload(el: HTMLElement, tier: string) {
-  const html2canvas = (await import('html2canvas')).default
-  const canvas = await html2canvas(el, {
-    useCORS: true,
-    allowTaint: true,
-    backgroundColor: '#070D14',
-    width: 1080,
-    height: 1080,
-    scale: 1,
-    logging: false,
-  })
-  const link = document.createElement('a')
-  link.download = `athleteos-rank-${tier.toLowerCase()}.png`
-  link.href = canvas.toDataURL('image/png')
-  link.click()
-}
-
-function shareOnX(tier: string, overallPct: number) {
-  const top = 100 - overallPct
-  const text = encodeURIComponent(
-    `Top ${top}% in India on athleteOS.\nTier: ${tier}\n\nCheck your rank free: https://athleteos.in #IndiaStrength`
-  )
-  window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank')
-}
-
-function shareOnWhatsApp(tier: string, overallPct: number) {
-  const top = 100 - overallPct
-  const text = encodeURIComponent(
-    `I just checked my India strength rank on athleteOS 💪\nTop ${top}% nationally · Tier: ${tier}\n\nCheck yours free: https://athleteos.in`
-  )
-  window.open(`https://wa.me/?text=${text}`, '_blank')
-}
-
 // ── Main export ───────────────────────────────────────────────────────────────
 export function RankSection() {
   const [trainingType, setTrainingType] = useState<'strength' | 'hybrid'>('strength')
   const [f, setF] = useState({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
   const [result, setResult] = useState<RankResult | null>(null)
   const [error, setError] = useState('')
-  const [capturing, setCapturing] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
 
   const upd = (k: keyof typeof f) => (v: string) => setF(prev => ({ ...prev, [k]: v }))
 
@@ -455,13 +418,15 @@ export function RankSection() {
           <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
             Know where you stand.
           </h2>
+          <p className="body-copy mb-5 max-w-3xl">
+            Start with your rank inside our competitive Indian strength-athlete benchmark. Then use athleteOS to diagnose whether training, nutrition, or recovery is limiting progress.
+          </p>
 
-          {/* Mono chips */}
           <div className="flex flex-wrap gap-2">
-            {['IPF_CALIBRATED', 'INDIA_DATABASE', 'FREE'].map(chip => (
+            {['IPF-calibrated', 'Weight-class benchmark', 'Free · no account'].map(chip => (
               <span
                 key={chip}
-                className="rounded-full px-3 py-1.5"
+                className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.08)',
@@ -495,17 +460,17 @@ export function RankSection() {
               >
                 {/* Training type toggle */}
                 <div className="flex gap-2 mb-8">
-                  {(['strength', 'hybrid'] as const).map(t => (
+                {(['strength', 'hybrid'] as const).map(t => (
                     <button
                       key={t}
                       onClick={() => setTrainingType(t)}
                       className="px-4 py-2 rounded-xl text-sm font-semibold transition"
                       style={trainingType === t
-                        ? { background: 'rgba(255,122,47,0.14)', border: '1px solid rgba(255,122,47,0.35)', color: '#FF9A5C' }
+                        ? { background: 'rgba(127,178,255,0.14)', border: '1px solid rgba(127,178,255,0.32)', color: 'var(--accent-light)' }
                         : { background: 'transparent', border: '1px solid rgba(255,255,255,0.09)', color: 'var(--muted-foreground)' }
                       }
                     >
-                      {t}
+                      {t === 'strength' ? 'Strength' : 'Hybrid'}
                     </button>
                   ))}
                 </div>
@@ -518,8 +483,17 @@ export function RankSection() {
                     </div>
                   </div>
                   <div
+                    className="rounded-2xl px-4 py-3"
+                    style={{ background: 'rgba(127,178,255,0.05)', border: '1px solid rgba(127,178,255,0.14)' }}
+                  >
+                    <p className="text-sm font-semibold text-foreground">Benchmarked against competitive Indian athletes</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                      Your percentile is calculated against 3,200+ meet-calibrated and athlete-submitted records in your weight class — not the general population.
+                    </p>
+                  </div>
+                  <div
                     className="h-px"
-                    style={{ background: 'linear-gradient(90deg, rgba(255,122,47,0.2), rgba(255,255,255,0.04), transparent)' }}
+                    style={{ background: 'linear-gradient(90deg, rgba(127,178,255,0.18), rgba(255,255,255,0.04), transparent)' }}
                   />
                   <div>
                     <p className="text-sm font-semibold text-muted-foreground mb-1.5">Enter your best recent set for each lift</p>
@@ -547,7 +521,7 @@ export function RankSection() {
                   onClick={submit}
                   className="cta-glow mt-8 w-full bg-accent text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 group transition hover:bg-accent-light accent-glow"
                 >
-                  Find My Rank
+                  See My Rank
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
@@ -569,7 +543,7 @@ export function RankSection() {
                 <AthleteScoreCard
                   score={result.athleteScore}
                   systemStatus={result.tier}
-                  percentileLabel={`Top ${100 - result.overallPct}% in India`}
+                  percentileLabel={`Top ${100 - result.overallPct}% of competitive Indian strength athletes`}
                   animate={false}
                   metrics={[
                     { label: 'Strength',  value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', status: result.squat.percentile >= 60    ? 'up' : result.squat.percentile >= 30    ? 'neutral' : 'down' },
@@ -581,42 +555,14 @@ export function RankSection() {
                 <div className="space-y-4">
                   <DiagnosticBars result={result} />
 
-                  {/* Share card actions */}
                   <div
-                    className="rounded-2xl p-4 space-y-3"
-                    style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.08)' }}
+                    className="rounded-2xl px-4 py-3"
+                    style={{ background: 'rgba(127,178,255,0.05)', border: '1px solid rgba(127,178,255,0.14)' }}
                   >
-                    <p className="text-sm font-semibold text-muted-foreground">Share your percentile</p>
-                    <div className="grid grid-cols-3 gap-2">
-                      <button
-                        onClick={async () => {
-                          if (!cardRef.current) return
-                          setCapturing(true)
-                          try { await captureAndDownload(cardRef.current, result.tier) } finally { setCapturing(false) }
-                        }}
-                        disabled={capturing}
-                        className="flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition disabled:opacity-50"
-                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.8)' }}
-                      >
-                        <Download size={12} />
-                        {capturing ? '…' : 'PNG'}
-                      </button>
-                      <button
-                        onClick={() => shareOnX(result.tier, result.overallPct)}
-                        className="flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition"
-                        style={{ background: '#000', border: '1px solid rgba(255,255,255,0.18)', color: '#fff' }}
-                      >
-                        𝕏 Post
-                      </button>
-                      <button
-                        onClick={() => shareOnWhatsApp(result.tier, result.overallPct)}
-                        className="flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition"
-                        style={{ background: 'rgba(37,211,102,0.10)', border: '1px solid rgba(37,211,102,0.28)', color: '#25D366' }}
-                      >
-                        <Share2 size={12} />
-                        WA
-                      </button>
-                    </div>
+                    <p className="text-sm font-semibold text-foreground">Rank tells you where you stand. Diagnosis tells you what to fix.</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                      athleteOS connects training, nutrition, and recovery data to find the one bottleneck limiting your next PR — then tracks whether the fix is working.
+                    </p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -630,7 +576,7 @@ export function RankSection() {
                       href="#waitlist"
                       className="cta-glow bg-accent text-white py-3 rounded-xl text-sm font-bold text-center transition hover:bg-accent-light"
                     >
-                      Diagnose the gap →
+                      Why Am I Stuck? →
                     </a>
                   </div>
                 </div>
@@ -638,9 +584,6 @@ export function RankSection() {
 
               {/* Inline gate — peak motivation */}
               <InlineSignupGate />
-
-              {/* Off-screen card for PNG capture */}
-              <RankShareCard result={result} ref={cardRef} />
             </motion.div>
           )}
         </AnimatePresence>

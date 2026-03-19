@@ -2,8 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { DiagnosticCard } from './DiagnosticCard'
-import { PillarStrip } from './PillarStrip'
+import { ProductShowcase } from './ProductShowcase'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -14,6 +13,21 @@ const fadeUp = (delay = 0) => ({
 export function HeroSection() {
   return (
     <section className="editorial-stage relative overflow-hidden px-4 py-24 sm:px-6 sm:py-28 md:px-10 md:py-32">
+
+      {/* Background Atmosphere Image — The Hybrid Athlete */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.10] grayscale contrast-[1.15] scale-105"
+          style={{ 
+            backgroundImage: 'url("https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80")',
+            maskImage: 'radial-gradient(ellipse 100% 70% at 30% 30%, black 10%, transparent 90%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 100% 70% at 30% 30%, black 10%, transparent 90%)'
+          }}
+        />
+        {/* Melding Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/80 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/20 via-transparent to-transparent" />
+      </div>
 
       {/* Spotlight orbs */}
       <div
@@ -40,21 +54,27 @@ export function HeroSection() {
 
         {/* Left */}
         <div>
-          {/* Kicker — plain mono text, no pill */}
           <motion.div {...fadeUp(0)} className="flex items-center gap-2 mb-7">
             <span
               className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-accent animate-pulse-glow"
             />
-            <span className="font-mono-label text-muted-foreground/90">Performance diagnostic system</span>
+            <span className="font-mono-label text-muted-foreground/90">Strength athlete diagnostic system · launching soon on iOS &amp; Android</span>
           </motion.div>
 
           <motion.h1
             {...fadeUp(0.1)}
             className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-foreground leading-[1.0] tracking-tight mb-8"
           >
-            You&apos;re not stuck.{' '}
-            <span className="gradient-text">You&apos;re just missing the signal.</span>
+            Your training is stalling.{' '}
+            <span className="gradient-text">We&apos;ll tell you exactly why.</span>
           </motion.h1>
+
+          <motion.p
+            {...fadeUp(0.15)}
+            className="body-copy-strong mb-8 max-w-2xl"
+          >
+            Check where you rank against 3,200+ competitive Indian strength athletes. Then find out whether training load, nutrition, or recovery is the bottleneck — and track whether the fix is working.
+          </motion.p>
 
           {/* CTA row */}
           <motion.div {...fadeUp(0.2)} className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
@@ -62,88 +82,54 @@ export function HeroSection() {
               href="#rank"
               className="cta-glow inline-flex items-center gap-2 bg-accent text-white font-bold px-7 py-3.5 rounded group transition hover:bg-accent-light accent-glow"
             >
-              Find My Rank
+              Diagnose My Plateau — Free
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
             <span className="max-w-[24rem] text-sm leading-relaxed text-muted-foreground">
-              Founding Cohort · Max 500 · Price locked forever
+              Free rank check · No account needed · Founding members get first app access
             </span>
           </motion.div>
 
-          {/* Inline stats — no pills, just text */}
           <motion.div {...fadeUp(0.28)} className="mb-6 flex flex-wrap items-center gap-y-2">
             {[
-              { val: 'IPF-CALIBRATED', sep: true },
-              { val: '3,200+ INDIA', sep: true },
-              { val: 'FREE', sep: false },
+              { val: 'IPF-calibrated benchmark', sep: true },
+              { val: '3,200+ athlete records', sep: true },
+              { val: 'Weight-class percentile', sep: false },
             ].map(({ val, sep }) => (
               <span key={val} className="flex items-center">
-                <span className="text-sm font-medium text-muted-foreground">{val.replace('+', '+ ').replace('-', ' ')}</span>
+                <span className="text-sm font-medium text-muted-foreground">{val}</span>
                 {sep && <span className="mx-3 hidden text-sm text-muted-foreground/35 sm:inline">·</span>}
               </span>
             ))}
           </motion.div>
 
-          {/* System status — plain mono text, thin top divider */}
           <motion.div
             {...fadeUp(0.33)}
-            className="pt-4 text-sm text-muted-foreground/75"
+            className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 pt-4"
             style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
           >
-            <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-              <span>SYSTEM_STATUS: ACTIVE</span>
-              <span>ATHLETES_INDEXED: 3,200+</span>
-              <span>COHORT_SLOTS: 142/500</span>
-            </div>
-          </motion.div>
-
-          {/* Numbered steps */}
-          <motion.div {...fadeUp(0.4)} className="mt-8 grid gap-3 sm:grid-cols-3">
             {[
-              { num: '01', label: 'Get your rank',      active: true  },
-              { num: '02', label: 'Find the gap',       active: false },
-              { num: '03', label: 'Fix the bottleneck', active: false },
-            ].map(({ num, label, active }, i) => (
-              <div
-                key={num}
-                className="rounded-2xl border px-4 py-3"
-                style={{
-                  borderColor: active ? 'rgba(127,178,255,0.18)' : 'rgba(255,255,255,0.08)',
-                  background: active ? 'rgba(127,178,255,0.06)' : 'rgba(255,255,255,0.02)',
-                }}
-              >
-                <div className="mb-1 flex items-center justify-between gap-3">
-                  <span className={`font-mono text-xs font-bold ${active ? 'text-accent' : 'text-muted-foreground/60'}`}>
-                    {num}
-                  </span>
-                  {i < 2 && <span className="hidden font-mono text-[10px] text-muted-foreground/50 sm:inline">NEXT</span>}
-                </div>
-                <span className={`block text-base ${active ? 'text-foreground' : 'text-muted-foreground/80'}`}>
-                  {label}
-                </span>
+              { step: '01', label: 'Check your rank' },
+              { step: '02', label: 'Log food + training' },
+              { step: '03', label: 'Get the diagnosis' },
+            ].map(({ step, label }, i) => (
+              <div key={step} className="flex items-center gap-2">
+                {i > 0 && <span className="text-muted-foreground/30 font-mono text-xs">→</span>}
+                <span className="font-mono text-xs font-bold text-accent">{step}</span>
+                <span className="text-sm text-muted-foreground">{label}</span>
               </div>
             ))}
           </motion.div>
         </div>
 
-        {/* Right: card floats directly — no stage-frame wrapper */}
-        <motion.div
-          className="flex flex-col items-center lg:items-end"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <DiagnosticCard />
-          <p className="mt-3 text-xs text-muted-foreground/50 text-center lg:text-right">
-            Sample output · your data will differ
+        {/* Right: product artifact inside device frame */}
+        <div className="flex flex-col items-center lg:items-end">
+          <ProductShowcase />
+          <p className="mt-8 text-xs text-muted-foreground/50 text-center lg:text-right">
+            Sample app view · founding members get early access on iOS and Android
           </p>
-        </motion.div>
+        </div>
 
-      </div>
-
-      {/* PillarStrip anchored to bottom of Hero */}
-      <div className="relative mt-20">
-        <PillarStrip />
       </div>
     </section>
   )

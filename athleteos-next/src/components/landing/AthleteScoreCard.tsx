@@ -50,7 +50,7 @@ const DEFAULT_METRICS: ScoreMetric[] = [
 export function AthleteScoreCard({
   score = 84,
   systemStatus = 'Optimal',
-  percentileLabel = 'Top 16% in India',
+  percentileLabel = 'Top 16% of competitive Indian strength athletes',
   metrics = DEFAULT_METRICS,
   animate = true,
   variant = 'default',
@@ -78,10 +78,10 @@ export function AthleteScoreCard({
       {/* Header */}
       <div className="flex justify-between items-start gap-4 mb-6">
         <div>
-          <p className="font-mono-label text-muted-foreground mb-1">India percentile</p>
+          <p className="font-mono-label text-muted-foreground mb-1">Competitive benchmark percentile</p>
           <h3 className="text-3xl font-display font-bold text-foreground leading-none">{percentileLabel}</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Tier: <span className="font-bold text-foreground">{systemStatus}</span>
+            Tier: <span className="font-bold text-foreground">{systemStatus}</span> · benchmarked in your weight class
           </p>
         </div>
         <div className="text-right">
@@ -141,10 +141,9 @@ export function AthleteScoreCard({
 
       {/* Footer */}
       <div className="mt-5 pt-5 border-t border-white/[0.06]">
-        <p className="text-sm text-muted-foreground">
-          You are ahead of{' '}
-          <span className="text-foreground font-semibold">{score}%</span>{' '}
-          of athletes in your weight class. The score is secondary; the rank is what matters first.
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Compared against competitive Indian strength-athlete records in your weight class.
+          The score is secondary. The rank tells you where you stand first.
         </p>
       </div>
     </Wrapper>

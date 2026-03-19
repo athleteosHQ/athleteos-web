@@ -6,10 +6,10 @@ export function Footer() {
           <p className="font-bold text-foreground">
             athlete<span className="text-accent">OS</span>
           </p>
-          <p className="mt-1 font-mono-label text-muted-foreground">Stop tracking. Start understanding.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Performance diagnosis + progress tracking for serious strength athletes.</p>
           <a
             href="mailto:contact@athleteos.io"
-            className="mt-1 block font-mono-label text-muted-foreground transition hover:text-foreground"
+            className="mt-2 block text-sm text-muted-foreground transition hover:text-foreground"
           >
             contact@athleteos.io
           </a>

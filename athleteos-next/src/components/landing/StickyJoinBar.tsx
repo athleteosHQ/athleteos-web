@@ -3,10 +3,18 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
+import { getFounderCount } from '@/lib/supabase'
+
+const MAX_FOUNDERS = 500
 
 export function StickyJoinBar() {
   const [visible, setVisible] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const [count, setCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    getFounderCount().then(setCount).catch(() => setCount(142))
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 560)
@@ -14,7 +22,9 @@ export function StickyJoinBar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  if (dismissed) return null
+  if (dismissed || count === null) return null
+
+  const remaining = MAX_FOUNDERS - Math.min(count, MAX_FOUNDERS)
 
   return (
     <AnimatePresence>
@@ -44,7 +54,7 @@ export function StickyJoinBar() {
 
           {/* Copy */}
           <span className="min-w-0 text-xs sm:text-sm text-foreground/80 font-medium leading-snug">
-            Founding cohort · <span className="text-foreground font-bold">₹4,999/yr</span> · <span className="sm:hidden">locked</span><span className="hidden sm:inline">price locked forever</span>
+            <span className="text-foreground font-bold">{remaining} of {MAX_FOUNDERS}</span> founding spots left
           </span>
 
           {/* CTA */}
@@ -52,8 +62,8 @@ export function StickyJoinBar() {
             href="#waitlist"
             className="flex-shrink-0 bg-accent text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-xl hover:bg-accent-light transition-colors whitespace-nowrap"
           >
-            <span className="sm:hidden">Lock price</span>
-            <span className="hidden sm:inline">Lock my price →</span>
+            <span className="sm:hidden">Claim spot</span>
+            <span className="hidden sm:inline">Claim my spot →</span>
           </a>
 
           {/* Dismiss */}

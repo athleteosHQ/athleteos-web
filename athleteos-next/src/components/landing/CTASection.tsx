@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { insertFounder, incrementShareCount, getFounderCount } from '@/lib/supabase'
@@ -14,14 +15,13 @@ const MAX_FOUNDERS = 500
 
 // Founding perks — data-grid rows
 const FOUNDING_PERKS = [
-  { key: 'PRICE_LOCK',        value: '₹4,999/yr · fixed at founding' },
-  { key: 'BETA_ACCESS',       value: 'Pre-launch · diagnosis engine first' },
-  { key: 'DIRECT_LINE',       value: 'WhatsApp to founders · not support tickets' },
-  { key: 'FEATURE_PRIORITY',  value: 'Founding requests built first' },
-  { key: 'FOUNDER_BADGE',     value: 'In-app · permanent' },
+  { key: 'Price lock',        value: '₹4,999/year — the lowest price athleteOS will ever offer, locked permanently' },
+  { key: 'First access',      value: 'Diagnosis, nutrition tracking, and training analysis before public launch' },
+  { key: 'Shape the product', value: 'Direct access to founders — your feedback decides what gets built first' },
+  { key: 'Founder badge',     value: 'Permanent founding member status inside the app' },
 ]
 
-const DISCIPLINE_OPTIONS = ['POWERLIFTING', 'WEIGHTLIFTING', 'HYBRID', 'GENERAL FITNESS']
+const DISCIPLINE_OPTIONS = ['POWERLIFTING', 'WEIGHTLIFTING', 'HYBRID', 'BODYBUILDING']
 const EXPERIENCE_OPTIONS = ['< 1 YR', '1–3 YR', '3–5 YR', '5+ YR']
 
 function GlassField({ type, placeholder, value, onChange, error }: {
@@ -85,25 +85,30 @@ function SlotCounter({ count }: { count: number }) {
   const claimed = Math.min(count, MAX_FOUNDERS)
   const pct = Math.round((claimed / MAX_FOUNDERS) * 100)
   const remaining = MAX_FOUNDERS - claimed
-  const filled = Math.round(pct / 10)
 
   return (
     <div
       className="mb-6 p-4"
       style={{
-        background: 'rgba(0,217,255,0.04)',
-        border: '1px solid rgba(0,217,255,0.14)',
-        borderRadius: 4,
+        background: 'rgba(255,255,255,0.025)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 6,
       }}
     >
-      <div className="flex items-baseline justify-between gap-4 mb-2">
-        <span className="font-mono-label" style={{ color: 'var(--data-cyan)', fontSize: '10px' }}>
-          REMAINING_SLOTS: {remaining}/{MAX_FOUNDERS}
+      <div className="flex items-baseline justify-between gap-4 mb-2.5">
+        <span className="text-xs font-semibold text-foreground">
+          {remaining} founding spots left
         </span>
-        <span className="font-mono text-xs font-bold" style={{ color: 'var(--data-cyan)' }}>{pct}% CLAIMED</span>
+        <span className="text-xs font-bold text-accent">{pct}% claimed</span>
       </div>
-      <div className="font-mono text-muted-foreground/60" style={{ fontSize: '12px', letterSpacing: '0.04em' }}>
-        {'█'.repeat(filled)}{'░'.repeat(10 - filled)}
+      <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+        <div
+          className="h-full rounded-full transition-all duration-700"
+          style={{
+            width: `${pct}%`,
+            background: 'linear-gradient(90deg, var(--accent), var(--accent-light))',
+          }}
+        />
       </div>
     </div>
   )
@@ -139,12 +144,14 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
 
       <div className="p-8 sm:p-10">
         {/* Cohort badge */}
-        <div
-          className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 text-xs font-semibold text-success"
-          style={{ borderRadius: 999, background: 'rgba(45,220,143,0.08)', border: '1px solid rgba(45,220,143,0.2)' }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-glow" />
-          Application Approved — Founding Member #{founder.founderNumber}
+        <div className="mb-6">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-success"
+            style={{ borderRadius: 999, background: 'rgba(45,220,143,0.08)', border: '1px solid rgba(45,220,143,0.2)' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-glow" />
+            Founding Member #{founder.founderNumber} confirmed
+          </div>
         </div>
 
         {/* Queue position */}
@@ -250,7 +257,7 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
           )}
         </div>
 
-        <p className="mt-4 text-center text-xs text-muted-foreground">
+          <p className="mt-4 text-center text-xs text-muted-foreground">
           Questions? WhatsApp us at{' '}
           <a href="https://wa.me/916005109043" className="text-accent hover:underline">6005109043</a>
         </p>
@@ -269,6 +276,19 @@ export function CTASection() {
   const [claimVisible, setClaimVisible] = useState(false)
   const [claiming, setClaiming] = useState(false)
   const [slotCount, setSlotCount] = useState(142)
+
+  // Restore founder state from localStorage on mount (detect existing signup)
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('aos_founder_data')
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        if (parsed.id && parsed.num) {
+          setFounder({ id: parsed.id, founderNumber: parsed.num, shareCount: parsed.shareCount ?? 0 })
+        }
+      }
+    } catch { /* ignore parse errors */ }
+  }, [])
 
   useEffect(() => {
     getFounderCount().then(setSlotCount).catch(() => {})
@@ -310,7 +330,7 @@ export function CTASection() {
   const handleShare = (platform: 'x' | 'wa') => {
     if (!founder) return
     if (platform === 'x') {
-      const txt = encodeURIComponent(`Just locked Founding Member #${founder.founderNumber} on @athleteos_in — ₹4,999/year, price locked forever.\nCheck your India strength rank: https://athleteos.in`)
+      const txt = encodeURIComponent(`Just locked Founding Member #${founder.founderNumber} on @athleteos_in — ₹4,999/year, price locked forever.\nCheck your competitive athlete benchmark rank: https://athleteos.in`)
       window.open(`https://twitter.com/intent/tweet?text=${txt}`, '_blank')
     } else {
       const txt = encodeURIComponent(`Just locked my founding spot on athleteOS — ₹4,999/year, price locked forever. If you're serious about your training, check this out: https://athleteos.in`)
@@ -361,11 +381,13 @@ export function CTASection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <p className="font-mono-label text-accent mb-5">APPLY_FOR_FOUNDING_ACCESS</p>
           <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
-            You&apos;ve seen the gap.<br />
-            <span className="gradient-text">Here&apos;s how you close it.</span>
+            Reserve your founding spot.<br />
+            <span className="gradient-text">No payment until launch.</span>
           </h2>
+          <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
+            We&apos;re building athleteOS for iOS and Android. Founding members lock the lowest price we&apos;ll ever offer and get first access when the app opens.
+          </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-[1fr_380px] gap-6 items-start">
@@ -389,7 +411,7 @@ export function CTASection() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <p className="font-mono-label text-accent mb-2">Founding annual · Price locked forever</p>
+                  <p className="font-mono-label text-accent mb-2">Founding annual</p>
                   <div className="flex items-baseline gap-2">
                     <span className="font-display text-5xl font-bold text-foreground">₹4,999</span>
                     <span className="text-muted-foreground">/year</span>
@@ -415,8 +437,7 @@ export function CTASection() {
                 className="p-3 text-base text-muted-foreground leading-relaxed"
                 style={{ borderRadius: 4, background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.06)' }}
               >
-                You spend <span className="text-foreground font-semibold">₹3,000+/month</span> on protein and creatine.
-                For <span className="text-accent font-semibold">₹416/month</span> you&apos;ll know if any of it is actually working.
+                Founding members activate first when the app launches on iOS and Android.
               </div>
             </div>
 
@@ -467,10 +488,9 @@ export function CTASection() {
               {/* Slot counter */}
               <SlotCounter count={slotCount} />
 
-              <p className="font-mono-label text-accent mb-1">Apply for founding access</p>
-              <p className="text-lg font-bold text-foreground mb-1">Lock price + get beta access</p>
+              <p className="text-lg font-bold text-foreground mb-1">Reserve your founding spot</p>
               <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                No payment now. This reserves your founding access and locks your launch price.
+                No payment now. You&apos;ll only pay when athleteOS opens to founding members on iOS and Android.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-3">
@@ -522,7 +542,7 @@ export function CTASection() {
                   className="cta-glow w-full bg-accent py-4 font-bold text-white transition hover:bg-accent-light accent-glow disabled:opacity-50 mt-2"
                   style={{ borderRadius: 4 }}
                 >
-                  {loading ? 'Submitting…' : 'Submit Application →'}
+                  {loading ? 'Reserving…' : 'Reserve My Spot — Free →'}
                 </button>
               </form>
 

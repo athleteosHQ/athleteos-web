@@ -55,14 +55,14 @@ export function NavBar() {
             </circle>
           </svg>
 
-          {/* Wordmark + version */}
+          {/* Wordmark + access status */}
           <span
             className="text-base sm:text-lg font-extrabold"
             style={{ fontFamily: 'var(--font-jakarta)', letterSpacing: '-0.04em' }}
           >
             <span className="text-foreground">athlete</span><span className="text-accent">OS</span>
           </span>
-          <span className="hidden font-mono text-[10px] text-muted-foreground/40 sm:inline">v0.1-beta</span>
+          <span className="hidden font-mono text-[10px] text-muted-foreground/40 sm:inline">early access</span>
         </Link>
 
         <div className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
@@ -81,8 +81,8 @@ export function NavBar() {
           href="#rank"
           className="cta-glow rounded bg-accent px-3 py-2 text-xs sm:px-4 sm:text-sm font-bold text-white transition hover:bg-accent-light accent-glow whitespace-nowrap"
         >
-          <span className="sm:hidden">Rank Free</span>
-          <span className="hidden sm:inline">Check My Rank — Free</span>
+          <span className="sm:hidden">Diagnose Free</span>
+          <span className="hidden sm:inline">Diagnose My Plateau — Free</span>
         </a>
       </div>
     </nav>

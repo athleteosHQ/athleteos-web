@@ -6,7 +6,7 @@ const OUTCOME_ROWS = [
   {
     key: 'RANK_OUTPUT',
     label: 'Where you stand',
-    value: 'Top 23% nationally',
+    value: 'Top 23% of competitive Indian strength athletes',
     sub: 'Squat · Top 31%   Bench · Top 22%   Deadlift · Top 14%',
     color: 'var(--data-cyan, #00D9FF)',
     bg: 'rgba(0,217,255,0.05)',
@@ -54,10 +54,10 @@ export function SampleOutcomeBlock() {
         >
           <p className="font-mono-label text-accent mb-3">Sample athlete outcome</p>
           <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2">
-            From rank to correction plan.
+            From rank to diagnosis to tracked progress.
           </h2>
           <p className="text-sm text-muted-foreground max-w-2xl">
-            One athlete. One bottleneck. One correction path. This section should make the product feel concrete in seconds.
+            One athlete. One bottleneck. One correction path. One measurable outcome to track in the next block.
           </p>
         </motion.div>
 
@@ -85,6 +85,7 @@ export function SampleOutcomeBlock() {
               <div className="rounded-2xl p-5" style={{ background: 'rgba(0,217,255,0.05)', border: '1px solid rgba(0,217,255,0.18)' }}>
                 <p className="font-mono-label text-accent-light/70 mb-2">Current rank</p>
                 <p className="font-mono text-4xl font-bold text-foreground">TOP 23%</p>
+                <p className="mt-2 text-sm text-muted-foreground">within our competitive Indian strength-athlete benchmark</p>
                 <p className="mt-2 text-sm text-muted-foreground">Squat top 31% · Bench top 22% · Deadlift top 14%</p>
               </div>
               <div className="rounded-2xl p-5" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)' }}>
@@ -100,7 +101,7 @@ export function SampleOutcomeBlock() {
                 Add 45 minutes of sleep on training days and reduce AMRAP volume by 20% until recovery markers stabilise.
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
-                Projected upside: +8.2kg squat 1RM in 6 weeks if recovery debt closes.
+                Projected upside: +8.2kg squat 1RM in 6 weeks if recovery debt closes. That becomes the next progress marker to track.
               </p>
             </div>
           </div>

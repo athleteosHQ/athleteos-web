@@ -37,7 +37,7 @@ type Scenario = {
 
 const SCENARIOS: Scenario[] = [
   {
-    tag: 'LIVE_DIAGNOSIS · WK_04 · ACCUMULATED_LOAD',
+    tag: 'SAMPLE_DIAGNOSIS · WK_04 · ACCUMULATED_LOAD',
     title: 'Training in a fatigued state — 41/100 recovery',
     eyebrow: 'Primary signal',
     activeRow: {
@@ -68,7 +68,7 @@ const SCENARIOS: Scenario[] = [
     metricSub: '/ 100 score',
   },
   {
-    tag: 'LIVE_DIAGNOSIS · WK_11 · PEAKING_BLOCK',
+    tag: 'SAMPLE_DIAGNOSIS · WK_11 · PEAKING_BLOCK',
     title: 'Top 10% strength in 6 weeks — if one gap closes',
     eyebrow: 'Primary signal',
     activeRow: {
@@ -99,7 +99,7 @@ const SCENARIOS: Scenario[] = [
     metricSub: 'if recovery closes',
   },
   {
-    tag: 'LIVE_DIAGNOSIS · WK_08 · VOLUME_PHASE',
+    tag: 'SAMPLE_DIAGNOSIS · WK_08 · VOLUME_PHASE',
     title: '46% of your training isn\'t adapting you',
     eyebrow: 'Primary signal',
     activeRow: {
