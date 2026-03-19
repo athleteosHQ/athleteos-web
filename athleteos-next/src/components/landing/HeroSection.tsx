@@ -12,7 +12,7 @@ const fadeUp = (delay = 0) => ({
 
 export function HeroSection() {
   return (
-    <section className="relative py-24 px-4 sm:py-32 sm:px-6 overflow-hidden">
+    <section className="editorial-stage relative py-24 px-4 sm:py-32 sm:px-6 overflow-hidden">
 
       {/* Spotlight orbs */}
       <div
@@ -35,7 +35,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative container mx-auto max-w-6xl grid lg:grid-cols-2 gap-16 items-center">
+      <div className="relative container mx-auto max-w-6xl grid lg:grid-cols-[0.92fr_1.08fr] gap-14 items-center">
 
         {/* Left */}
         <div>
@@ -53,24 +53,55 @@ export function HeroSection() {
           </motion.h1>
 
           <motion.p {...fadeUp(0.2)} className="text-lg text-muted-foreground leading-relaxed max-w-md mb-10">
-            Most athletes can&apos;t see the friction between their fuel, fatigue, and force.
-            athleteOS finds the gap.
+            Most athletes track everything and understand nothing.
+            athleteOS gives you the one number that explains why you&apos;re stuck.
           </motion.p>
 
-          <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+          <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-wrap">
             <a
               href="#rank"
               className="cta-glow inline-flex items-center gap-2 bg-accent text-white font-bold px-8 py-4 rounded-xl group transition hover:bg-accent-light accent-glow"
             >
-              Get Your Athlete Score
+              Find My Rank
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
+            <span
+              className="inline-flex items-center gap-1.5 font-mono-label rounded-full px-3 py-1"
+              style={{
+                background: 'rgba(255,122,47,0.08)',
+                border: '1px solid rgba(255,122,47,0.22)',
+                color: 'rgba(255,154,92,0.85)',
+                fontSize: '11px',
+              }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                style={{ background: '#FF7A2F', boxShadow: '0 0 6px #FF7A2F' }}
+              />
+              Founding Cohort · Max 500 athletes · Price locked forever
+            </span>
+          </motion.div>
+
+          <motion.div {...fadeUp(0.32)} className="mt-6 flex flex-wrap gap-3">
+            {[
+              'IPF-calibrated percentiles',
+              '3,200+ Indian athletes',
+              'Free rank check',
+            ].map(label => (
+              <div key={label} className="status-pill">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+                <span className="font-mono-label text-muted-foreground">{label}</span>
+              </div>
+            ))}
+          </motion.div>
+
+          <motion.div {...fadeUp(0.35)} className="mt-3">
             <a
               href="#system"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-6 py-4 text-sm font-semibold text-muted-foreground backdrop-blur-sm transition hover:border-white/20 hover:text-foreground"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground"
             >
-              See How It Works
-              <ChevronRight className="w-4 h-4" />
+              See how it works
+              <ChevronRight className="w-3.5 h-3.5" />
             </a>
           </motion.div>
 
@@ -101,10 +132,18 @@ export function HeroSection() {
 
         {/* Right: Diagnostic Card */}
         <div className="flex flex-col items-center lg:items-end gap-3">
-          <p className="font-mono-label text-muted-foreground self-start lg:self-auto">
-            Sample output · your data will differ
-          </p>
-          <DiagnosticCard />
+          <div className="stage-frame w-full p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3 px-2 pb-4">
+              <p className="font-mono-label text-muted-foreground self-start lg:self-auto">
+                Sample output · your data will differ
+              </p>
+              <div className="status-pill">
+                <span className="w-1.5 h-1.5 rounded-full bg-success flex-shrink-0" />
+                <span className="font-mono-label text-muted-foreground">Signal confidence high</span>
+              </div>
+            </div>
+            <DiagnosticCard />
+          </div>
         </div>
 
       </div>

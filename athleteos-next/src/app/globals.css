@@ -5,8 +5,8 @@
   --background:        #070D14;
   --foreground:        #EDF1F5;
   --muted-foreground:  #73839a;
-  --card:              rgba(255,255,255,0.026);
-  --border:            rgba(255, 255, 255, 0.09);
+  --card:              rgba(255,255,255,0.045);
+  --border:            rgba(255, 255, 255, 0.12);
   --secondary:         #111927;
   --accent:            #FF7A2F;
   --accent-light:      #FF9A5C;
@@ -23,8 +23,8 @@ html { scroll-behavior: smooth; }
 
 body {
   background:
-    radial-gradient(ellipse 130% 60% at 50% -12%, rgba(255,122,47,0.18) 0%, transparent 52%),
-    radial-gradient(ellipse 45% 28% at 92% 90%,  rgba(224,90,0,0.07)   0%, transparent 42%),
+    radial-gradient(ellipse 90% 50% at 50% -12%, rgba(255,122,47,0.10) 0%, transparent 52%),
+    radial-gradient(ellipse 45% 28% at 92% 90%,  rgba(224,90,0,0.04)   0%, transparent 42%),
     #070D14;
   color: var(--foreground);
   font-family: var(--font-jakarta), sans-serif;
@@ -66,13 +66,24 @@ body {
 
 /* ── Utility classes ───────────────────────────────────────── */
 .card-surface {
-  background: rgba(255,255,255,0.026);
-  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 1rem;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.06),
     inset 0 -1px 0 rgba(0,0,0,0.15),
     0 24px 72px rgba(0,0,0,0.32);
+}
+
+/* Secondary card surface — informational/supporting content */
+.card-surface-secondary {
+  background: rgba(255,255,255,0.028);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 1rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    inset 0 -1px 0 rgba(0,0,0,0.10),
+    0 12px 40px rgba(0,0,0,0.22);
 }
 
 /* Premium hero card — glassmorphism + float */
@@ -96,6 +107,42 @@ body {
   background: linear-gradient(180deg, rgba(255,122,47,0.08), rgba(255,255,255,0.02));
   border: 1px solid rgba(255,122,47,0.18);
   border-radius: 1rem;
+}
+
+.editorial-stage {
+  position: relative;
+  overflow: hidden;
+}
+.editorial-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 24%, rgba(255,122,47,0.12), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(255,154,92,0.10), transparent 26%),
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 22%);
+  opacity: 0.9;
+}
+
+.stage-frame {
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 1.5rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 30px 80px rgba(0,0,0,0.24);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  padding: 0.6rem 0.85rem;
 }
 
 /* Hover lift */
@@ -159,8 +206,8 @@ body {
 .font-display   { font-family: var(--font-jakarta), sans-serif; font-weight: 800; }
 .font-mono-label {
   font-family: var(--font-mono), monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 

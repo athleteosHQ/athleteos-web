@@ -13,6 +13,7 @@ export interface ScoreMetric {
 interface AthleteScoreCardProps {
   score?: number
   systemStatus?: string
+  percentileLabel?: string
   metrics?: ScoreMetric[]
   animate?: boolean
   variant?: 'hero' | 'default'
@@ -49,6 +50,7 @@ const DEFAULT_METRICS: ScoreMetric[] = [
 export function AthleteScoreCard({
   score = 84,
   systemStatus = 'Optimal',
+  percentileLabel = 'Top 16% in India',
   metrics = DEFAULT_METRICS,
   animate = true,
   variant = 'default',
@@ -74,14 +76,18 @@ export function AthleteScoreCard({
       )}
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start gap-4 mb-6">
         <div>
-          <p className="font-mono-label text-muted-foreground mb-1">System Status</p>
-          <h3 className="text-2xl font-display font-semibold text-foreground">{systemStatus}</h3>
+          <p className="font-mono-label text-muted-foreground mb-1">India percentile</p>
+          <h3 className="text-3xl font-display font-bold text-foreground leading-none">{percentileLabel}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Tier: <span className="font-semibold text-foreground">{systemStatus}</span>
+          </p>
         </div>
         <div className="text-right">
-          <p className="font-mono-label text-muted-foreground mb-1">Athlete Score</p>
-          <p className="text-5xl font-display font-bold text-accent tabular-nums">{score}</p>
+          <p className="font-mono-label text-muted-foreground/80 mb-1">Athlete Score</p>
+          <p className="text-3xl font-display font-bold text-accent/90 tabular-nums">{score}</p>
+          <p className="mt-1 text-xs text-muted-foreground">Support signal</p>
         </div>
       </div>
 
@@ -139,7 +145,7 @@ export function AthleteScoreCard({
         <p className="text-sm text-muted-foreground">
           You are ahead of{' '}
           <span className="text-foreground font-semibold">{score}%</span>{' '}
-          of athletes in your weight class.
+          of athletes in your weight class. The score is secondary; the rank is what matters first.
         </p>
       </div>
     </Wrapper>

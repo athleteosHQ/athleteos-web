@@ -21,11 +21,22 @@ const FOUNDING_PERKS = [
   { icon: Users,         text: 'Founding member badge in-app. You were here before anyone else.' },
 ]
 
-// Demoted comparison (shown as "what others will pay")
-const LATER_TIERS = [
-  { label: 'Trial',        price: '₹199',   note: '7 days only' },
-  { label: 'Monthly',      price: '₹999',   note: 'per month' },
-  { label: 'Annual',       price: '₹6,999', note: 'after launch' },
+const SIGNUP_OUTCOMES = [
+  {
+    label: 'Price lock',
+    title: '₹4,999/year founding price',
+    note: 'Fixed before launch, even if public pricing goes up later.',
+  },
+  {
+    label: 'Beta access',
+    title: 'Test the diagnosis engine first',
+    note: 'You get in before the public launch.',
+  },
+  {
+    label: 'Founder priority',
+    title: 'Direct feedback access',
+    note: 'Early members shape the product and get first rollout priority.',
+  },
 ]
 
 function GlassField({ type, placeholder, value, onChange, error }: {
@@ -127,7 +138,7 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
         {/* Perks locked */}
         <div className="mb-6 space-y-2.5">
           <p className="font-mono-label text-muted-foreground mb-3">What you&apos;ve locked in</p>
-          {FOUNDING_PERKS.slice(0, 3).map(({ icon: Icon, text }) => (
+          {FOUNDING_PERKS.slice(0, 3).map(({ text }) => (
             <div key={text} className="flex items-start gap-3">
               <div className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,122,47,0.15)' }}>
                 <Check size={10} className="text-accent" />
@@ -359,7 +370,7 @@ export function CTASection() {
               >
                 You spend <span className="text-foreground font-semibold">₹3,000+/month</span> on protein and creatine.
                 For <span className="text-accent font-semibold">₹416/month</span> you&apos;ll know if any of it is actually working.
-                Less than 2 scoops of whey — to diagnose the gap that&apos;s costing you years.
+                A small fraction of what you already spend — to diagnose the gap that&apos;s costing you years.
               </div>
             </div>
 
@@ -386,24 +397,6 @@ export function CTASection() {
                 ))}
               </div>
             </div>
-
-            {/* Demoted comparison */}
-            <div className="mt-4">
-              <p className="font-mono-label text-muted-foreground mb-2">What you&apos;d pay after launch ↓</p>
-              <div className="grid grid-cols-3 gap-2">
-                {LATER_TIERS.map(t => (
-                  <div
-                    key={t.label}
-                    className="rounded-xl p-3 text-center opacity-50"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}
-                  >
-                    <p className="font-mono-label text-muted-foreground mb-1">{t.label}</p>
-                    <p className="font-mono text-sm font-bold text-foreground">{t.price}</p>
-                    <p className="font-mono-label text-muted-foreground mt-0.5">{t.note}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </motion.div>
 
           {/* Right: form */}
@@ -421,10 +414,10 @@ export function CTASection() {
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 72px rgba(0,0,0,0.32)',
               }}
             >
-              <p className="font-mono-label text-accent mb-1">Reserve your founding spot</p>
-              <p className="text-lg font-bold text-foreground mb-1">Lock price before launch</p>
+              <p className="font-mono-label text-accent mb-1">Join the founding cohort</p>
+              <p className="text-lg font-bold text-foreground mb-1">Lock price + get beta access</p>
               <p className="text-xs text-muted-foreground mb-6">
-                No payment now. Price locks on confirmation.
+                No payment now. This reserves your founding access and locks your launch price.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-3">
@@ -492,6 +485,31 @@ export function CTASection() {
           </motion.div>
 
         </div>
+
+        {/* Outcome summary — full width below grid */}
+        <motion.div
+          className="mt-6"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <p className="font-mono-label text-muted-foreground mb-3">What signing up actually gets you</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {SIGNUP_OUTCOMES.map(t => (
+              <div
+                key={t.label}
+                className="rounded-xl p-4 flex flex-col"
+                style={{ background: 'rgba(255,255,255,0.028)', border: '1px solid rgba(255,255,255,0.09)' }}
+              >
+                <p className="font-mono-label text-accent/70 mb-2" style={{ minHeight: '2rem' }}>{t.label}</p>
+                <p className="text-sm font-bold text-foreground leading-snug mb-2">{t.title}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed mt-auto">{t.note}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
       </div>
     </section>
   )

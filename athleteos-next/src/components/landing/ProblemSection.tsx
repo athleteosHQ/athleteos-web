@@ -15,27 +15,118 @@ const PROBLEM_CARDS = [
   { num: '03', text: 'Neither explains the stall.' },
 ]
 
+const IMPACT_CONTEXT = [
+  { label: 'IFCT 2017', note: 'National Institute of Nutrition, Hyderabad', color: '#2DDC8F' },
+  { label: 'vs MyFitnessPal', note: 'crowd-sourced food entries', color: '#F59E0B' },
+  { label: 'Per 100g', note: 'cooked or prepared weight', color: '#FF7A2F' },
+]
+
+const IMPACT_STATS = [
+  { kicker: 'Protein missed in 12 months', value: '5.4 kg', note: 'Likely miscounted because the food data is wrong.' },
+  { kicker: 'Potential lean mass left behind', value: '2.1 kg', note: 'The performance cost of tracking with bad numbers.' },
+]
+
 export function ProblemSection() {
   return (
-    <section id="problem" className="px-4 py-16 sm:px-6">
+    <section id="problem" className="px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
-          <p className="font-mono-label text-accent mb-3">Step 2 · The data gap</p>
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-            MFP under-reports Indian food protein by 20–30%.
-          </h2>
-          <p className="text-muted-foreground max-w-2xl leading-relaxed">
-            Using inaccurate data for 12 months means you&apos;ve likely miscounted{' '}
-            <span className="font-semibold text-foreground">5.4kg of protein</span>. That&apos;s roughly
-            2.1kg of potential lean muscle mass left on the table.
-          </p>
-        </motion.div>
+        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-start mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="card-surface p-6 md:p-8"
+          >
+            <p className="font-mono-label text-accent mb-3">Step 2 · The data gap</p>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
+              MFP under-reports Indian food protein by 20–30%.
+            </h2>
+            <div className="flex max-w-3xl flex-wrap gap-2.5">
+              {IMPACT_CONTEXT.map(({ label, note, color }) => (
+                <div
+                  key={label}
+                  className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                >
+                  <span className="h-2 w-2 rounded-full" style={{ background: color }} />
+                  <span className="text-muted-foreground">
+                    <span className="font-semibold text-foreground">{label}</span> {note}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 max-w-3xl">
+              {IMPACT_STATS.map(({ kicker, value, note }) => (
+                <div
+                  key={kicker}
+                  className="rounded-2xl p-5"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(21,31,43,0.98), rgba(17,26,37,0.96))',
+                    border: '1px solid rgba(255,255,255,0.09)',
+                  }}
+                >
+                  <p className="font-mono-label text-destructive mb-2">{kicker}</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">{value}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{note}</p>
+                </div>
+              ))}
+            </div>
+            <div
+              className="mt-4 inline-flex items-center gap-2 rounded-full px-3.5 py-2"
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-success" />
+              <span className="font-mono-label text-muted-foreground">Source: NIN · IFCT 2017 · verified against peer literature</span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="card-surface-secondary p-6 md:p-8 h-full"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.08 }}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-mono-label text-muted-foreground mb-2">Protein tracking drift</p>
+                <p className="font-mono text-5xl font-bold text-foreground">27%</p>
+              </div>
+              <div
+                className="rounded-xl px-3 py-2"
+                style={{ background: 'rgba(226,75,74,0.10)', border: '1px solid rgba(226,75,74,0.22)' }}
+              >
+                <span className="font-mono-label text-destructive">Plateau risk ↑</span>
+              </div>
+            </div>
+            <div className="mt-8 flex items-end gap-2 h-48">
+              {[32, 40, 36, 45, 49, 49, 49].map((h, i) => (
+                <div
+                  key={i}
+                  className="flex-1 rounded-t-md relative"
+                  style={{
+                    height: `${h * 3.4}px`,
+                    background: i < 4 ? 'rgba(255,255,255,0.09)' : i === 4 ? 'rgba(255,122,47,0.42)' : 'rgba(226,75,74,0.26)',
+                    borderTop: i >= 5 ? '1px dashed rgba(226,75,74,0.55)' : 'none',
+                  }}
+                >
+                  {i === 4 && (
+                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-bold text-white whitespace-nowrap"
+                      style={{ background: '#E24B4A' }}>
+                      Plateau point
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 pt-5 border-t border-white/8">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                <span className="font-semibold text-destructive">Critical:</span> you can think you&apos;re hitting 180g protein and still be closer to 145g. That gap compounds for months before it shows up in your lifts.
+              </p>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Data table */}
         <motion.div
@@ -68,16 +159,16 @@ export function ProblemSection() {
           {PROBLEM_CARDS.map(({ num, text }, i) => (
             <motion.div
               key={num}
-              className="card-surface p-4"
+              className={`p-4 ${i === 2 ? 'card-surface' : 'card-surface-secondary'}`}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
             >
-              <p className="font-mono-label text-muted-foreground mb-2">{num}</p>
-              <p className="text-sm font-semibold text-foreground">{text}</p>
-            </motion.div>
-          ))}
+                <p className="font-mono-label text-muted-foreground mb-2">{num}</p>
+                <p className="text-sm font-semibold text-foreground">{text}</p>
+              </motion.div>
+            ))}
         </div>
       </div>
     </section>
