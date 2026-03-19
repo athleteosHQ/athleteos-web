@@ -24,11 +24,11 @@ export function StickyJoinBar() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2.5 rounded-2xl w-max max-w-[calc(100vw-2rem)]"
+          className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex max-w-[calc(100vw-1rem)] items-center gap-2 rounded-2xl px-3 py-3 sm:gap-3 sm:px-4 sm:py-2.5"
           style={{
             background: 'rgba(7,13,20,0.94)',
-            border: '1px solid rgba(255,122,47,0.28)',
-            boxShadow: '0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04), 0 0 20px rgba(255,122,47,0.06)',
+            border: '1px solid rgba(127,178,255,0.24)',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04), 0 0 20px rgba(127,178,255,0.05)',
             backdropFilter: 'blur(20px)',
           }}
         >
@@ -36,23 +36,24 @@ export function StickyJoinBar() {
           <span
             className="w-2 h-2 rounded-full flex-shrink-0"
             style={{
-              background: '#FF7A2F',
-              boxShadow: '0 0 0 4px rgba(255,122,47,0.15)',
+              background: '#7FB2FF',
+              boxShadow: '0 0 0 4px rgba(127,178,255,0.15)',
               animation: 'orbitPulse 2s ease-in-out infinite',
             }}
           />
 
           {/* Copy */}
-          <span className="text-sm text-foreground/80 font-medium whitespace-nowrap">
-            Founding cohort · <span className="text-foreground font-bold">₹4,999/yr</span> · price locked forever
+          <span className="min-w-0 text-xs sm:text-sm text-foreground/80 font-medium leading-snug">
+            Founding cohort · <span className="text-foreground font-bold">₹4,999/yr</span> · <span className="sm:hidden">locked</span><span className="hidden sm:inline">price locked forever</span>
           </span>
 
           {/* CTA */}
           <a
             href="#waitlist"
-            className="flex-shrink-0 bg-accent text-white text-sm font-bold px-4 py-2 rounded-xl hover:bg-accent-light transition-colors"
+            className="flex-shrink-0 bg-accent text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-xl hover:bg-accent-light transition-colors whitespace-nowrap"
           >
-            Lock my price →
+            <span className="sm:hidden">Lock price</span>
+            <span className="hidden sm:inline">Lock my price →</span>
           </a>
 
           {/* Dismiss */}

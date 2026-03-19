@@ -30,7 +30,7 @@ function GlassInput({ label, value, onChange, placeholder, min, max, step }: {
         borderRadius: '12px',
         padding: '12px 14px',
       }}
-      onFocus={e => { e.target.style.borderColor = 'rgba(255,122,47,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(255,122,47,0.08)' }}
+      onFocus={e => { e.target.style.borderColor = 'rgba(127,178,255,0.48)'; e.target.style.boxShadow = '0 0 0 3px rgba(127,178,255,0.08)' }}
       onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.boxShadow = 'none' }}
     />
   )
@@ -53,7 +53,7 @@ function GlassField({ type, placeholder, value, onChange }: {
         borderRadius: 12,
         padding: '12px 14px',
       }}
-      onFocus={e => { e.target.style.borderColor = 'rgba(255,122,47,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(255,122,47,0.08)' }}
+      onFocus={e => { e.target.style.borderColor = 'rgba(127,178,255,0.48)'; e.target.style.boxShadow = '0 0 0 3px rgba(127,178,255,0.08)' }}
       onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.boxShadow = 'none' }}
     />
   )
@@ -83,7 +83,7 @@ function LiftRow({ label, weightVal, repsVal, onWeight, onReps }: {
 // ── Diagnostic bars ───────────────────────────────────────────────────────────
 function DiagnosticBars({ result }: { result: RankResult }) {
   const bars = [
-    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: '#FF7A2F', est: result.squat.estimated1RM },
+    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: '#7FB2FF', est: result.squat.estimated1RM },
     { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: '#F59E0B', est: result.bench.estimated1RM },
     { label: 'Deadlift', pct: result.deadlift.percentile, value: result.deadlift.estimated1RM > 0 ? `Top ${100 - result.deadlift.percentile}%` : '—', color: '#E24B4A', est: result.deadlift.estimated1RM },
     ...(result.run5k ? [{ label: '5K Run', pct: result.run5k.percentile, value: `Top ${100 - result.run5k.percentile}%`, color: '#2DDC8F', est: 1 }] : []),
@@ -132,7 +132,7 @@ function DiagnosticBars({ result }: { result: RankResult }) {
 
 // ── Ghost tier preview (idle state right column) ──────────────────────────────
 const GHOST_BARS = [
-  { label: 'Squat',    color: '#FF7A2F', pct: 78 },
+  { label: 'Squat',    color: '#7FB2FF', pct: 78 },
   { label: 'Bench',    color: '#F59E0B', pct: 55 },
   { label: 'Deadlift', color: '#E24B4A', pct: 84 },
 ]
@@ -164,19 +164,19 @@ function GhostTierPreview() {
           <div
             className="relative flex-shrink-0 w-20 h-20 rounded-full"
             style={{
-              background: 'conic-gradient(#FF7A2F 0deg 270deg, rgba(255,255,255,0.06) 270deg 360deg)',
+              background: 'conic-gradient(#7FB2FF 0deg 270deg, rgba(255,255,255,0.06) 270deg 360deg)',
             }}
           >
             <div
               className="absolute inset-2 rounded-full flex items-center justify-center"
               style={{ background: 'rgba(7,13,20,0.92)' }}
             >
-              <span className="font-mono text-xl font-bold text-accent">74</span>
+              <span className="font-display text-xl font-bold text-accent">74</span>
             </div>
           </div>
           <div>
             <p className="font-mono-label text-accent mb-0.5">India Rank</p>
-            <p className="font-mono text-2xl font-bold text-foreground">ADVANCED</p>
+            <p className="font-display text-2xl font-bold text-foreground">ADVANCED</p>
             <p className="text-xs text-muted-foreground mt-0.5">Top 22% nationally</p>
           </div>
         </div>
@@ -209,7 +209,7 @@ function GhostTierPreview() {
       >
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: 'rgba(255,122,47,0.12)', border: '1px solid rgba(255,122,47,0.30)' }}
+          style={{ background: 'rgba(127,178,255,0.12)', border: '1px solid rgba(127,178,255,0.26)' }}
         >
           <Activity className="w-5 h-5 text-accent" />
         </div>
@@ -441,8 +441,8 @@ export function RankSection() {
   const reset = () => { setResult(null); setError('') }
 
   return (
-    <section id="rank" className="py-24 px-4 sm:px-6">
-      <div className="container mx-auto max-w-4xl">
+    <section id="rank" className="py-24 px-6 md:px-10">
+      <div className="container mx-auto max-w-6xl">
 
         {/* Section header */}
         <motion.div
@@ -452,23 +452,19 @@ export function RankSection() {
           className="mb-8"
         >
           <p className="font-mono-label text-accent mb-3">Step 1 · Free rank check</p>
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
             Know where you stand.
           </h2>
-          <p className="text-muted-foreground mb-4">
-            Before you can fix a plateau, you need a baseline. Find exactly where you rank against Indian athletes in your weight class, right now, for free.
-          </p>
 
-          {/* Social proof chips */}
+          {/* Mono chips */}
           <div className="flex flex-wrap gap-2">
-            {['IPF-calibrated percentiles', '3,200+ Indian athletes', 'Free · no account'].map(chip => (
+            {['IPF_CALIBRATED', 'INDIA_DATABASE', 'FREE'].map(chip => (
               <span
                 key={chip}
-                className="font-mono-label text-muted-foreground rounded-full px-3 py-1"
+                className="rounded-full px-3 py-1.5"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.08)',
-                  fontSize: '11px',
                 }}
               >
                 {chip}
@@ -503,7 +499,7 @@ export function RankSection() {
                     <button
                       key={t}
                       onClick={() => setTrainingType(t)}
-                      className="px-4 py-2 rounded-xl font-mono-label transition"
+                      className="px-4 py-2 rounded-xl text-sm font-semibold transition"
                       style={trainingType === t
                         ? { background: 'rgba(255,122,47,0.14)', border: '1px solid rgba(255,122,47,0.35)', color: '#FF9A5C' }
                         : { background: 'transparent', border: '1px solid rgba(255,255,255,0.09)', color: 'var(--muted-foreground)' }
@@ -516,7 +512,7 @@ export function RankSection() {
 
                 <div className="space-y-5">
                   <div>
-                    <p className="font-mono-label text-muted-foreground mb-1.5">Bodyweight</p>
+                    <p className="text-sm font-semibold text-muted-foreground mb-1.5">Bodyweight</p>
                     <div className="w-40">
                       <GlassInput placeholder="kg" value={f.bw} onChange={upd('bw')} min={40} max={250} step={0.5} />
                     </div>
@@ -526,8 +522,8 @@ export function RankSection() {
                     style={{ background: 'linear-gradient(90deg, rgba(255,122,47,0.2), rgba(255,255,255,0.04), transparent)' }}
                   />
                   <div>
-                    <p className="font-mono-label text-muted-foreground mb-1.5">Enter your best recent set for each lift</p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-sm font-semibold text-muted-foreground mb-1.5">Enter your best recent set for each lift</p>
+                    <p className="text-base text-muted-foreground leading-relaxed">
                       Use <span className="text-foreground font-semibold">weight × reps</span>. Sets are not needed. Example: <span className="text-foreground font-semibold">190 × 1</span> or <span className="text-foreground font-semibold">140 × 5</span>.
                     </p>
                   </div>
@@ -536,7 +532,7 @@ export function RankSection() {
                   <LiftRow label="Deadlift" weightVal={f.dlW} repsVal={f.dlR} onWeight={upd('dlW')} onReps={upd('dlR')} />
                   {trainingType === 'hybrid' && (
                     <div>
-                      <p className="font-mono-label text-muted-foreground mb-1.5">5K Run Time</p>
+                      <p className="text-sm font-semibold text-muted-foreground mb-1.5">5K Run Time</p>
                       <div className="flex gap-2 w-52">
                         <GlassInput placeholder="min" value={f.runMin} onChange={upd('runMin')} min={12} max={60} />
                         <GlassInput placeholder="sec" value={f.runSec} onChange={upd('runSec')} min={0} max={59} />
@@ -590,7 +586,7 @@ export function RankSection() {
                     className="rounded-2xl p-4 space-y-3"
                     style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.08)' }}
                   >
-                    <p className="font-mono-label text-muted-foreground" style={{ fontSize: 11 }}>SHARE YOUR PERCENTILE</p>
+                    <p className="text-sm font-semibold text-muted-foreground">Share your percentile</p>
                     <div className="grid grid-cols-3 gap-2">
                       <button
                         onClick={async () => {

@@ -1,17 +1,22 @@
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google'
+import { Archivo, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 
-const jakarta = Plus_Jakarta_Sans({
+const archivo = Archivo({
   subsets: ['latin'],
-  variable: '--font-jakarta',
-  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-archivo',
+  weight: ['400', '600', '700', '800', '900'],
 })
 
-const spaceMono = Space_Mono({
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
-  weight: ['400', '700'],
+  weight: ['400', '500', '700'],
 })
 
 export const metadata: Metadata = {
@@ -22,7 +27,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${jakarta.variable} ${spaceMono.variable} bg-[#0B1118] font-sans text-white antialiased`}>
+      <body className={`${archivo.variable} ${inter.variable} ${jetbrainsMono.variable} bg-[#0B1118] font-sans text-white antialiased`}>
         {children}
       </body>
     </html>

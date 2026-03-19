@@ -71,7 +71,7 @@ export function AthleteScoreCard({
       {isHero && (
         <div
           className="pointer-events-none absolute top-0 right-0 w-32 h-32 rounded-tr-2xl"
-          style={{ background: 'radial-gradient(circle at top right, rgba(255,122,47,0.2), transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle at top right, rgba(127,178,255,0.18), transparent 70%)' }}
         />
       )}
 
@@ -81,13 +81,12 @@ export function AthleteScoreCard({
           <p className="font-mono-label text-muted-foreground mb-1">India percentile</p>
           <h3 className="text-3xl font-display font-bold text-foreground leading-none">{percentileLabel}</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Tier: <span className="font-semibold text-foreground">{systemStatus}</span>
+            Tier: <span className="font-bold text-foreground">{systemStatus}</span>
           </p>
         </div>
         <div className="text-right">
-          <p className="font-mono-label text-muted-foreground/80 mb-1">Athlete Score</p>
-          <p className="text-3xl font-display font-bold text-accent/90 tabular-nums">{score}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Support signal</p>
+          <p className="font-mono-label text-muted-foreground mb-1">Score</p>
+          <p className="text-4xl font-display font-bold text-accent tabular-nums">{score}</p>
         </div>
       </div>
 
@@ -96,8 +95,8 @@ export function AthleteScoreCard({
         <svg viewBox="0 0 300 48" className="w-full h-full" preserveAspectRatio="none">
           <defs>
             <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stopColor="#FF7A2F" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#FF7A2F" stopOpacity="0" />
+              <stop offset="0%"   stopColor="#7FB2FF" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#7FB2FF" stopOpacity="0" />
             </linearGradient>
           </defs>
           <path
@@ -107,12 +106,12 @@ export function AthleteScoreCard({
           <path
             d="M0 40 Q30 35 60 30 T120 20 T180 25 T240 12 T300 8"
             fill="none"
-            stroke="#FF7A2F"
+            stroke="#7FB2FF"
             strokeWidth="2"
             strokeLinecap="round"
           />
           {/* Live dot at end */}
-          <circle cx="296" cy="9" r="3" fill="#FF7A2F">
+          <circle cx="296" cy="9" r="3" fill="#7FB2FF">
             <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
             <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"/>
           </circle>

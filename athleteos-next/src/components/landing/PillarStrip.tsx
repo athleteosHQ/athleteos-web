@@ -1,111 +1,84 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { BarChart2, Flame, Zap, TrendingDown } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { TrendingDown } from 'lucide-react'
 
-interface Pillar {
-  icon: React.ElementType
-  label: string
-  title: string
-  sub: string
-  accent: boolean
-  stat: ReactNode
-  statLabel: string
-  statColor?: string
-}
-
-const PILLARS: Pillar[] = [
+const STATS = [
   {
-    icon: BarChart2,
-    label: 'Input Layer',
-    title: 'Training',
+    kicker: 'INPUT',
+    label: 'Training',
     sub: 'Strength · endurance · metcon',
-    accent: false,
     stat: '60+',
-    statLabel: 'exercises tracked',
+    statNote: 'exercises tracked',
+    accent: false,
+    statColor: undefined as string | undefined,
   },
   {
-    icon: Flame,
-    label: 'Input Layer',
-    title: 'Nutrition',
+    kicker: 'INPUT',
+    label: 'Nutrition',
     sub: 'IFCT-verified Indian food data',
+    stat: null,
+    statNote: 'MFP protein undercount',
     accent: false,
-    stat: (
-      <span className="inline-flex items-center gap-1">
-        <TrendingDown size={16} className="text-destructive" />
-        <span>23%</span>
-      </span>
-    ),
-    statLabel: 'MFP protein undercount',
     statColor: 'text-destructive',
   },
   {
-    icon: Zap,
-    label: 'Output',
-    title: 'Diagnosis',
+    kicker: 'OUTPUT',
+    label: 'Diagnosis',
     sub: 'One answer. No guessing.',
-    accent: true,
     stat: '1',
-    statLabel: 'bottleneck named',
+    statNote: 'bottleneck named',
+    accent: true,
+    statColor: undefined,
   },
 ]
 
 export function PillarStrip() {
   return (
-    <section className="px-4 pb-14 sm:px-6">
-      <div className="mx-auto max-w-6xl">
+    <div className="px-4 pb-10 sm:px-6 md:px-10">
+      <div className="mx-auto max-w-screen-xl">
         <motion.div
-          className="grid grid-cols-3 overflow-hidden rounded-2xl"
-          style={{
-            border: '1px solid rgba(255,255,255,0.09)',
-            background: 'rgba(255,255,255,0.018)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
-          }}
-          initial={{ opacity: 0, y: 16 }}
+          className="grid gap-3 border-t pt-4 sm:grid-cols-2 lg:grid-cols-3"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          {PILLARS.map(({ icon: Icon, label, title, sub, accent, stat, statLabel, statColor }, i) => (
+          {STATS.map(({ kicker, label, sub, stat, statNote, accent, statColor }) => (
             <div
-              key={title}
-              className={`relative p-6 text-center sm:p-8 card-lift ${i < 2 ? 'border-r' : ''}`}
-              style={{ borderColor: 'rgba(255,255,255,0.07)' }}
+              key={label}
+              className="rounded-2xl px-4 py-5 text-left sm:px-5"
+              style={{
+                border: accent ? '1px solid rgba(255,122,47,0.18)' : '1px solid rgba(255,255,255,0.08)',
+                background: accent ? 'rgba(255,122,47,0.05)' : 'rgba(255,255,255,0.02)',
+              }}
             >
-              {accent && (
-                <div
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(255,122,47,0.10) 0%, transparent 60%)',
-                    borderRadius: 'inherit',
-                  }}
-                />
-              )}
-              <div
-                className="relative mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-xl"
-                style={accent
-                  ? { border: '1px solid rgba(255,122,47,0.35)', background: 'rgba(255,122,47,0.12)' }
-                  : { border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.04)' }
-                }
-              >
-                <Icon size={16} className={accent ? 'text-accent' : 'text-muted-foreground'} />
-              </div>
-              <p className={`font-mono-label ${accent ? 'text-accent' : 'text-muted-foreground'}`}>
+              <p className={`font-mono-label mb-1 ${accent ? 'text-accent/70' : 'text-muted-foreground/40'}`} style={{ fontSize: '9px' }}>
+                {kicker}
+              </p>
+              <p className={`mb-0.5 text-sm font-bold ${accent ? 'text-foreground' : 'text-foreground/80'}`}>
                 {label}
               </p>
-              <p className="mt-1.5 text-base font-bold text-foreground">{title}</p>
-              <p className={`mt-1 text-xs ${accent ? 'text-accent-light/70' : 'text-muted-foreground'}`}>{sub}</p>
-              <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                <p className={`font-mono text-lg font-bold ${statColor ?? (accent ? 'text-accent' : 'text-foreground')}`}>
-                  {stat}
-                </p>
-                <p className="font-mono-label text-muted-foreground mt-0.5">{statLabel}</p>
+              <p className="mb-4 text-xs leading-relaxed text-muted-foreground/60">{sub}</p>
+
+              <div className="flex items-end justify-between gap-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 12 }}>
+                {stat !== null ? (
+                  <p className={`font-mono text-2xl font-bold mb-0.5 ${statColor ?? (accent ? 'text-accent' : 'text-foreground')}`}>
+                    {stat}
+                  </p>
+                ) : (
+                  <p className={`mb-0.5 flex items-center gap-1 font-mono text-2xl font-bold ${statColor ?? 'text-foreground'}`}>
+                    <TrendingDown size={18} className="text-destructive" />
+                    <span>23%</span>
+                  </p>
+                )}
+                <p className="max-w-[9rem] text-right font-mono-label text-muted-foreground/40">{statNote}</p>
               </div>
             </div>
           ))}
         </motion.div>
       </div>
-    </section>
+    </div>
   )
 }

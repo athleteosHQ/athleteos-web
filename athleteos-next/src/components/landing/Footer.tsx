@@ -1,7 +1,7 @@
 export function Footer() {
   return (
-    <footer className="border-t border-border px-4 py-10 sm:px-6">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6">
+    <footer className="border-t border-border px-6 py-10 md:px-10">
+      <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-6">
         <div>
           <p className="font-bold text-foreground">
             athlete<span className="text-accent">OS</span>

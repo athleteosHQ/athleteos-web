@@ -1,43 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Users, Zap, MessageCircle, GitBranch, Check } from 'lucide-react'
-import { insertFounder, incrementShareCount } from '@/lib/supabase'
+import { Check } from 'lucide-react'
+import { insertFounder, incrementShareCount, getFounderCount } from '@/lib/supabase'
 
-interface FormState { name: string; email: string; whatsapp: string }
+interface FormState { name: string; email: string; whatsapp: string; discipline: string; experience: string }
 interface FounderState { id: string; founderNumber: number; shareCount: number }
 
 const MAX_BOOSTS = 3
 const BOOST_SPOTS = 100
 const MAX_FOUNDERS = 500
 
-// What founding members get that nobody else will
+// Founding perks — data-grid rows
 const FOUNDING_PERKS = [
-  { icon: Lock,          text: '₹4,999/year locked forever — even when we raise prices at launch' },
-  { icon: Zap,           text: 'Beta access before public launch. You test the diagnosis engine first.' },
-  { icon: MessageCircle, text: 'Direct line to founders via WhatsApp — not a support ticket.' },
-  { icon: GitBranch,     text: 'Feature requests from founding members get built first.' },
-  { icon: Users,         text: 'Founding member badge in-app. You were here before anyone else.' },
+  { key: 'PRICE_LOCK',        value: '₹4,999/yr · fixed at founding' },
+  { key: 'BETA_ACCESS',       value: 'Pre-launch · diagnosis engine first' },
+  { key: 'DIRECT_LINE',       value: 'WhatsApp to founders · not support tickets' },
+  { key: 'FEATURE_PRIORITY',  value: 'Founding requests built first' },
+  { key: 'FOUNDER_BADGE',     value: 'In-app · permanent' },
 ]
 
-const SIGNUP_OUTCOMES = [
-  {
-    label: 'Price lock',
-    title: '₹4,999/year founding price',
-    note: 'Fixed before launch, even if public pricing goes up later.',
-  },
-  {
-    label: 'Beta access',
-    title: 'Test the diagnosis engine first',
-    note: 'You get in before the public launch.',
-  },
-  {
-    label: 'Founder priority',
-    title: 'Direct feedback access',
-    note: 'Early members shape the product and get first rollout priority.',
-  },
-]
+const DISCIPLINE_OPTIONS = ['POWERLIFTING', 'WEIGHTLIFTING', 'HYBRID', 'GENERAL FITNESS']
+const EXPERIENCE_OPTIONS = ['< 1 YR', '1–3 YR', '3–5 YR', '5+ YR']
 
 function GlassField({ type, placeholder, value, onChange, error }: {
   type: string; placeholder: string; value: string
@@ -50,17 +35,76 @@ function GlassField({ type, placeholder, value, onChange, error }: {
         placeholder={placeholder}
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="w-full rounded-xl font-sans text-sm text-foreground placeholder:text-muted-foreground/50 transition-all focus:outline-none"
+        className="w-full font-sans text-base text-foreground placeholder:text-muted-foreground/50 transition-all focus:outline-none"
         style={{
           background: 'rgba(11,17,24,0.8)',
           border: `1px solid ${error ? 'rgba(226,75,74,0.5)' : 'rgba(255,255,255,0.10)'}`,
-          borderRadius: 12,
+          borderRadius: 4,
           padding: '13px 16px',
         }}
-        onFocus={e => { e.target.style.borderColor = 'rgba(255,122,47,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(255,122,47,0.08)' }}
+        onFocus={e => { e.target.style.borderColor = 'rgba(127,178,255,0.48)'; e.target.style.boxShadow = '0 0 0 3px rgba(127,178,255,0.08)' }}
         onBlur={e => { e.target.style.borderColor = error ? 'rgba(226,75,74,0.5)' : 'rgba(255,255,255,0.10)'; e.target.style.boxShadow = 'none' }}
       />
       {error && <p className="mt-1 font-mono text-xs text-destructive">{error}</p>}
+    </div>
+  )
+}
+
+function ChipToggle({ options, value, onChange, label }: {
+  options: string[]; value: string; onChange: (v: string) => void; label: string
+}) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-muted-foreground mb-2">{label}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {options.map(opt => (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => onChange(value === opt ? '' : opt)}
+            className="text-sm font-semibold transition"
+            style={{
+              padding: '5px 10px',
+              borderRadius: 4,
+              ...(value === opt
+                ? { background: 'rgba(255,122,47,0.14)', border: '1px solid rgba(255,122,47,0.35)', color: '#FF9A5C' }
+                : { background: 'transparent', border: '1px solid rgba(255,255,255,0.09)', color: 'var(--muted-foreground)' }
+              ),
+            }}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Slot counter bar ─────────────────────────────────────────────────────────
+function SlotCounter({ count }: { count: number }) {
+  const claimed = Math.min(count, MAX_FOUNDERS)
+  const pct = Math.round((claimed / MAX_FOUNDERS) * 100)
+  const remaining = MAX_FOUNDERS - claimed
+  const filled = Math.round(pct / 10)
+
+  return (
+    <div
+      className="mb-6 p-4"
+      style={{
+        background: 'rgba(0,217,255,0.04)',
+        border: '1px solid rgba(0,217,255,0.14)',
+        borderRadius: 4,
+      }}
+    >
+      <div className="flex items-baseline justify-between gap-4 mb-2">
+        <span className="font-mono-label" style={{ color: 'var(--data-cyan)', fontSize: '10px' }}>
+          REMAINING_SLOTS: {remaining}/{MAX_FOUNDERS}
+        </span>
+        <span className="font-mono text-xs font-bold" style={{ color: 'var(--data-cyan)' }}>{pct}% CLAIMED</span>
+      </div>
+      <div className="font-mono text-muted-foreground/60" style={{ fontSize: '12px', letterSpacing: '0.04em' }}>
+        {'█'.repeat(filled)}{'░'.repeat(10 - filled)}
+      </div>
     </div>
   )
 }
@@ -82,8 +126,9 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
       initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-      className="rounded-2xl overflow-hidden"
+      className="overflow-hidden"
       style={{
+        borderRadius: 6,
         background: 'rgba(255,255,255,0.026)',
         border: '1px solid rgba(255,122,47,0.25)',
         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 60px rgba(255,122,47,0.08)',
@@ -94,10 +139,12 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
 
       <div className="p-8 sm:p-10">
         {/* Cohort badge */}
-        <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-6 text-xs font-semibold text-success"
-          style={{ background: 'rgba(45,220,143,0.08)', border: '1px solid rgba(45,220,143,0.2)' }}>
+        <div
+          className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 text-xs font-semibold text-success"
+          style={{ borderRadius: 999, background: 'rgba(45,220,143,0.08)', border: '1px solid rgba(45,220,143,0.2)' }}
+        >
           <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-glow" />
-          Founding member confirmed
+          Application Approved — Founding Member #{founder.founderNumber}
         </div>
 
         {/* Queue position */}
@@ -105,12 +152,12 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
           <div className="flex items-end gap-6 flex-wrap mb-4">
             <div>
               <p className="font-mono-label text-muted-foreground mb-1">Assigned spot</p>
-              <p className="font-mono text-4xl font-bold text-muted-foreground">#{founder.founderNumber}</p>
+              <p className="font-display text-4xl font-bold text-muted-foreground">#{founder.founderNumber}</p>
             </div>
             <div className="pb-1 text-muted-foreground font-mono text-xl">→</div>
             <div>
               <p className="font-mono-label text-accent mb-1">Queue position</p>
-              <p className="font-mono text-4xl font-bold text-accent">#{effectivePosition}</p>
+              <p className="font-display text-4xl font-bold text-accent">#{effectivePosition}</p>
             </div>
           </div>
 
@@ -138,18 +185,18 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
         {/* Perks locked */}
         <div className="mb-6 space-y-2.5">
           <p className="font-mono-label text-muted-foreground mb-3">What you&apos;ve locked in</p>
-          {FOUNDING_PERKS.slice(0, 3).map(({ text }) => (
-            <div key={text} className="flex items-start gap-3">
+          {FOUNDING_PERKS.slice(0, 3).map(({ key, value }) => (
+            <div key={key} className="flex items-start gap-3">
               <div className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,122,47,0.15)' }}>
                 <Check size={10} className="text-accent" />
               </div>
-              <p className="text-sm text-muted-foreground">{text}</p>
+              <p className="text-sm text-muted-foreground">{value}</p>
             </div>
           ))}
         </div>
 
         {/* Share to boost */}
-        <div className="rounded-xl p-5" style={{ background: 'rgba(255,122,47,0.05)', border: '1px solid rgba(255,122,47,0.15)' }}>
+        <div className="p-5" style={{ borderRadius: 4, background: 'rgba(255,122,47,0.05)', border: '1px solid rgba(255,122,47,0.15)' }}>
           {boostsLeft > 0 ? (
             <>
               <div className="flex items-center justify-between mb-3">
@@ -162,8 +209,8 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
               <div className="flex gap-3 flex-wrap">
                 <button
                   onClick={() => onShare('x')}
-                  className="flex-1 min-w-[120px] rounded-xl py-2.5 text-sm font-bold text-white transition"
-                  style={{ background: '#000', border: '1px solid rgba(255,255,255,0.14)' }}
+                  className="flex-1 min-w-[120px] py-2.5 text-sm font-bold text-white transition"
+                  style={{ borderRadius: 4, background: '#000', border: '1px solid rgba(255,255,255,0.14)' }}
                   onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)')}
                 >
@@ -171,8 +218,8 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
                 </button>
                 <button
                   onClick={() => onShare('wa')}
-                  className="flex-1 min-w-[120px] rounded-xl py-2.5 text-sm font-bold transition"
-                  style={{ background: 'rgba(37,211,102,0.10)', border: '1px solid rgba(37,211,102,0.28)', color: '#25D366' }}
+                  className="flex-1 min-w-[120px] py-2.5 text-sm font-bold transition"
+                  style={{ borderRadius: 4, background: 'rgba(37,211,102,0.10)', border: '1px solid rgba(37,211,102,0.28)', color: '#25D366' }}
                   onMouseEnter={e => (e.currentTarget.style.background = 'rgba(37,211,102,0.18)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'rgba(37,211,102,0.10)')}
                 >
@@ -187,8 +234,8 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
                     initial={{ opacity: 0, y: 8, height: 0 }}
                     animate={{ opacity: 1, y: 0, height: 'auto' }}
                     exit={{ opacity: 0, y: -4, height: 0 }}
-                    className="mt-3 w-full rounded-xl py-3 text-sm font-bold text-accent transition disabled:opacity-50"
-                    style={{ background: 'rgba(255,122,47,0.12)', border: '1px solid rgba(255,122,47,0.35)' }}
+                    className="mt-3 w-full py-3 text-sm font-bold text-accent transition disabled:opacity-50"
+                    style={{ borderRadius: 4, background: 'rgba(255,122,47,0.12)', border: '1px solid rgba(255,122,47,0.35)' }}
                   >
                     {claiming ? 'Claiming…' : '✓ Claim boost — jump 100 spots now →'}
                   </motion.button>
@@ -214,19 +261,24 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
 
 // ── Pre-signup state ─────────────────────────────────────────────────────────
 export function CTASection() {
-  const [form, setForm] = useState<FormState>({ name: '', email: '', whatsapp: '' })
-  const [errors, setErrors] = useState<Partial<FormState>>({})
+  const [form, setForm] = useState<FormState>({ name: '', email: '', whatsapp: '', discipline: '', experience: '' })
+  const [errors, setErrors] = useState<Partial<Pick<FormState, 'name' | 'email' | 'whatsapp'>>>({})
   const [loading, setLoading] = useState(false)
   const [apiError, setApiError] = useState('')
   const [founder, setFounder] = useState<FounderState | null>(null)
   const [claimVisible, setClaimVisible] = useState(false)
   const [claiming, setClaiming] = useState(false)
+  const [slotCount, setSlotCount] = useState(142)
+
+  useEffect(() => {
+    getFounderCount().then(setSlotCount).catch(() => {})
+  }, [])
 
   const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)
   const isValidPhone = (v: string) => /^\+?[0-9\s()-]{10,15}$/.test(v)
 
   const validate = (): boolean => {
-    const e: Partial<FormState> = {}
+    const e: Partial<Pick<FormState, 'name' | 'email' | 'whatsapp'>> = {}
     if (!form.name.trim()) e.name = 'Required'
     if (!isValidPhone(form.whatsapp)) e.whatsapp = 'Invalid number'
     if (!isValidEmail(form.email)) e.email = 'Invalid email'
@@ -244,6 +296,8 @@ export function CTASection() {
       email: form.email.trim(),
       whatsapp: form.whatsapp.trim(),
       source: 'landing-v2',
+      ...(form.discipline ? { discipline: form.discipline } : {}),
+      ...(form.experience ? { experience: form.experience } : {}),
     })
     setLoading(false)
     if (error) { setApiError(error.message); return }
@@ -281,8 +335,8 @@ export function CTASection() {
 
   if (founder) {
     return (
-      <section id="waitlist" className="px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-2xl">
+      <section id="waitlist" className="px-6 py-16 md:px-10">
+        <div className="mx-auto max-w-3xl">
           <FounderSuccess
             founder={founder}
             onShare={handleShare}
@@ -296,8 +350,8 @@ export function CTASection() {
   }
 
   return (
-    <section id="waitlist" className="px-4 py-20 sm:px-6">
-      <div className="mx-auto max-w-4xl">
+    <section id="waitlist" className="px-6 py-20 md:px-10">
+      <div className="mx-auto max-w-6xl">
 
         {/* Section header */}
         <motion.div
@@ -307,19 +361,11 @@ export function CTASection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-5 text-xs font-semibold text-accent"
-            style={{ background: 'rgba(255,122,47,0.08)', border: '1px solid rgba(255,122,47,0.20)' }}>
-            <Users size={11} />
-            Founding Cohort · Max 500 athletes
-          </div>
+          <p className="font-mono-label text-accent mb-5">APPLY_FOR_FOUNDING_ACCESS</p>
           <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
             You&apos;ve seen the gap.<br />
             <span className="gradient-text">Here&apos;s how you close it.</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl">
-            We&apos;re personally onboarding 500 founding members before public launch.
-            Not customers. Founding athletes.
-          </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-[1fr_380px] gap-6 items-start">
@@ -333,8 +379,9 @@ export function CTASection() {
           >
             {/* Founding price card — hero */}
             <div
-              className="rounded-2xl p-6 mb-4"
+              className="p-6 mb-4"
               style={{
+                borderRadius: 6,
                 background: 'linear-gradient(135deg, rgba(255,122,47,0.12) 0%, rgba(255,255,255,0.025) 60%)',
                 border: '1px solid rgba(255,122,47,0.30)',
                 boxShadow: '0 0 40px rgba(255,122,47,0.08)',
@@ -342,20 +389,20 @@ export function CTASection() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <p className="font-mono-label text-accent mb-2">Founding Annual · Price locked forever</p>
+                  <p className="font-mono-label text-accent mb-2">Founding annual · Price locked forever</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="font-mono text-5xl font-bold text-foreground">₹4,999</span>
+                    <span className="font-display text-5xl font-bold text-foreground">₹4,999</span>
                     <span className="text-muted-foreground">/year</span>
                   </div>
                   <div className="mt-1.5 flex items-center gap-3 flex-wrap">
-                    <span className="font-mono text-lg font-bold text-success">₹416/month</span>
+                    <span className="font-display text-lg font-bold text-success">₹416/month</span>
                     <span className="text-xs text-muted-foreground line-through">₹6,999/yr at launch</span>
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
                   <span
-                    className="inline-block rounded-lg px-3 py-1.5 font-mono text-sm font-bold text-accent"
-                    style={{ background: 'rgba(255,122,47,0.15)', border: '1px solid rgba(255,122,47,0.3)' }}
+                    className="inline-block px-3 py-1.5 font-mono text-sm font-bold text-accent"
+                    style={{ borderRadius: 4, background: 'rgba(255,122,47,0.15)', border: '1px solid rgba(255,122,47,0.3)' }}
                   >
                     29% OFF
                   </span>
@@ -365,34 +412,36 @@ export function CTASection() {
 
               {/* The real anchor */}
               <div
-                className="rounded-xl p-3 text-sm text-muted-foreground"
-                style={{ background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.06)' }}
+                className="p-3 text-base text-muted-foreground leading-relaxed"
+                style={{ borderRadius: 4, background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.06)' }}
               >
                 You spend <span className="text-foreground font-semibold">₹3,000+/month</span> on protein and creatine.
                 For <span className="text-accent font-semibold">₹416/month</span> you&apos;ll know if any of it is actually working.
-                A small fraction of what you already spend — to diagnose the gap that&apos;s costing you years.
               </div>
             </div>
 
-            {/* What founding members get */}
+            {/* WHAT_YOU_LOCK_IN — data-grid */}
             <div
-              className="rounded-2xl p-5"
+              className="p-5"
               style={{
+                borderRadius: 6,
                 background: 'rgba(255,255,255,0.02)',
                 border: '1px solid rgba(255,255,255,0.08)',
               }}
             >
-              <p className="font-mono-label text-muted-foreground mb-4">Founding members get everything — and then some</p>
-              <div className="space-y-3">
-                {FOUNDING_PERKS.map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-start gap-3">
-                    <div
-                      className="mt-0.5 flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center"
-                      style={{ background: 'rgba(255,122,47,0.12)', border: '1px solid rgba(255,122,47,0.20)' }}
-                    >
-                      <Icon size={12} className="text-accent" />
-                    </div>
-                    <p className="text-sm text-foreground/80 leading-relaxed">{text}</p>
+              <p className="font-mono-label text-muted-foreground mb-4">What you lock in</p>
+              <div className="space-y-0">
+                {FOUNDING_PERKS.map(({ key, value }, i) => (
+                  <div
+                    key={key}
+                    className="grid gap-2 sm:gap-4 py-2.5 sm:grid-cols-[140px_1fr]"
+                    style={{
+                      borderTop: i === 0 ? '1px solid rgba(255,255,255,0.06)' : undefined,
+                      borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent/70">{key}</span>
+                    <span className="text-base text-foreground/80 leading-relaxed">{value}</span>
                   </div>
                 ))}
               </div>
@@ -407,16 +456,20 @@ export function CTASection() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div
-              className="rounded-2xl p-6 sticky top-24"
+              className="p-6 sticky top-24"
               style={{
+                borderRadius: 6,
                 background: 'rgba(255,255,255,0.026)',
                 border: '1px solid rgba(255,255,255,0.09)',
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 72px rgba(0,0,0,0.32)',
               }}
             >
-              <p className="font-mono-label text-accent mb-1">Join the founding cohort</p>
+              {/* Slot counter */}
+              <SlotCounter count={slotCount} />
+
+              <p className="font-mono-label text-accent mb-1">Apply for founding access</p>
               <p className="text-lg font-bold text-foreground mb-1">Lock price + get beta access</p>
-              <p className="text-xs text-muted-foreground mb-6">
+              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                 No payment now. This reserves your founding access and locks your launch price.
               </p>
 
@@ -443,6 +496,22 @@ export function CTASection() {
                   error={errors.email}
                 />
 
+                {/* Optional segmentation fields */}
+                <div className="space-y-3 pt-1">
+                  <ChipToggle
+                    label="DISCIPLINE (optional)"
+                    options={DISCIPLINE_OPTIONS}
+                    value={form.discipline}
+                    onChange={v => setForm(f => ({ ...f, discipline: v }))}
+                  />
+                  <ChipToggle
+                    label="EXPERIENCE (optional)"
+                    options={EXPERIENCE_OPTIONS}
+                    value={form.experience}
+                    onChange={v => setForm(f => ({ ...f, experience: v }))}
+                  />
+                </div>
+
                 {apiError && (
                   <p className="font-mono text-xs text-destructive">{apiError}</p>
                 )}
@@ -450,9 +519,10 @@ export function CTASection() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="cta-glow w-full rounded-xl bg-accent py-4 font-bold text-white transition hover:bg-accent-light accent-glow disabled:opacity-50 mt-2"
+                  className="cta-glow w-full bg-accent py-4 font-bold text-white transition hover:bg-accent-light accent-glow disabled:opacity-50 mt-2"
+                  style={{ borderRadius: 4 }}
                 >
-                  {loading ? 'Reserving…' : 'Lock My Founding Price →'}
+                  {loading ? 'Submitting…' : 'Submit Application →'}
                 </button>
               </form>
 
@@ -485,31 +555,6 @@ export function CTASection() {
           </motion.div>
 
         </div>
-
-        {/* Outcome summary — full width below grid */}
-        <motion.div
-          className="mt-6"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <p className="font-mono-label text-muted-foreground mb-3">What signing up actually gets you</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {SIGNUP_OUTCOMES.map(t => (
-              <div
-                key={t.label}
-                className="rounded-xl p-4 flex flex-col"
-                style={{ background: 'rgba(255,255,255,0.028)', border: '1px solid rgba(255,255,255,0.09)' }}
-              >
-                <p className="font-mono-label text-accent/70 mb-2" style={{ minHeight: '2rem' }}>{t.label}</p>
-                <p className="text-sm font-bold text-foreground leading-snug mb-2">{t.title}</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-auto">{t.note}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
       </div>
     </section>
   )
