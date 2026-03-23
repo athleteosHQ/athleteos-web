@@ -1,0 +1,79 @@
+<h2>System Section Layout Fixes</h2>
+<p class="subtitle">Same content, different spacing logic. These options are about making the handoff feel structurally correct before we animate it.</p>
+
+<div class="cards" style="grid-template-columns:repeat(3,minmax(0,1fr));align-items:start">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">A · Tighter Bridge</div>
+        <div class="mockup-body" style="background:#091019;padding:18px;min-height:300px;position:relative;overflow:hidden">
+          <div style="position:absolute;left:5%;top:10%;width:39%;height:22%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:5%;top:39%;width:39%;height:22%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:5%;top:68%;width:39%;height:22%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;right:5%;top:18%;width:43%;height:60%;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(255,255,255,.02)"></div>
+          <div style="position:absolute;left:49%;top:50%;width:50px;height:50px;border:1px solid rgba(255,255,255,.6);border-radius:999px;transform:translate(-50%,-50%);background:#0b1118"></div>
+          <svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%">
+            <path d="M44 22 Q48 30 49 50" stroke="rgba(255,122,47,.4)" stroke-width="0.8" fill="none"/>
+            <path d="M44 50 L49 50" stroke="rgba(255,122,47,.7)" stroke-width="1.1" fill="none"/>
+            <path d="M44 78 Q48 70 49 50" stroke="rgba(255,122,47,.4)" stroke-width="0.8" fill="none"/>
+            <path d="M51 50 Q58 50 67 46" stroke="rgba(138,168,255,.75)" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Tighter Bridge</h3>
+      <p>Reduce the dead zone. Pull the left stack and output card closer so the center badge acts like an actual junction, not a floating ornament.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">B · Staggered Funnel</div>
+        <div class="mockup-body" style="background:#091019;padding:18px;min-height:300px;position:relative;overflow:hidden">
+          <div style="position:absolute;left:4%;top:8%;width:39%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:8%;top:39%;width:35%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:12%;top:70%;width:31%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;right:4%;top:18%;width:42%;height:60%;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(255,255,255,.02)"></div>
+          <div style="position:absolute;left:50%;top:50%;width:50px;height:50px;border:1px solid rgba(255,255,255,.6);border-radius:999px;transform:translate(-50%,-50%);background:#0b1118"></div>
+          <svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%">
+            <path d="M43 18 Q48 26 50 50" stroke="rgba(255,122,47,.4)" stroke-width="0.8" fill="none"/>
+            <path d="M43 49 L50 50" stroke="rgba(255,122,47,.7)" stroke-width="1.1" fill="none"/>
+            <path d="M43 80 Q48 72 50 50" stroke="rgba(255,122,47,.4)" stroke-width="0.8" fill="none"/>
+            <path d="M52 50 Q61 50 71 45" stroke="rgba(138,168,255,.75)" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Staggered Funnel</h3>
+      <p>Indent the left cards progressively so the composition already implies convergence before the connector even moves.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">C · Embedded Junction</div>
+        <div class="mockup-body" style="background:#091019;padding:18px;min-height:300px;position:relative;overflow:hidden">
+          <div style="position:absolute;left:5%;top:10%;width:38%;height:22%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:5%;top:39%;width:38%;height:22%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:5%;top:68%;width:38%;height:22%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;right:4%;top:18%;width:47%;height:60%;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(255,255,255,.02)"></div>
+          <div style="position:absolute;left:46%;top:50%;width:50px;height:50px;border:1px solid rgba(255,255,255,.6);border-radius:999px;transform:translate(-50%,-50%);background:#0b1118"></div>
+          <svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%">
+            <path d="M43 22 Q45 30 46 50" stroke="rgba(255,122,47,.4)" stroke-width="0.8" fill="none"/>
+            <path d="M43 50 L46 50" stroke="rgba(255,122,47,.7)" stroke-width="1.1" fill="none"/>
+            <path d="M43 78 Q45 70 46 50" stroke="rgba(255,122,47,.4)" stroke-width="0.8" fill="none"/>
+            <path d="M48 50 Q58 50 74 46" stroke="rgba(138,168,255,.75)" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Embedded Junction</h3>
+      <p>Push the output card inward so the badge visually belongs to it. The center becomes part of the result system rather than a standalone middle column.</p>
+    </div>
+  </div>
+</div>

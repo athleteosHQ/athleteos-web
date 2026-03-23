@@ -272,23 +272,22 @@ export function CTASection() {
   const [errors, setErrors] = useState<Partial<Pick<FormState, 'name' | 'email' | 'whatsapp'>>>({})
   const [loading, setLoading] = useState(false)
   const [apiError, setApiError] = useState('')
-  const [founder, setFounder] = useState<FounderState | null>(null)
-  const [claimVisible, setClaimVisible] = useState(false)
-  const [claiming, setClaiming] = useState(false)
-  const [slotCount, setSlotCount] = useState(142)
-
-  // Restore founder state from localStorage on mount (detect existing signup)
-  useEffect(() => {
+  const [founder, setFounder] = useState<FounderState | null>(() => {
+    if (typeof window === 'undefined') return null
     try {
       const stored = localStorage.getItem('aos_founder_data')
       if (stored) {
         const parsed = JSON.parse(stored)
         if (parsed.id && parsed.num) {
-          setFounder({ id: parsed.id, founderNumber: parsed.num, shareCount: parsed.shareCount ?? 0 })
+          return { id: parsed.id, founderNumber: parsed.num, shareCount: parsed.shareCount ?? 0 }
         }
       }
     } catch { /* ignore parse errors */ }
-  }, [])
+    return null
+  })
+  const [claimVisible, setClaimVisible] = useState(false)
+  const [claiming, setClaiming] = useState(false)
+  const [slotCount, setSlotCount] = useState(142)
 
   useEffect(() => {
     getFounderCount().then(setSlotCount).catch(() => {})

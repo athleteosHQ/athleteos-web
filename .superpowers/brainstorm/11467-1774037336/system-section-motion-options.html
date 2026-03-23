@@ -1,0 +1,101 @@
+<h2>System Section Motion Directions</h2>
+<p class="subtitle">Same layout, same orbit metaphor, different levels of diagnostic precision. Click one if a direction feels right.</p>
+
+<div class="cards" style="grid-template-columns:repeat(3,minmax(0,1fr));align-items:start">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">A · Sequential Scan</div>
+        <div class="mockup-body" style="background:#091019;padding:18px;min-height:290px;position:relative;overflow:hidden">
+          <div style="position:absolute;left:8%;top:14%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:8%;top:40%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:8%;top:66%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;right:8%;top:22%;width:38%;height:54%;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(255,255,255,.02)"></div>
+          <div style="position:absolute;left:50%;top:50%;width:52px;height:52px;border:1px solid rgba(255,255,255,.55);border-radius:999px;transform:translate(-50%,-50%);background:#0b1118"></div>
+          <svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%">
+            <path d="M20 24 Q44 24 50 50" stroke="rgba(255,122,47,.45)" stroke-width="0.8" fill="none" stroke-dasharray="2 4"/>
+            <path d="M20 50 Q38 50 50 50" stroke="rgba(255,122,47,.7)" stroke-width="1.1" fill="none"/>
+            <path d="M20 76 Q44 76 50 50" stroke="rgba(255,122,47,.45)" stroke-width="0.8" fill="none" stroke-dasharray="2 4"/>
+            <circle cx="35" cy="50" r="1.5" fill="#8aa8ff"/>
+            <circle cx="50" cy="50" r="2.2" fill="#ff7a2f"/>
+          </svg>
+          <div style="position:absolute;left:10%;top:44%;width:18%;height:2px;background:linear-gradient(90deg,transparent,#8aa8ff,transparent);opacity:.9"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Sequential Scan</h3>
+      <p>Each input briefly emits a measured signal toward the center, one after another, then the output panel gets a subtle readiness pulse.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Feels analytical and deliberate</li><li>Easy to build with transform and opacity</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>More restrained than dramatic</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">B · Signal Triangulation</div>
+        <div class="mockup-body" style="background:#091019;padding:18px;min-height:290px;position:relative;overflow:hidden">
+          <div style="position:absolute;left:8%;top:14%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:8%;top:40%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:8%;top:66%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;right:8%;top:22%;width:38%;height:54%;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(255,255,255,.02)"></div>
+          <div style="position:absolute;left:50%;top:50%;width:52px;height:52px;border:1px solid rgba(255,255,255,.55);border-radius:999px;transform:translate(-50%,-50%);background:#0b1118;box-shadow:0 0 0 8px rgba(255,122,47,.05)"></div>
+          <svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%">
+            <path d="M20 24 Q44 24 50 50" stroke="rgba(255,122,47,.34)" stroke-width="0.8" fill="none"/>
+            <path d="M20 50 Q38 50 50 50" stroke="rgba(255,122,47,.34)" stroke-width="0.8" fill="none"/>
+            <path d="M20 76 Q44 76 50 50" stroke="rgba(255,122,47,.34)" stroke-width="0.8" fill="none"/>
+            <circle cx="28" cy="24" r="1.5" fill="#8aa8ff"/>
+            <circle cx="28" cy="50" r="1.5" fill="#8aa8ff"/>
+            <circle cx="28" cy="76" r="1.5" fill="#8aa8ff"/>
+            <circle cx="50" cy="50" r="2.2" fill="#ff7a2f"/>
+          </svg>
+          <div style="position:absolute;left:47%;top:47%;width:6%;height:6%;border-radius:999px;background:rgba(255,122,47,.35);filter:blur(6px)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Signal Triangulation</h3>
+      <p>All three paths stay visible, but tiny beacons tighten inward and briefly lock at center like a solved diagnostic intersection.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Most “system intelligence” feel</li><li>Still low-cost if done with SVG stroke and keyframes</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Needs careful timing to avoid looking busy</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">C · Output Calibration</div>
+        <div class="mockup-body" style="background:#091019;padding:18px;min-height:290px;position:relative;overflow:hidden">
+          <div style="position:absolute;left:8%;top:14%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:8%;top:40%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;left:8%;top:66%;width:38%;height:20%;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)"></div>
+          <div style="position:absolute;right:8%;top:22%;width:38%;height:54%;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(255,255,255,.02)"></div>
+          <div style="position:absolute;left:50%;top:50%;width:52px;height:52px;border:1px solid rgba(255,255,255,.55);border-radius:999px;transform:translate(-50%,-50%);background:#0b1118"></div>
+          <svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%">
+            <path d="M20 24 Q44 24 50 50" stroke="rgba(255,122,47,.28)" stroke-width="0.8" fill="none"/>
+            <path d="M20 50 Q38 50 50 50" stroke="rgba(255,122,47,.28)" stroke-width="0.8" fill="none"/>
+            <path d="M20 76 Q44 76 50 50" stroke="rgba(255,122,47,.28)" stroke-width="0.8" fill="none"/>
+            <path d="M50 50 Q63 50 80 44" stroke="rgba(138,168,255,.7)" stroke-width="1.1" fill="none" stroke-dasharray="3 4"/>
+            <circle cx="50" cy="50" r="2.2" fill="#ff7a2f"/>
+            <circle cx="80" cy="44" r="1.5" fill="#8aa8ff"/>
+          </svg>
+          <div style="position:absolute;right:11%;top:30%;width:20%;height:2px;background:linear-gradient(90deg,transparent,#8aa8ff,transparent);opacity:.8"></div>
+          <div style="position:absolute;right:12%;top:36%;width:14%;height:2px;background:linear-gradient(90deg,transparent,#8aa8ff,transparent);opacity:.45"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Output Calibration</h3>
+      <p>The center stays calm, then a thin calibrated handoff travels into the result card, emphasizing decision readiness over data intake.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Cleanest and safest for performance</li><li>Pulls attention to the output card</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Less interesting on repeated view</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

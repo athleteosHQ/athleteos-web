@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Activity, Zap, Flame, BarChart2, ChevronRight } from 'lucide-react'
 
 const fadeUp = (delay = 0) => ({
@@ -11,6 +11,38 @@ const fadeUp = (delay = 0) => ({
 })
 
 export function SystemSection() {
+  const prefersReducedMotion = useReducedMotion()
+
+  const inputCards = [
+    {
+      key: 'nutrition',
+      title: 'IFCT-Verified Intake',
+      eyebrow: 'Nutrition',
+      description: 'Indian food logging grounded in IFCT data.',
+      Icon: Flame,
+      delay: 0.1,
+      funnelClassName: 'lg:mr-14 xl:mr-16',
+    },
+    {
+      key: 'training',
+      title: 'Multi-Modal Stress',
+      eyebrow: 'Training',
+      description: 'Session load, intensity, and accumulated stress.',
+      Icon: BarChart2,
+      delay: 0.2,
+      funnelClassName: 'lg:mr-8 xl:mr-10',
+    },
+    {
+      key: 'recovery',
+      title: 'Block Scheduling',
+      eyebrow: 'Recovery + context',
+      description: 'Phase context changes what good progress should look like.',
+      Icon: Activity,
+      delay: 0.3,
+      funnelClassName: 'lg:mr-2 xl:mr-3',
+    },
+  ] as const
+
   return (
     <section id="system" className="relative px-6 py-24 md:px-10 md:py-32 overflow-hidden">
       
@@ -34,85 +66,88 @@ export function SystemSection() {
         <div className="relative">
           
           {/* Main Flow Grid */}
-          <div className="grid gap-12 lg:grid-cols-[1fr_auto_1.2fr] items-center">
+          <div className="grid gap-10 lg:gap-6 xl:gap-8 lg:grid-cols-[minmax(0,0.96fr)_88px_minmax(0,1.08fr)] items-center">
             
             {/* 1. INPUTS COLUMN */}
             <div className="space-y-6">
               <p className="font-mono-label text-muted-foreground mb-8 block lg:hidden">Input Layer ↓</p>
-              
-              {/* Nutrition Node */}
-              <motion.div {...fadeUp(0.1)} className="card-surface p-6 relative group overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Flame size={48} />
-                </div>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
-                    <Flame size={20} className="text-accent" />
-                  </div>
-                  <p className="font-mono-label text-accent">Nutrition</p>
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">IFCT-Verified Intake</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Indian food logging grounded in IFCT data.
-                </p>
-              </motion.div>
 
-              {/* Training Node */}
-              <motion.div {...fadeUp(0.2)} className="card-surface p-6 relative group overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <BarChart2 size={48} />
-                </div>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
-                    <BarChart2 size={20} className="text-accent" />
+              {inputCards.map(({ key, title, eyebrow, description, Icon, delay, funnelClassName }) => (
+                <motion.div
+                  key={key}
+                  {...fadeUp(delay)}
+                  className={`card-surface p-6 relative group overflow-hidden lg:ml-auto ${funnelClassName}`}
+                >
+                  <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <Icon size={48} />
                   </div>
-                  <p className="font-mono-label text-accent">Training</p>
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">Multi-Modal Stress</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Session load, intensity, and accumulated stress.
-                </p>
-              </motion.div>
-
-              {/* Phase Node */}
-              <motion.div {...fadeUp(0.3)} className="card-surface p-6 relative group overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Activity size={48} />
-                </div>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
-                    <Activity size={20} className="text-accent" />
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                      <Icon size={20} className="text-accent" />
+                    </div>
+                    <p className="font-mono-label text-accent">{eyebrow}</p>
                   </div>
-                  <p className="font-mono-label text-accent">Recovery + context</p>
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">Block Scheduling</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Phase context changes what good progress should look like.
-                </p>
-              </motion.div>
+                  <h3 className="text-lg font-bold text-foreground mb-2">{title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+                </motion.div>
+              ))}
             </div>
 
             {/* 2. CONVERGENCE POINT (Connecting Lines) */}
-            <div className="hidden lg:flex flex-col items-center justify-center h-full relative px-4">
-              <div className="w-px h-[400px] bg-gradient-to-b from-transparent via-white/10 to-transparent absolute" />
-              <div className="w-12 h-12 rounded-full border border-accent/30 bg-background flex items-center justify-center relative z-10 shadow-[0_0_20px_rgba(255,122,47,0.1)]">
-                <Zap size={20} className="text-accent animate-pulse" />
-              </div>
-              
-              {/* Data Flow Pulse - SVG Paths */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ minWidth: '100px' }}>
-                <motion.path 
-                  d="M 0 150 Q 50 150 100 250" 
-                  fill="none" stroke="rgba(255,122,47,0.2)" strokeWidth="1" 
+            <div className="hidden lg:flex flex-col items-center justify-center h-full relative">
+              <div className="w-px h-[420px] bg-gradient-to-b from-transparent via-white/8 to-transparent absolute" />
+              <svg
+                className="absolute inset-y-0 left-1/2 h-full -translate-x-1/2 pointer-events-none overflow-visible"
+                width="132"
+                viewBox="0 0 132 420"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path d="M6 90 C 40 90, 46 120, 58 170" stroke="rgba(255,122,47,0.24)" strokeWidth="1.1" />
+                <path d="M12 210 C 34 210, 46 210, 58 210" stroke="rgba(255,122,47,0.38)" strokeWidth="1.1" />
+                <path d="M18 330 C 42 330, 48 296, 58 250" stroke="rgba(255,122,47,0.24)" strokeWidth="1.1" />
+                <motion.path
+                  d="M72 210 C 82 210, 92 206, 116 192"
+                  stroke="rgba(138,168,255,0.85)"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                  initial={prefersReducedMotion ? false : { pathLength: 0, opacity: 0 }}
+                  whileInView={
+                    prefersReducedMotion
+                      ? undefined
+                      : { pathLength: 1, opacity: [0, 1, 1] }
+                  }
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 />
-                <motion.circle r="3" fill="var(--accent)">
-                  <animateMotion dur="2s" repeatCount="indefinite" path="M 0 150 Q 50 150 100 250" />
-                </motion.circle>
+                {!prefersReducedMotion && (
+                  <motion.circle
+                    r="3"
+                    fill="rgb(138,168,255)"
+                    initial={{ opacity: 0, offsetDistance: '0%' }}
+                    whileInView={{ opacity: [0, 1, 1, 0], offsetDistance: '100%' }}
+                    viewport={{ once: true, amount: 0.6 }}
+                    transition={{ duration: 1, delay: 0.58, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      offsetPath: "path('M72 210 C 82 210, 92 206, 116 192')",
+                    }}
+                  />
+                )}
               </svg>
+
+              <motion.div
+                className="w-12 h-12 rounded-full border border-white/55 bg-background flex items-center justify-center relative z-10 shadow-[0_0_20px_rgba(255,122,47,0.08)]"
+                initial={prefersReducedMotion ? false : { scale: 0.96 }}
+                whileInView={prefersReducedMotion ? undefined : { scale: [0.96, 1, 1] }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Zap size={20} className="text-accent" />
+              </motion.div>
             </div>
 
             {/* 3. OUTPUT COLUMN */}
-            <div className="relative">
+            <div className="relative lg:-ml-2 xl:-ml-3">
               <p className="font-mono-label text-muted-foreground mb-8 block lg:hidden">Outcome Layer ↓</p>
               
               <motion.div 
