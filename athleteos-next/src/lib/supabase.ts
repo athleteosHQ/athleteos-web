@@ -1,9 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
-
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+/** Client-side API helpers — all writes go through Next.js API routes (service role key stays server-side). */
 
 export interface FounderInsert {
   name: string
@@ -14,51 +9,46 @@ export interface FounderInsert {
   experience?: string
 }
 
-export interface FounderRow extends FounderInsert {
-  id: string
-  founder_number: number
-  share_count: number
-  created_at: string
-}
-
-function coreFounderFields(data: FounderInsert) {
-  return {
-    name: data.name,
-    email: data.email,
-    whatsapp: data.whatsapp,
-    source: data.source,
+export async function insertFounder(data: FounderInsert): Promise<{ data: { id: string; founder_number: number }; error: { message: string } | null }> {
+  try {
+    const res = await fetch('/api/founders/reserve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    const json = await res.json()
+    if (!res.ok) {
+      return { data: { id: '', founder_number: 0 }, error: { message: json.error ?? 'Something went wrong' } }
+    }
+    return { data: { id: json.id, founder_number: json.founder_number }, error: null }
+  } catch {
+    return { data: { id: '', founder_number: 0 }, error: { message: 'Network error — please try again' } }
   }
 }
 
-export async function insertFounder(data: FounderInsert) {
-  const initial = await supabase
-    .from('founders_waitlist')
-    .insert(data)
-    .select('id, founder_number')
-    .single()
-
-  const message = initial.error?.message ?? ''
-  const missingOptionalColumn =
-    message.includes(`Could not find the 'discipline' column`) ||
-    message.includes(`Could not find the 'experience' column`)
-
-  if (!missingOptionalColumn) return initial
-
-  return supabase
-    .from('founders_waitlist')
-    .insert(coreFounderFields(data))
-    .select('id, founder_number')
-    .single()
-}
-
-export async function incrementShareCount(rowId: string) {
-  return supabase.rpc('increment_share_count', { row_id: rowId })
+export async function incrementShareCount(rowId: string): Promise<{ data: number | null; error: { message: string } | null }> {
+  try {
+    const res = await fetch('/api/founders/boost', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: rowId }),
+    })
+    const json = await res.json()
+    if (!res.ok) {
+      return { data: null, error: { message: json.error ?? 'Something went wrong' } }
+    }
+    return { data: json.shareCount, error: null }
+  } catch {
+    return { data: null, error: { message: 'Network error — please try again' } }
+  }
 }
 
 export async function getFounderCount(): Promise<number> {
-  const { count, error } = await supabase
-    .from('founders_waitlist')
-    .select('*', { count: 'exact', head: true })
-  if (error || count === null) return 142
-  return count
+  try {
+    const res = await fetch('/api/founders/count')
+    const json = await res.json()
+    return json.count ?? 142
+  } catch {
+    return 142
+  }
 }

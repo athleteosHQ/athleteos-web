@@ -12,7 +12,7 @@ const fadeUp = (delay = 0) => ({
 
 export function HeroSection() {
   return (
-    <section className="editorial-stage relative overflow-hidden px-4 py-24 sm:px-6 sm:py-28 md:px-10 md:py-32">
+    <section className="editorial-stage relative overflow-hidden px-4 py-16 sm:px-6 sm:py-28 md:px-10 md:py-32">
 
       {/* Background Atmosphere Image — The Hybrid Athlete */}
       <div className="absolute inset-0 z-0">
@@ -50,11 +50,11 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative container mx-auto grid max-w-screen-xl items-center gap-14 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
+      <div className="relative container mx-auto grid max-w-screen-xl items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
 
         {/* Left */}
         <div>
-          <motion.div {...fadeUp(0)} className="flex items-center gap-2 mb-7">
+          <motion.div {...fadeUp(0)} className="mb-5 flex items-center gap-2 md:mb-7">
             <span
               className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-accent animate-pulse-glow"
             />
@@ -63,7 +63,7 @@ export function HeroSection() {
 
           <motion.h1
             {...fadeUp(0.1)}
-            className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-foreground leading-[1.0] tracking-tight mb-8"
+            className="mb-6 text-4xl font-display font-bold leading-[1.0] tracking-tight text-foreground md:mb-8 md:text-6xl lg:text-7xl"
           >
             Your training is stalling.{' '}
             <span className="gradient-text">We&apos;ll tell you exactly why.</span>
@@ -71,13 +71,13 @@ export function HeroSection() {
 
           <motion.p
             {...fadeUp(0.15)}
-            className="body-copy-strong mb-8 max-w-2xl"
+            className="body-copy-strong mb-6 max-w-2xl md:mb-8"
           >
             Check where you rank against 3,200+ competitive Indian strength athletes. Then find out whether training load, nutrition, or recovery is the bottleneck — and track whether the fix is working.
           </motion.p>
 
           {/* CTA row */}
-          <motion.div {...fadeUp(0.2)} className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <motion.div {...fadeUp(0.2)} className="mb-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center md:mb-8 md:gap-4">
             <a
               href="#rank"
               className="cta-glow inline-flex items-center gap-2 bg-accent text-white font-bold px-7 py-3.5 rounded group transition hover:bg-accent-light accent-glow"
@@ -90,7 +90,7 @@ export function HeroSection() {
             </span>
           </motion.div>
 
-          <motion.div {...fadeUp(0.28)} className="mb-6 flex flex-wrap items-center gap-y-2">
+          <motion.div {...fadeUp(0.28)} className="mb-5 flex flex-wrap items-center gap-y-2 md:mb-6">
             {[
               { val: 'IPF-calibrated benchmark', sep: true },
               { val: '3,200+ athlete records', sep: true },
@@ -105,7 +105,7 @@ export function HeroSection() {
 
           <motion.div
             {...fadeUp(0.33)}
-            className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 pt-4"
+            className="mt-2 hidden flex-wrap items-center gap-x-6 gap-y-2 pt-4 md:flex"
             style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
           >
             {[
@@ -123,9 +123,9 @@ export function HeroSection() {
         </div>
 
         {/* Right: product artifact inside device frame */}
-        <div className="flex flex-col items-center lg:items-end">
+        <div className="hidden flex-col items-center lg:flex lg:items-end">
           <ProductShowcase />
-          <p className="mt-8 text-xs text-muted-foreground/50 text-center lg:text-right">
+          <p className="mt-5 hidden text-center text-xs text-muted-foreground/50 md:block lg:mt-8 lg:text-right">
             Sample app view · founding members get early access on iOS and Android
           </p>
         </div>

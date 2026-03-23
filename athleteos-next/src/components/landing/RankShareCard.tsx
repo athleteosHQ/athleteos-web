@@ -34,8 +34,11 @@ function Bar({ label, pct, est1rm, color }: { label: string; pct: number; est1rm
   )
 }
 
-export const RankShareCard = React.forwardRef<HTMLDivElement, { result: RankResult }>(
-  function RankShareCard({ result }, ref) {
+export const RankShareCard = React.forwardRef<
+  HTMLDivElement,
+  { result: RankResult; founderLabel: string; badgeLabel: string; diagnosisLabel: string; diagnosisHeadline: string }
+>(
+  function RankShareCard({ result, founderLabel, badgeLabel, diagnosisLabel, diagnosisHeadline }, ref) {
     const tierUpper = result.tier.toUpperCase()
     const top = 100 - result.overallPct
     const score = result.athleteScore
@@ -79,19 +82,36 @@ export const RankShareCard = React.forwardRef<HTMLDivElement, { result: RankResu
               athlete<span style={{ color: ACCENT }}>OS</span>
             </div>
             <div style={{ fontFamily: 'monospace', fontSize: 14, color: 'rgba(255,255,255,0.3)', letterSpacing: 3, marginTop: 4 }}>
-              INDIA STRENGTH PERCENTILE
+              EARLY ATHLETE PERFORMANCE CARD
             </div>
           </div>
-          <div
-            style={{
-              border: `1px solid ${result.tierColor}44`,
-              background: `${result.tierColor}12`,
-              borderRadius: 12,
-              padding: '10px 20px',
-            }}
-          >
-            <div style={{ fontFamily: 'monospace', fontSize: 13, color: 'rgba(255,255,255,0.4)', letterSpacing: 2 }}>WEIGHT CLASS</div>
-            <div style={{ fontFamily: 'monospace', fontSize: 20, fontWeight: 700, color: '#fff', marginTop: 2 }}>{result.weightClass}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10 }}>
+            <div
+              style={{
+                border: `1px solid ${ACCENT}33`,
+                background: `${ACCENT}10`,
+                borderRadius: 999,
+                padding: '8px 16px',
+                fontFamily: 'monospace',
+                fontSize: 14,
+                fontWeight: 700,
+                color: '#D8E7FF',
+                letterSpacing: 2,
+              }}
+            >
+              {badgeLabel.toUpperCase()}
+            </div>
+            <div
+              style={{
+                border: `1px solid ${result.tierColor}44`,
+                background: `${result.tierColor}12`,
+                borderRadius: 12,
+                padding: '10px 20px',
+              }}
+            >
+              <div style={{ fontFamily: 'monospace', fontSize: 13, color: 'rgba(255,255,255,0.4)', letterSpacing: 2 }}>WEIGHT CLASS</div>
+              <div style={{ fontFamily: 'monospace', fontSize: 20, fontWeight: 700, color: '#fff', marginTop: 2 }}>{result.weightClass}</div>
+            </div>
           </div>
         </div>
 
@@ -149,6 +169,26 @@ export const RankShareCard = React.forwardRef<HTMLDivElement, { result: RankResu
             <div style={{ fontFamily: 'monospace', fontSize: 14, color: 'rgba(255,255,255,0.34)', marginTop: 10, letterSpacing: 1.4 }}>
               Ahead of {result.overallPct}% of athletes in your class
             </div>
+            <div style={{ fontFamily: 'monospace', fontSize: 14, color: '#D8E7FF', marginTop: 12, letterSpacing: 1.4 }}>
+              {founderLabel.toUpperCase()}
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginBottom: 32,
+            borderRadius: 24,
+            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'rgba(255,255,255,0.03)',
+            padding: '24px 26px',
+          }}
+        >
+          <div style={{ fontFamily: 'monospace', fontSize: 13, color: ACCENT, letterSpacing: 3, marginBottom: 14 }}>
+            {diagnosisLabel.toUpperCase()}
+          </div>
+          <div style={{ fontSize: 32, fontWeight: 700, color: '#fff', lineHeight: 1.2, letterSpacing: -0.8 }}>
+            {diagnosisHeadline}
           </div>
         </div>
 

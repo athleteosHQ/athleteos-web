@@ -61,7 +61,7 @@ export function ProductShowcase() {
   }, [])
 
   return (
-    <div className="relative w-full max-w-[340px] py-6 lg:py-0">
+    <div className="relative w-full max-w-[280px] py-3 sm:max-w-[340px] sm:py-6 lg:py-0">
       <motion.div
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}

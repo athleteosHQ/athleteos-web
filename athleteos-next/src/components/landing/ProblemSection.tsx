@@ -24,7 +24,76 @@ export function ProblemSection() {
   return (
     <section id="problem" className="px-6 py-20 md:px-10">
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-start mb-10">
+        <div className="space-y-4 md:hidden mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.45 }}
+            className="card-surface p-5"
+          >
+            <p className="font-mono-label text-accent mb-2">Why most tracking fails</p>
+            <h2 className="text-2xl font-display font-bold text-foreground mb-3">
+              The food data is wrong, so the diagnosis is wrong.
+            </h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              MyFitnessPal is crowd-sourced. athleteOS uses IFCT 2017 so Indian athletes are not guessing off bad macros.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="grid gap-3 sm:grid-cols-2"
+          >
+            {IMPACT_STATS.map(({ kicker, value, note }) => (
+              <div
+                key={kicker}
+                className="rounded-2xl p-5"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(21,31,43,0.98), rgba(17,26,37,0.96))',
+                  border: '1px solid rgba(255,255,255,0.09)',
+                }}
+              >
+                <p className="font-mono-label text-destructive mb-2">{kicker}</p>
+                <p className="font-display text-3xl font-bold text-foreground">{value}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{note}</p>
+              </div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="rounded-2xl p-5"
+            style={{
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(255,255,255,0.07)',
+            }}
+          >
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <div>
+                <p className="font-mono-label text-muted-foreground mb-1">Protein tracking drift</p>
+                <p className="font-display text-4xl font-bold text-foreground">27%</p>
+              </div>
+              <div
+                className="rounded-xl px-3 py-2"
+                style={{ background: 'rgba(226,75,74,0.10)', border: '1px solid rgba(226,75,74,0.22)' }}
+              >
+                <span className="font-mono-label text-destructive">Plateau risk ↑</span>
+              </div>
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Wrong intake data compounds for months before it shows up in your lifts.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="hidden md:grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-start mb-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -138,7 +207,7 @@ export function ProblemSection() {
 
         {/* Data table */}
         <motion.div
-          className="card-surface overflow-hidden"
+          className="hidden md:block card-surface overflow-hidden"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -187,7 +256,7 @@ export function ProblemSection() {
 
         {/* Formula line */}
         <motion.div
-          className="mt-6 px-4 py-3 text-sm font-medium text-muted-foreground text-center"
+          className="mt-6 px-4 py-3 text-center text-sm font-medium text-muted-foreground"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

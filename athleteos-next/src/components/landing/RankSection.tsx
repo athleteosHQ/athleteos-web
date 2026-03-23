@@ -1,10 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Activity, Check, Users } from 'lucide-react'
 import { calculateRank, type RankInput, type RankResult } from '@/lib/rankCalc'
+import { trackEvent } from '@/lib/analytics'
 import { AthleteScoreCard } from './AthleteScoreCard'
+import { getFirstReadDiagnosis } from './firstReadDiagnosis'
+import { validateFounderForm } from './founderFormValidation'
+import { getRankResultMessaging } from './rankResultMessaging'
 import { insertFounder } from '@/lib/supabase'
 
 // ── Shared number input ───────────────────────────────────────────────────────
@@ -129,6 +134,93 @@ function DiagnosticBars({ result }: { result: RankResult }) {
   )
 }
 
+function ResultInsightPanel({ result }: { result: RankResult }) {
+  const messaging = getRankResultMessaging({
+    overallPct: result.overallPct,
+    weightClass: result.weightClass,
+  })
+  const diagnosis = getFirstReadDiagnosis(result)
+
+  return (
+    <div
+      className="rounded-2xl px-4 py-4"
+      style={{ background: 'rgba(127,178,255,0.05)', border: '1px solid rgba(127,178,255,0.14)' }}
+    >
+      <p className="font-mono-label text-accent mb-2">{messaging.status}</p>
+      <p className="text-lg font-semibold text-foreground">{messaging.identity}</p>
+      <p className="mt-1 text-base font-medium text-foreground/90">{messaging.progression}</p>
+      <div
+        className="mt-4 rounded-xl px-3.5 py-3"
+        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        <p className="font-mono-label text-muted-foreground mb-1.5">{diagnosis.label}</p>
+        <p className="text-sm font-semibold text-foreground">{diagnosis.headline}</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{diagnosis.body}</p>
+      </div>
+
+      <div
+        className="mt-3 rounded-xl px-3.5 py-3"
+        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        <p className="font-mono-label text-muted-foreground mb-1.5">Performance Preview</p>
+        <p className="text-sm leading-relaxed text-muted-foreground">{messaging.preview}</p>
+      </div>
+
+      <div
+        className="mt-3 rounded-xl px-3.5 py-3"
+        style={{ background: 'rgba(45,220,143,0.04)', border: '1px solid rgba(45,220,143,0.14)' }}
+      >
+        <p className="font-mono-label text-success mb-1.5">World Benchmark</p>
+        <p className="text-sm leading-relaxed text-muted-foreground">{messaging.worldBenchmark}</p>
+      </div>
+
+      <div className="mt-4 grid gap-2 sm:grid-cols-3">
+        {messaging.lockedCards.map((label) => (
+          <div
+            key={label}
+            className="relative overflow-hidden rounded-xl px-3 py-3"
+            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <p className="text-sm font-semibold text-foreground/80 blur-[1.5px] select-none">{label}</p>
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{ background: 'linear-gradient(180deg, rgba(11,17,24,0.08) 0%, rgba(11,17,24,0.72) 100%)' }}
+            />
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-3 text-xs text-muted-foreground">
+        Founding members unlock the full performance readout.
+      </p>
+    </div>
+  )
+}
+
+function ResultActions({ result, onReset }: { result: RankResult; onReset: () => void }) {
+  const messaging = getRankResultMessaging({
+    overallPct: result.overallPct,
+    weightClass: result.weightClass,
+  })
+
+  return (
+    <div className="grid grid-cols-2 gap-3">
+      <button
+        onClick={onReset}
+        className="border border-white/10 text-muted-foreground py-3 rounded-xl text-sm font-semibold transition hover:text-foreground hover:border-white/20"
+      >
+        ↩ Re-run
+      </button>
+      <a
+        href="#waitlist"
+        className="cta-glow bg-accent text-white py-3 rounded-xl text-sm font-bold text-center transition hover:bg-accent-light"
+      >
+        {messaging.cta} →
+      </a>
+    </div>
+  )
+}
+
 // ── Ghost tier preview (idle state right column) ──────────────────────────────
 const GHOST_BARS = [
   { label: 'Squat',    color: '#7FB2FF', pct: 78 },
@@ -234,6 +326,7 @@ function GhostTierPreview() {
 interface GateForm { name: string; email: string; whatsapp: string }
 
 function InlineSignupGate() {
+  const router = useRouter()
   const [form, setForm] = useState<GateForm>({ name: '', email: '', whatsapp: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -245,8 +338,9 @@ function InlineSignupGate() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    if (!form.name.trim() || !form.email.trim() || !form.whatsapp.trim()) {
-      setError('All fields required')
+    const errors = validateFounderForm(form)
+    if (Object.keys(errors).length > 0) {
+      setError(errors.name ?? errors.email ?? errors.whatsapp ?? 'Invalid input')
       return
     }
     setLoading(true)
@@ -264,6 +358,7 @@ function InlineSignupGate() {
     localStorage.setItem('aos_founder_data', JSON.stringify({
       id: data.id, num: data.founder_number, shareCount: 0,
     }))
+    router.push('/welcome')
   }
 
   if (done) {
@@ -384,6 +479,7 @@ export function RankSection() {
 
   const submit = () => {
     setError('')
+    trackEvent('rank_check_started', { trainingType })
     const bw = parseFloat(f.bw)
     if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); return }
     const input: RankInput = {
@@ -398,6 +494,13 @@ export function RankSection() {
     if (!hasLift) { setError('Enter at least one lift above 20 kg'); return }
     const r = calculateRank(input)
     if (!r) { setError('Could not calculate. Check your inputs.'); return }
+    localStorage.setItem('aos_rank_result', JSON.stringify(r))
+    trackEvent('rank_result_viewed', {
+      overallPct: r.overallPct,
+      tier: r.tier,
+      weightClass: r.weightClass,
+      trainingType,
+    })
     setResult(r)
   }
 
@@ -554,31 +657,8 @@ export function RankSection() {
                 />
                 <div className="space-y-4">
                   <DiagnosticBars result={result} />
-
-                  <div
-                    className="rounded-2xl px-4 py-3"
-                    style={{ background: 'rgba(127,178,255,0.05)', border: '1px solid rgba(127,178,255,0.14)' }}
-                  >
-                    <p className="text-sm font-semibold text-foreground">Rank tells you where you stand. Diagnosis tells you what to fix.</p>
-                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                      athleteOS connects training, nutrition, and recovery data to find the one bottleneck limiting your next PR — then tracks whether the fix is working.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      onClick={reset}
-                      className="border border-white/10 text-muted-foreground py-3 rounded-xl text-sm font-semibold transition hover:text-foreground hover:border-white/20"
-                    >
-                      ↩ Re-run
-                    </button>
-                    <a
-                      href="#waitlist"
-                      className="cta-glow bg-accent text-white py-3 rounded-xl text-sm font-bold text-center transition hover:bg-accent-light"
-                    >
-                      Why Am I Stuck? →
-                    </a>
-                  </div>
+                  <ResultInsightPanel result={result} />
+                  <ResultActions result={result} onReset={reset} />
                 </div>
               </div>
 

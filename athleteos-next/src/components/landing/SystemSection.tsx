@@ -45,7 +45,6 @@ export function SystemSection() {
 
   return (
     <section id="system" className="relative px-6 py-24 md:px-10 md:py-32 overflow-hidden">
-      
       {/* Background Atmosphere */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl aspect-square rounded-full border border-accent/20 blur-3xl" />
@@ -62,8 +61,76 @@ export function SystemSection() {
           </p>
         </motion.div>
 
+        <div className="space-y-5 md:hidden">
+          <div className="grid gap-3">
+            {inputCards.map(({ key, title, eyebrow, description, Icon, delay }) => (
+              <motion.div
+                key={key}
+                {...fadeUp(delay)}
+                className="card-surface p-5"
+              >
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/20 bg-accent/10">
+                    <Icon size={18} className="text-accent" />
+                  </div>
+                  <div>
+                    <p className="font-mono-label text-accent">{eyebrow}</p>
+                    <h3 className="text-base font-bold text-foreground">{title}</h3>
+                  </div>
+                </div>
+                <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            {...fadeUp(0.4)}
+            className="rounded-3xl p-1 shadow-[0_20px_80px_rgba(0,0,0,0.4)]"
+            style={{ background: 'linear-gradient(to bottom right, rgba(255,122,47,0.18), rgba(255,255,255,0.05), transparent)' }}
+          >
+            <div className="relative overflow-hidden rounded-[calc(1.5rem-1px)] border border-white/5 bg-[#0B1118] p-6">
+              <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
+              <div className="relative z-10">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-3 py-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  <span className="font-mono-label text-[10px] text-accent">Diagnosis output</span>
+                </div>
+
+                <h3 className="mb-3 text-2xl font-display font-bold text-foreground">
+                  One likely bottleneck. One next move.
+                </h3>
+                <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
+                  athleteOS combines those inputs so you stop guessing whether the issue is food, recovery, or training distribution.
+                </p>
+
+                <div className="space-y-4">
+                  {[
+                    'See what is actually limiting progress.',
+                    'Know what to change next and what to keep tracking.',
+                  ].map((item) => (
+                    <div key={item} className="flex gap-4">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5">
+                        <ChevronRight size={18} className="text-accent" />
+                      </div>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{item}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <a
+                  href="#rank"
+                  className="mt-6 inline-flex items-center gap-2 font-bold text-foreground group"
+                >
+                  <span className="border-b border-accent pb-0.5 transition-all group-hover:border-accent-light">Start your first scan</span>
+                  <ArrowRight size={16} className="text-accent transition-transform group-hover:translate-x-1" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
         {/* Pipeline Visualization */}
-        <div className="relative">
+        <div className="relative hidden md:block">
           
           {/* Main Flow Grid */}
           <div className="grid gap-10 lg:gap-6 xl:gap-8 lg:grid-cols-[minmax(0,0.96fr)_88px_minmax(0,1.08fr)] items-center">

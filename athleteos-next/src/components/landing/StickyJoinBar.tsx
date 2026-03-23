@@ -2,29 +2,33 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
 import { getFounderCount } from '@/lib/supabase'
 
 const MAX_FOUNDERS = 500
 
 export function StickyJoinBar() {
   const [visible, setVisible] = useState(false)
-  const [dismissed, setDismissed] = useState(false)
   const [count, setCount] = useState<number | null>(null)
+  const [alreadyJoined] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return !!localStorage.getItem('aos_waitlist')
+  })
 
   useEffect(() => {
     getFounderCount().then(setCount).catch(() => setCount(142))
   }, [])
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 560)
+    const onScroll = () => setVisible(window.scrollY > (window.innerWidth < 768 ? 160 : 560))
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  if (dismissed || count === null) return null
+  // Hide if already signed up or count not loaded yet
+  if (count === null || alreadyJoined) return null
 
-  const remaining = MAX_FOUNDERS - Math.min(count, MAX_FOUNDERS)
+  const claimed = Math.min(count, MAX_FOUNDERS)
 
   return (
     <AnimatePresence>
@@ -54,26 +58,17 @@ export function StickyJoinBar() {
 
           {/* Copy */}
           <span className="min-w-0 text-xs sm:text-sm text-foreground/80 font-medium leading-snug">
-            <span className="text-foreground font-bold">{remaining} of {MAX_FOUNDERS}</span> founding spots left
+            <span className="text-foreground font-bold">{claimed} of {MAX_FOUNDERS}</span> founding spots claimed
           </span>
 
           {/* CTA */}
           <a
             href="#waitlist"
-            className="flex-shrink-0 bg-accent text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-xl hover:bg-accent-light transition-colors whitespace-nowrap"
+            className="flex-shrink-0 whitespace-nowrap rounded-xl bg-accent px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-accent-light sm:text-sm"
           >
             <span className="sm:hidden">Claim spot</span>
             <span className="hidden sm:inline">Claim my spot →</span>
           </a>
-
-          {/* Dismiss */}
-          <button
-            onClick={() => setDismissed(true)}
-            className="flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Dismiss"
-          >
-            <X size={14} />
-          </button>
         </motion.div>
       )}
     </AnimatePresence>

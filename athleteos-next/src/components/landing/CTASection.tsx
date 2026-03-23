@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { insertFounder, incrementShareCount, getFounderCount } from '@/lib/supabase'
+import { validateFounderForm } from './founderFormValidation'
 
 interface FormState { name: string; email: string; whatsapp: string; discipline: string; experience: string }
 interface FounderState { id: string; founderNumber: number; shareCount: number }
@@ -268,6 +270,7 @@ function FounderSuccess({ founder, onShare, onClaim, claimVisible, claiming }: {
 
 // ── Pre-signup state ─────────────────────────────────────────────────────────
 export function CTASection() {
+  const router = useRouter()
   const [form, setForm] = useState<FormState>({ name: '', email: '', whatsapp: '', discipline: '', experience: '' })
   const [errors, setErrors] = useState<Partial<Pick<FormState, 'name' | 'email' | 'whatsapp'>>>({})
   const [loading, setLoading] = useState(false)
@@ -293,14 +296,12 @@ export function CTASection() {
     getFounderCount().then(setSlotCount).catch(() => {})
   }, [])
 
-  const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)
-  const isValidPhone = (v: string) => /^\+?[0-9\s()-]{10,15}$/.test(v)
-
   const validate = (): boolean => {
-    const e: Partial<Pick<FormState, 'name' | 'email' | 'whatsapp'>> = {}
-    if (!form.name.trim()) e.name = 'Required'
-    if (!isValidPhone(form.whatsapp)) e.whatsapp = 'Invalid number'
-    if (!isValidEmail(form.email)) e.email = 'Invalid email'
+    const e = validateFounderForm({
+      name: form.name,
+      email: form.email,
+      whatsapp: form.whatsapp,
+    })
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -324,6 +325,7 @@ export function CTASection() {
     setFounder(state)
     localStorage.setItem('aos_waitlist', '1')
     localStorage.setItem('aos_founder_data', JSON.stringify({ id: data.id, num: data.founder_number, shareCount: 0 }))
+    router.push('/welcome')
   }
 
   const handleShare = (platform: 'x' | 'wa') => {
@@ -374,7 +376,7 @@ export function CTASection() {
 
         {/* Section header */}
         <motion.div
-          className="mb-10"
+          className="mb-8 md:mb-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -393,6 +395,7 @@ export function CTASection() {
 
           {/* Left: founding offer + perks */}
           <motion.div
+            className="order-2 lg:order-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -470,13 +473,14 @@ export function CTASection() {
 
           {/* Right: form */}
           <motion.div
+            className="order-1 lg:order-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div
-              className="p-6 sticky top-24"
+              className="p-5 md:p-6 lg:sticky lg:top-24"
               style={{
                 borderRadius: 6,
                 background: 'rgba(255,255,255,0.026)',
@@ -491,6 +495,11 @@ export function CTASection() {
               <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                 No payment now. You&apos;ll only pay when athleteOS opens to founding members on iOS and Android.
               </p>
+              <div className="mb-5 rounded-md border border-accent/18 bg-accent/6 px-3 py-2.5 lg:hidden">
+                <p className="text-xs font-medium leading-relaxed text-muted-foreground">
+                  Serious athletes first. Lock founder pricing now and skip the scroll.
+                </p>
+              </div>
 
               <form onSubmit={handleSubmit} className="space-y-3">
                 <GlassField

@@ -90,6 +90,7 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
 
 export function FAQSection() {
   const [open, setOpen] = useState<number | null>(0)
+  const mobileFaqs = FAQS.slice(0, 3)
 
   const toggle = (i: number) => setOpen(prev => (prev === i ? null : i))
 
@@ -116,9 +117,26 @@ export function FAQSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="space-y-2"
+          className="space-y-2 hidden md:block"
         >
           {FAQS.map((faq, i) => (
+            <AccordionItem
+              key={i}
+              faq={faq}
+              isOpen={open === i}
+              onToggle={() => toggle(i)}
+            />
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="space-y-2 md:hidden"
+        >
+          {mobileFaqs.map((faq, i) => (
             <AccordionItem
               key={i}
               faq={faq}
