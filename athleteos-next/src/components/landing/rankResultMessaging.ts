@@ -27,9 +27,9 @@ export function getRankResultMessaging({
       preview: 'From your lifts and bodyweight, we can already see where your next gains are most likely to come from.',
       worldBenchmark: 'World benchmark: advanced competitive standard',
       lockedCards: [
-        'What to improve first',
-        'What separates you from the next tier',
-        'Your next performance opportunity',
+        'Lift ratio analysis vs population norms',
+        'Where your programming leaks volume',
+        'Your next performance threshold',
       ],
       cta: 'See What Moves You Higher',
     }
@@ -43,9 +43,9 @@ export function getRankResultMessaging({
       preview: 'From your current profile, we can already see the area most likely to unlock your next level of progress.',
       worldBenchmark: 'World benchmark: developing competitive standard',
       lockedCards: [
-        'Your biggest opportunity',
-        'What to fix first',
-        'Your fastest path up',
+        'Your biggest ratio imbalance',
+        'The variable you\'re probably ignoring',
+        'Your fastest path to the next bracket',
       ],
       cta: 'See My Next Performance Move',
     }
@@ -58,8 +58,8 @@ export function getRankResultMessaging({
     preview: 'From your lifts and bodyweight, we can already see where the biggest early gains are most likely to come from.',
     worldBenchmark: 'World benchmark: foundational competitive standard',
     lockedCards: [
-      'Your main focus area',
-      'What to improve first',
+      'Where to focus first',
+      'The lift that unlocks the most progress',
       'Your fastest path up',
     ],
     cta: 'Find My Fastest Way Up',

@@ -53,7 +53,7 @@ export function CredibilitySection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="card-surface-secondary rounded-2xl p-5"
+              className="surface-card-muted rounded-2xl p-5"
             >
               <p className="font-mono-label text-accent/80 mb-3">{label}</p>
               <h3 className="text-lg font-semibold text-foreground leading-snug">{title}</h3>

@@ -12,7 +12,7 @@ const FOOD_DATA = [
 const IMPACT_CONTEXT = [
   { label: 'IFCT 2017', note: 'National Institute of Nutrition, Hyderabad', color: '#2DDC8F' },
   { label: 'vs MyFitnessPal', note: 'crowd-sourced food entries', color: '#F59E0B' },
-  { label: 'Per 100g', note: 'cooked or prepared weight', color: '#7FB2FF' },
+  { label: 'Per 100g', note: 'cooked or prepared weight', color: '#5E6AD2' },
 ]
 
 const IMPACT_STATS = [
@@ -30,7 +30,7 @@ export function ProblemSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45 }}
-            className="card-surface p-5"
+            className="surface-card p-5"
           >
             <p className="font-mono-label text-accent mb-2">Why most tracking fails</p>
             <h2 className="text-2xl font-display font-bold text-foreground mb-3">
@@ -51,11 +51,7 @@ export function ProblemSection() {
             {IMPACT_STATS.map(({ kicker, value, note }) => (
               <div
                 key={kicker}
-                className="rounded-2xl p-5"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(21,31,43,0.98), rgba(17,26,37,0.96))',
-                  border: '1px solid rgba(255,255,255,0.09)',
-                }}
+                className="rounded-2xl p-5 surface-impact-card"
               >
                 <p className="font-mono-label text-destructive mb-2">{kicker}</p>
                 <p className="font-display text-3xl font-bold text-foreground">{value}</p>
@@ -69,21 +65,14 @@ export function ProblemSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.12 }}
-            className="rounded-2xl p-5"
-            style={{
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.07)',
-            }}
+            className="rounded-2xl p-5 surface-dim-panel"
           >
             <div className="mb-4 flex items-center justify-between gap-4">
               <div>
                 <p className="font-mono-label text-muted-foreground mb-1">Protein tracking drift</p>
                 <p className="font-display text-4xl font-bold text-foreground">27%</p>
               </div>
-              <div
-                className="rounded-xl px-3 py-2"
-                style={{ background: 'rgba(226,75,74,0.10)', border: '1px solid rgba(226,75,74,0.22)' }}
-              >
+              <div className="rounded-xl px-3 py-2 pill-destructive">
                 <span className="font-mono-label text-destructive">Plateau risk ↑</span>
               </div>
             </div>
@@ -99,7 +88,7 @@ export function ProblemSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="card-surface p-6 md:p-8"
+            className="surface-card p-6 md:p-8"
           >
             <p className="font-mono-label text-accent mb-3">Why most tracking fails</p>
             <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
@@ -126,11 +115,7 @@ export function ProblemSection() {
               {IMPACT_STATS.map(({ kicker, value, note }) => (
                 <div
                   key={kicker}
-                  className="rounded-2xl p-5"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(21,31,43,0.98), rgba(17,26,37,0.96))',
-                    border: '1px solid rgba(255,255,255,0.09)',
-                  }}
+                  className="rounded-2xl p-5 surface-impact-card"
                 >
                   <p className="font-mono-label text-destructive mb-2">{kicker}</p>
                   <p className="font-display text-3xl font-bold text-foreground">{value}</p>
@@ -148,7 +133,7 @@ export function ProblemSection() {
           </motion.div>
 
           <motion.div
-            className="card-surface-secondary overflow-hidden relative h-full"
+            className="surface-card-muted overflow-hidden relative h-full"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -169,10 +154,7 @@ export function ProblemSection() {
                   <p className="font-mono-label text-muted-foreground mb-2">Protein tracking drift</p>
                   <p className="font-display text-5xl font-bold text-foreground">27%</p>
                 </div>
-                <div
-                  className="rounded-xl px-3 py-2"
-                  style={{ background: 'rgba(226,75,74,0.10)', border: '1px solid rgba(226,75,74,0.22)' }}
-                >
+                <div className="rounded-xl px-3 py-2 pill-destructive">
                   <span className="font-mono-label text-destructive">Plateau risk ↑</span>
                 </div>
               </div>
@@ -183,13 +165,13 @@ export function ProblemSection() {
                     className="flex-1 rounded-t-md relative"
                     style={{
                       height: `${h * 3.4}px`,
-                      background: i < 4 ? 'rgba(255,255,255,0.09)' : i === 4 ? 'rgba(127,178,255,0.42)' : 'rgba(226,75,74,0.26)',
-                      borderTop: i >= 5 ? '1px dashed rgba(226,75,74,0.55)' : 'none',
+                      background: i < 4 ? 'rgba(255,255,255,0.09)' : i === 4 ? 'rgba(94,106,210,0.42)' : 'rgba(239,68,68,0.26)',
+                      borderTop: i >= 5 ? '1px dashed rgba(239,68,68,0.55)' : 'none',
                     }}
                   >
                     {i === 4 && (
                       <div className="absolute -top-9 left-1/2 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-bold text-white whitespace-nowrap"
-                        style={{ background: '#E24B4A' }}>
+                        style={{ background: '#EF4444' }}>
                         Plateau point
                       </div>
                     )}
@@ -207,7 +189,7 @@ export function ProblemSection() {
 
         {/* Data table */}
         <motion.div
-          className="hidden md:block card-surface overflow-hidden"
+          className="hidden md:block surface-card overflow-hidden"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

@@ -1,469 +1,33 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Activity, Check, Users } from 'lucide-react'
 import { calculateRank, type RankInput, type RankResult } from '@/lib/rankCalc'
 import { trackEvent } from '@/lib/analytics'
+import { EASE_OUT, useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
 import { AthleteScoreCard } from './AthleteScoreCard'
 import { getFirstReadDiagnosis } from './firstReadDiagnosis'
-import { validateFounderForm } from './founderFormValidation'
-import { getFounderLabel, getInlineSignupGateContent, hasFounderData } from './landingFlow'
-import { getRankResultMessaging } from './rankResultMessaging'
 import { ShareActions } from './ShareActions'
-import { insertFounder } from '@/lib/supabase'
+import { RankForm, type RankFormFields } from './rank/RankForm'
+import { DiagnosticBars, ResultInsightPanel } from './rank/RankResult'
+import { GhostTierPreview } from './rank/GhostTierPreview'
+import { type AthleteMode } from './ModeSelector'
 
-// ── Shared number input ───────────────────────────────────────────────────────
-function GlassInput({ id, label, value, onChange, placeholder, min, max, step }: {
-  id?: string
-  label?: string; value: string; onChange: (v: string) => void
-  placeholder: string; min?: number; max?: number; step?: number
-}) {
-  return (
-    <input
-      id={id}
-      type="number"
-      aria-label={label ?? placeholder}
-      placeholder={placeholder}
-      value={value}
-      min={min}
-      max={max}
-      step={step}
-      onChange={e => onChange(e.target.value)}
-      className="w-full rounded-xl font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none transition-all"
-      style={{
-        background: 'rgba(11,17,24,0.8)',
-        border: '1px solid rgba(255,255,255,0.10)',
-        borderRadius: '12px',
-        padding: '12px 14px',
-      }}
-      onFocus={e => { e.target.style.borderColor = 'rgba(127,178,255,0.48)'; e.target.style.boxShadow = '0 0 0 3px rgba(127,178,255,0.08)' }}
-      onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.boxShadow = 'none' }}
-    />
-  )
-}
-
-// ── Shared text/email/tel input ───────────────────────────────────────────────
-function GlassField({ type, placeholder, value, onChange, error }: {
-  type: string; placeholder: string; value: string; onChange: (v: string) => void; error?: string
-}) {
-  return (
-    <div>
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        className="w-full rounded-xl font-sans text-sm text-foreground placeholder:text-muted-foreground/50 transition-all focus:outline-none"
-        style={{
-          background: 'rgba(11,17,24,0.8)',
-          border: `1px solid ${error ? 'rgba(226,75,74,0.5)' : 'rgba(255,255,255,0.10)'}`,
-          borderRadius: 12,
-          padding: '12px 14px',
-        }}
-        onFocus={e => { e.target.style.borderColor = 'rgba(127,178,255,0.48)'; e.target.style.boxShadow = '0 0 0 3px rgba(127,178,255,0.08)' }}
-        onBlur={e => { e.target.style.borderColor = error ? 'rgba(226,75,74,0.5)' : 'rgba(255,255,255,0.10)'; e.target.style.boxShadow = 'none' }}
-      />
-      {error && <p className="mt-1 font-mono text-xs text-destructive">{error}</p>}
-    </div>
-  )
-}
-
-function LiftRow({ label, weightVal, repsVal, onWeight, onReps }: {
-  label: string; weightVal: string; repsVal: string
-  onWeight: (v: string) => void; onReps: (v: string) => void
-}) {
-  return (
-    <div>
-      <p className="font-mono-label text-muted-foreground mb-1.5">{label}</p>
-      <div className="mb-1.5 grid grid-cols-[1fr_96px] gap-2">
-        <p className="text-[11px] font-medium text-muted-foreground">Weight (kg)</p>
-        <p className="text-[11px] font-medium text-muted-foreground">Reps</p>
-      </div>
-      <div className="flex gap-2">
-        <GlassInput placeholder="e.g. 190" value={weightVal} onChange={onWeight} min={0} step={0.5} />
-        <div className="w-24 flex-shrink-0">
-          <GlassInput placeholder="e.g. 1" value={repsVal} onChange={onReps} min={1} max={30} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ── Diagnostic bars ───────────────────────────────────────────────────────────
-function DiagnosticBars({ result }: { result: RankResult }) {
-  const bars = [
-    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: '#7FB2FF', est: result.squat.estimated1RM },
-    { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: '#F59E0B', est: result.bench.estimated1RM },
-    { label: 'Deadlift', pct: result.deadlift.percentile, value: result.deadlift.estimated1RM > 0 ? `Top ${100 - result.deadlift.percentile}%` : '—', color: '#E24B4A', est: result.deadlift.estimated1RM },
-    ...(result.run5k ? [{ label: '5K Run', pct: result.run5k.percentile, value: `Top ${100 - result.run5k.percentile}%`, color: '#2DDC8F', est: 1 }] : []),
-  ]
-
-  return (
-    <motion.div
-      className="card-surface p-6 space-y-5"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="flex justify-between items-baseline">
-        <div className="flex items-center gap-2">
-          <Activity className="w-3 h-3 text-accent" />
-          <p className="font-mono-label text-muted-foreground">Diagnostic Output</p>
-        </div>
-        <p className="text-xs text-muted-foreground">vs. {result.weightClass} class</p>
-      </div>
-
-      {bars.map((bar, i) => (
-        <div key={bar.label} className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-foreground">{bar.label}</span>
-            <div className="flex items-center gap-3">
-              {bar.est > 0 && (
-                <span className="font-mono text-xs text-muted-foreground">{bar.est.toFixed(1)}kg 1RM</span>
-              )}
-              <span className="font-mono tabular-nums text-xs font-bold" style={{ color: bar.color }}>{bar.value}</span>
-            </div>
-          </div>
-          <div className="h-1.5 rounded-full overflow-hidden signal-bar" style={{ background: 'rgba(255,255,255,0.08)' }}>
-            <motion.div
-              className="h-full rounded-full"
-              style={{ background: bar.color }}
-              initial={{ width: 0 }}
-              animate={{ width: `${bar.pct}%` }}
-              transition={{ duration: 0.8, delay: i * 0.12, ease: 'easeOut' }}
-            />
-          </div>
-        </div>
-      ))}
-    </motion.div>
-  )
-}
-
-function ResultInsightPanel({ result }: { result: RankResult }) {
-  const messaging = getRankResultMessaging({
-    overallPct: result.overallPct,
-    weightClass: result.weightClass,
-  })
-  const diagnosis = getFirstReadDiagnosis(result)
-
-  return (
-    <div
-      className="rounded-2xl px-4 py-4"
-      style={{ background: 'rgba(127,178,255,0.05)', border: '1px solid rgba(127,178,255,0.14)' }}
-    >
-      <p className="font-mono-label text-accent mb-2">{messaging.status}</p>
-      <p className="text-lg font-semibold text-foreground">{messaging.identity}</p>
-      <p className="mt-1 text-base font-medium text-foreground/90">{messaging.progression}</p>
-      <div
-        className="mt-4 rounded-xl px-3.5 py-3"
-        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
-      >
-        <p className="font-mono-label text-muted-foreground mb-1.5">{diagnosis.label}</p>
-        <p className="text-sm font-semibold text-foreground">{diagnosis.headline}</p>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{diagnosis.body}</p>
-      </div>
-
-      <div
-        className="mt-3 rounded-xl px-3.5 py-3"
-        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
-      >
-        <p className="font-mono-label text-muted-foreground mb-1.5">Performance Preview</p>
-        <p className="text-sm leading-relaxed text-muted-foreground">{messaging.preview}</p>
-      </div>
-
-      <div
-        className="mt-3 rounded-xl px-3.5 py-3"
-        style={{ background: 'rgba(45,220,143,0.04)', border: '1px solid rgba(45,220,143,0.14)' }}
-      >
-        <p className="font-mono-label text-success mb-1.5">World Benchmark</p>
-        <p className="text-sm leading-relaxed text-muted-foreground">{messaging.worldBenchmark}</p>
-      </div>
-
-      <div className="mt-4 grid gap-2 sm:grid-cols-3">
-        {messaging.lockedCards.map((label) => (
-          <div
-            key={label}
-            className="relative overflow-hidden rounded-xl px-3 py-3"
-            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
-          >
-            <p className="text-sm font-semibold text-foreground/80 blur-[1.5px] select-none">{label}</p>
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{ background: 'linear-gradient(180deg, rgba(11,17,24,0.08) 0%, rgba(11,17,24,0.72) 100%)' }}
-            />
-          </div>
-        ))}
-      </div>
-
-      <p className="mt-3 text-xs text-muted-foreground">
-        Founding members unlock the full performance readout.
-      </p>
-    </div>
-  )
-}
-
-// ── Ghost tier preview (idle state right column) ──────────────────────────────
-const GHOST_BARS = [
-  { label: 'Squat',    color: '#7FB2FF', pct: 78 },
-  { label: 'Bench',    color: '#F59E0B', pct: 55 },
-  { label: 'Deadlift', color: '#E24B4A', pct: 84 },
-]
-
-function GhostTierPreview() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="relative"
-    >
-      {/* Ghost content — visible through overlay */}
-      <div
-        className="rounded-2xl overflow-hidden p-6"
-        style={{
-          background: 'rgba(255,255,255,0.026)',
-          border: '1px solid rgba(255,255,255,0.09)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
-        }}
-      >
-        <div className="flex items-center gap-2 mb-5">
-          <Activity className="w-3 h-3 text-accent" />
-          <p className="font-mono-label text-muted-foreground">Sample Output</p>
-        </div>
-
-        {/* Ghost score circle + tier */}
-        <div className="flex items-center gap-4 mb-5" style={{ filter: 'blur(5px)', userSelect: 'none' }}>
-          <div
-            className="relative flex-shrink-0 w-20 h-20 rounded-full"
-            style={{
-              background: 'conic-gradient(#7FB2FF 0deg 270deg, rgba(255,255,255,0.06) 270deg 360deg)',
-            }}
-          >
-            <div
-              className="absolute inset-2 rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(7,13,20,0.92)' }}
-            >
-              <span className="font-display text-xl font-bold text-accent">74</span>
-            </div>
-          </div>
-          <div>
-            <p className="font-mono-label text-accent mb-0.5">Benchmark rank</p>
-            <p className="font-display text-2xl font-bold text-foreground">ADVANCED</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Top 22% of competitive Indian strength athletes</p>
-          </div>
-        </div>
-
-        {/* Ghost bars */}
-        <div className="space-y-4" style={{ filter: 'blur(3px)', userSelect: 'none' }}>
-          {GHOST_BARS.map(bar => (
-            <div key={bar.label}>
-              <div className="flex justify-between text-sm mb-1.5">
-                <span className="text-foreground text-xs">{bar.label}</span>
-                <span className="font-mono text-xs font-bold" style={{ color: bar.color }}>
-                  Top {100 - bar.pct}%
-                </span>
-              </div>
-              <div className="h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: `${bar.pct}%`, background: bar.color }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Overlay */}
-      <div
-        className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-3 p-6 text-center"
-        style={{ background: 'rgba(7,13,20,0.72)', backdropFilter: 'blur(2px)' }}
-      >
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: 'rgba(127,178,255,0.12)', border: '1px solid rgba(127,178,255,0.26)' }}
-        >
-          <Activity className="w-5 h-5 text-accent" />
-        </div>
-        <div>
-          <p className="text-sm font-bold text-foreground mb-1">Your diagnosis will appear here</p>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Enter your lifts to see your percentile within our competitive Indian athlete benchmark
-          </p>
-        </div>
-        <div className="flex gap-3 flex-wrap justify-center">
-          {['IPF-calibrated', '3,200+ competitive Indian athletes'].map(t => (
-            <span key={t} className="font-mono-label text-muted-foreground/60" style={{ fontSize: '10px' }}>
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
-
-// ── Inline signup gate (post-result, peak motivation) ─────────────────────────
-interface GateForm { name: string; email: string; whatsapp: string }
-
-function InlineSignupGate({ overallPct }: { overallPct: number }) {
-  const router = useRouter()
-  const [form, setForm] = useState<GateForm>({ name: '', email: '', whatsapp: '' })
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [apiError, setApiError] = useState('')
-  const [founderLabel] = useState(() =>
-    typeof window !== 'undefined' ? getFounderLabel(localStorage.getItem('aos_founder_data')) : '',
-  )
-
-  const gateContent = getInlineSignupGateContent(overallPct)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErrors({})
-    setApiError('')
-
-    const validationErrors = validateFounderForm(form)
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors)
-      return
-    }
-
-    setLoading(true)
-    const referrerId = typeof window !== 'undefined' ? localStorage.getItem('aos_referrer_id') : null
-    const { data, error: apiErr } = await insertFounder({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      whatsapp: form.whatsapp.trim(),
-      source: 'rank-gate',
-      ...(referrerId ? { referrer_id: referrerId } : {}),
-    })
-    setLoading(false)
-    if (apiErr) {
-      setApiError(apiErr.message)
-      return
-    }
-
-    localStorage.setItem('aos_waitlist', '1')
-    localStorage.setItem('aos_founder_data', JSON.stringify({
-      id: data.id, num: data.founder_number, shareCount: 0,
-    }))
-    window.dispatchEvent(new Event('aos-founder-data-changed'))
-    router.push('/welcome')
-  }
-
-  if (founderLabel) {
-    return (
-      <div
-        id="inline-signup-gate"
-        className="rounded-2xl p-5"
-        style={{ background: 'rgba(45,220,143,0.05)', border: '1px solid rgba(45,220,143,0.2)' }}
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(45,220,143,0.15)' }}
-          >
-            <Check className="w-3.5 h-3.5 text-success" />
-          </div>
-          <p className="font-bold text-foreground">You&apos;re in. {founderLabel}.</p>
-        </div>
-        <p className="mt-2 pl-9 text-sm text-muted-foreground">
-          <a href="/welcome" className="text-accent hover:underline">Go to your welcome page →</a>
-        </p>
-      </div>
-    )
-  }
-
-  return (
-    <motion.div
-      id="inline-signup-gate"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.25 }}
-      className="rounded-2xl p-6"
-      style={{
-        background: 'linear-gradient(135deg, rgba(255,122,47,0.08) 0%, rgba(255,255,255,0.02) 60%)',
-        border: '1px solid rgba(255,122,47,0.22)',
-        boxShadow: '0 0 40px rgba(255,122,47,0.06)',
-      }}
-    >
-      <div className="mb-5">
-        <div>
-          <div className="mb-1.5 flex items-center gap-2">
-            <Users className="w-3.5 h-3.5 text-accent" />
-            <span className="font-mono-label text-accent">{gateContent.eyebrow}</span>
-          </div>
-          <p className="text-lg font-bold leading-snug text-foreground">{gateContent.headline}</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {gateContent.productLine}
-            <br />
-            {gateContent.pricingLine}
-          </p>
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-2.5">
-        <div className="grid sm:grid-cols-2 gap-2.5">
-          <GlassField
-            type="text"
-            placeholder="Your name"
-            value={form.name}
-            onChange={v => setForm(f => ({ ...f, name: v }))}
-            error={errors.name}
-          />
-          <GlassField
-            type="tel"
-            placeholder="WhatsApp number"
-            value={form.whatsapp}
-            onChange={v => setForm(f => ({ ...f, whatsapp: v }))}
-            error={errors.whatsapp}
-          />
-        </div>
-        <GlassField
-          type="email"
-          placeholder="Email address"
-          value={form.email}
-          onChange={v => setForm(f => ({ ...f, email: v }))}
-          error={errors.email}
-        />
-        {apiError && <p className="font-mono text-xs text-destructive">{apiError}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="cta-glow w-full rounded-xl bg-accent py-3.5 font-bold text-white transition hover:bg-accent-light accent-glow disabled:opacity-50 flex items-center justify-center gap-2 group"
-        >
-          {loading ? 'Locking…' : (
-            <>
-              Lock My Spot — Free
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </>
-          )}
-        </button>
-      </form>
-
-      <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-3">
-        {gateContent.trustChips.map(t => (
-          <div key={t} className="flex items-center gap-1.5">
-            <Check className="w-3 h-3 text-success flex-shrink-0" />
-            <span className="text-xs text-muted-foreground">{t}</span>
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  )
-}
-
-// ── Main export ───────────────────────────────────────────────────────────────
-export function RankSection() {
-  const [trainingType, setTrainingType] = useState<'strength' | 'hybrid'>('strength')
-  const [f, setF] = useState({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
+// ── Main export ───────────────────────────────────────────────────────────
+export function RankSection({ mode }: { mode: AthleteMode }) {
+  const parallax = useHeadingParallax()
+  const trainingType = mode === 'gym' ? 'strength' : 'hybrid'
+  const [f, setF] = useState<RankFormFields>({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
   const [result, setResult] = useState<RankResult | null>(null)
   const [error, setError] = useState('')
 
-  const upd = (k: keyof typeof f) => (v: string) => setF(prev => ({ ...prev, [k]: v }))
+  useEffect(() => {
+    setF({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
+    setResult(null)
+    setError('')
+  }, [mode])
+
+  const upd = (k: keyof RankFormFields) => (v: string) => setF(prev => ({ ...prev, [k]: v }))
 
   const submit = () => {
     setError('')
@@ -496,17 +60,20 @@ export function RankSection() {
   const reset = () => { setResult(null); setError('') }
 
   return (
-    <section id="rank" className="py-24 px-6 md:px-10">
+    <section id="rank" className="section-fade-top py-24 px-6 md:px-10">
       <div className="container mx-auto max-w-6xl">
 
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          ref={parallax.ref}
+          style={parallax.style}
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
           className="mb-8"
         >
-          <h2 className="text-3xl font-display font-bold text-foreground md:text-4xl">Where do you stand?</h2>
+          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">Where are you strong. Where are you leaking.</motion.h2>
         </motion.div>
 
         <AnimatePresence mode="wait">
@@ -516,113 +83,34 @@ export function RankSection() {
               key="form"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
               className="grid lg:grid-cols-2 gap-6 items-start"
             >
-              {/* Form panel */}
-              <div
-                className="rounded-2xl p-6 sm:p-8"
-                style={{
-                  background: 'rgba(255,255,255,0.026)',
-                  border: '1px solid rgba(255,255,255,0.09)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 72px rgba(0,0,0,0.32)',
-                }}
-              >
-                {/* Training type toggle */}
-                <div className="flex gap-2 mb-8">
-                {(['strength', 'hybrid'] as const).map(t => (
-                    <button
-                      key={t}
-                      onClick={() => setTrainingType(t)}
-                      className="px-4 py-2 rounded-xl text-sm font-semibold transition"
-                      style={trainingType === t
-                        ? { background: 'rgba(127,178,255,0.14)', border: '1px solid rgba(127,178,255,0.32)', color: 'var(--accent-light)' }
-                        : { background: 'transparent', border: '1px solid rgba(255,255,255,0.09)', color: 'var(--muted-foreground)' }
-                      }
-                    >
-                      {t === 'strength' ? 'Strength' : 'Hybrid'}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="space-y-5">
-                  <div>
-                    <p className="text-sm font-semibold text-muted-foreground mb-1.5">Bodyweight</p>
-                    <div className="w-40">
-                      <GlassInput
-                        id="rank-bw-input"
-                        placeholder="kg"
-                        value={f.bw}
-                        onChange={upd('bw')}
-                        min={40}
-                        max={250}
-                        step={0.5}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className="rounded-2xl px-4 py-3"
-                    style={{ background: 'rgba(127,178,255,0.05)', border: '1px solid rgba(127,178,255,0.14)' }}
-                  >
-                    <p className="text-sm font-semibold text-foreground">Benchmarked against competitive Indian athletes</p>
-                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                      Your percentile is calculated against 3,200+ meet-calibrated and athlete-submitted records in your weight class — not the general population.
-                    </p>
-                  </div>
-                  <div
-                    className="h-px"
-                    style={{ background: 'linear-gradient(90deg, rgba(127,178,255,0.18), rgba(255,255,255,0.04), transparent)' }}
-                  />
-                  <div>
-                    <p className="text-sm font-semibold text-muted-foreground mb-1.5">Enter your best recent set for each lift</p>
-                    <p className="text-base text-muted-foreground leading-relaxed">
-                      Use <span className="text-foreground font-semibold">weight × reps</span>. Sets are not needed. Example: <span className="text-foreground font-semibold">190 × 1</span> or <span className="text-foreground font-semibold">140 × 5</span>.
-                    </p>
-                  </div>
-                  <LiftRow label="Squat"    weightVal={f.sqW} repsVal={f.sqR} onWeight={upd('sqW')} onReps={upd('sqR')} />
-                  <LiftRow label="Bench"    weightVal={f.bpW} repsVal={f.bpR} onWeight={upd('bpW')} onReps={upd('bpR')} />
-                  <LiftRow label="Deadlift" weightVal={f.dlW} repsVal={f.dlR} onWeight={upd('dlW')} onReps={upd('dlR')} />
-                  {trainingType === 'hybrid' && (
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground mb-1.5">5K Run Time</p>
-                      <div className="flex gap-2 w-52">
-                        <GlassInput placeholder="min" value={f.runMin} onChange={upd('runMin')} min={12} max={60} />
-                        <GlassInput placeholder="sec" value={f.runSec} onChange={upd('runSec')} min={0} max={59} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {error && <p className="mt-4 font-mono text-xs text-destructive">{error}</p>}
-
-                <button
-                  onClick={submit}
-                  className="cta-glow mt-8 w-full bg-accent text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 group transition hover:bg-accent-light accent-glow"
-                >
-                  See My Rank
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-
-              {/* Ghost tier preview */}
-              <GhostTierPreview />
+              <RankForm
+                mode={mode}
+                fields={f}
+                onFieldChange={upd}
+                onSubmit={submit}
+                error={error}
+              />
+              <GhostTierPreview mode={mode} />
             </motion.div>
           ) : (
-            /* ── Result: score card + bars + inline gate ── */
+            /* ── Result: score card + bars + insight ── */
             <motion.div
               key="result"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.32, ease: EASE_OUT }}
               className="space-y-5"
             >
               <div className="grid md:grid-cols-2 gap-6 items-start">
                 <AthleteScoreCard
                   score={result.athleteScore}
                   systemStatus={result.tier}
-                  percentileLabel={`Top ${100 - result.overallPct}% of competitive Indian strength athletes`}
+                  percentileLabel={`Top ${100 - result.overallPct}% of competitive strength athletes`}
                   animate={false}
                   metrics={[
                     { label: 'Strength',  value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', status: result.squat.percentile >= 60    ? 'up' : result.squat.percentile >= 30    ? 'neutral' : 'down' },
@@ -648,7 +136,6 @@ export function RankSection() {
                 diagnosisLabel={getFirstReadDiagnosis(result).label}
                 diagnosisHeadline={getFirstReadDiagnosis(result).headline}
               />
-              <InlineSignupGate overallPct={result.overallPct} />
             </motion.div>
           )}
         </AnimatePresence>

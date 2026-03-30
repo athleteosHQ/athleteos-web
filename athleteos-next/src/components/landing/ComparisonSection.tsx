@@ -58,7 +58,7 @@ export function ComparisonSection() {
         </motion.div>
 
         {/* Comparison Table */}
-        <div className="relative overflow-x-auto rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-sm shadow-2xl">
+        <div className="relative overflow-x-auto rounded-3xl surface-card shadow-2xl">
           <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>
               <tr className="border-b border-white/10">
@@ -73,7 +73,7 @@ export function ComparisonSection() {
                 </th>
                 <th className="p-6 md:p-8 text-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-accent/10 -z-10" />
-                  <div className="absolute top-0 left-0 w-full h-1 bg-accent" />
+                  <div className="absolute top-0 left-0 w-full h-1 bg-accent" style={{ boxShadow: '0 2px 20px rgba(94,106,210,0.4)' }} />
                   <div className="flex items-center justify-center gap-2 mb-1">
                     <Zap size={16} className="text-accent fill-accent" />
                     <p className="text-lg font-bold text-foreground">athleteOS</p>

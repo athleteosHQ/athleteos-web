@@ -68,7 +68,7 @@ export function SampleOutcomeBlock() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]"
         >
-          <div className="card-surface p-6 sm:p-8">
+          <div className="surface-card p-6 sm:p-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="font-mono-label text-muted-foreground mb-2">Athlete profile</p>
@@ -106,7 +106,7 @@ export function SampleOutcomeBlock() {
             </div>
           </div>
 
-          <div className="card-surface-secondary p-6 sm:p-8">
+          <div className="surface-card-muted p-6 sm:p-8">
             <p className="font-mono-label text-accent mb-4">Outcome chain</p>
             <div className="space-y-3">
               {OUTCOME_ROWS.map(({ key, label, value, sub, color, bg, border }, i) => (

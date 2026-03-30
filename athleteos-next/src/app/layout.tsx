@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { Archivo, Inter, JetBrains_Mono } from 'next/font/google'
+import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 
-const archivo = Archivo({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  variable: '--font-archivo',
-  weight: ['400', '600', '700', '800', '900'],
+  variable: '--font-jakarta',
+  weight: ['400', '500', '600', '700', '800'],
 })
 
 const inter = Inter({
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${archivo.variable} ${inter.variable} ${jetbrainsMono.variable} bg-[#0B1118] font-sans text-white antialiased`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${jakarta.variable} ${inter.variable} ${jetbrainsMono.variable} bg-background font-sans text-white antialiased`}>
         {children}
       </body>
     </html>

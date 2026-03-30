@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { EASE_OUT } from '@/lib/motion'
 
 /* ── Weekly recovery data (7 days) ────────────────────────────────── */
 const WEEK = [
@@ -65,7 +66,7 @@ export function ProductShowcase() {
       <motion.div
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.75, ease: EASE_OUT }}
         className="relative mx-auto"
       >
         {/* ── Phone shell ──────────────────────────────────────────── */}
@@ -117,7 +118,7 @@ export function ProductShowcase() {
                       <circle
                         cx="26" cy="26" r="22"
                         fill="none"
-                        stroke="#E24B4A"
+                        stroke="#EF4444"
                         strokeWidth="4"
                         strokeLinecap="round"
                         strokeDasharray={`${2 * Math.PI * 22 * 0.41} ${2 * Math.PI * 22 * 0.59}`}
@@ -137,7 +138,7 @@ export function ProductShowcase() {
                         className="w-full rounded-[3px]"
                         style={{
                           background: d.below
-                            ? 'linear-gradient(180deg, #E24B4A, rgba(226,75,74,0.2))'
+                            ? 'linear-gradient(180deg, #EF4444, rgba(239,68,68,0.2))'
                             : 'linear-gradient(180deg, #2DDC8F, rgba(45,220,143,0.2))',
                         }}
                         initial={{ height: 0 }}
@@ -153,12 +154,12 @@ export function ProductShowcase() {
               {/* ── Primary finding ─────────────────────────────────── */}
               <div
                 className="rounded-2xl p-3.5 mb-3"
-                style={{ background: 'rgba(226,75,74,0.08)', border: '1px solid rgba(226,75,74,0.15)' }}
+                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div
                     className="h-[7px] w-[7px] rounded-full bg-destructive flex-shrink-0"
-                    style={{ boxShadow: '0 0 0 3px rgba(226,75,74,0.15)' }}
+                    style={{ boxShadow: '0 0 0 3px rgba(239,68,68,0.15)' }}
                   />
                   <p className="text-[10px] font-semibold text-destructive/80 tracking-wide uppercase">Blocker Found</p>
                 </div>

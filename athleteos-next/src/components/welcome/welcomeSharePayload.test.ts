@@ -13,6 +13,8 @@ const result: RankResult = {
   squat: { estimated1RM: 260, percentile: 91 },
   bench: { estimated1RM: 150, percentile: 62 },
   deadlift: { estimated1RM: 300, percentile: 94 },
+  strengthAge: { years: '5+', description: 'Consistent with 5+ years of structured training' },
+  efficiencyScore: { pct: 62, ceilingTotal: 1100, actualTotal: 710 },
 }
 
 describe('getWelcomeSharePayload', () => {
@@ -37,6 +39,6 @@ describe('getWelcomeSharePayload', () => {
 
     expect(payload.badgeLabel).toBe('Early Athlete')
     expect(payload.foundingLabel).toBe('Founding Member #23')
-    expect(payload.diagnosisLabel).toBe('First Read')
+    expect(payload.diagnosisLabel).toBe('Primary Constraint')
   })
 })

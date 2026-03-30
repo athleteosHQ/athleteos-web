@@ -2,16 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { EASE_OUT, DURATION, useMotionSafe } from '@/lib/motion'
 
-const SIGNAL_DOT: React.CSSProperties = {
-  width: 7,
-  height: 7,
-  borderRadius: 999,
-  background: '#7FB2FF',
-  boxShadow: '0 0 0 4px rgba(127,178,255,0.15)',
-  animation: 'orbitPulse 2.2s ease-in-out infinite',
-  flexShrink: 0,
-}
 
 type Scenario = {
   tag: string
@@ -135,40 +127,35 @@ const FADE = {
   initial: { opacity: 0, y: 6 },
   animate: { opacity: 1, y: 0 },
   exit:    { opacity: 0, y: -6 },
-  transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+  transition: { duration: DURATION.slow, ease: EASE_OUT },
 }
 
 const ROW_DIVIDER = '1px solid rgba(255,255,255,0.07)'
 export function DiagnosticCard() {
+  const { reduced } = useMotionSafe()
   const [idx, setIdx] = useState(0)
 
   useEffect(() => {
+    if (reduced) return
     const t = setInterval(() => setIdx(i => (i + 1) % SCENARIOS.length), 4500)
     return () => clearInterval(t)
-  }, [])
+  }, [reduced])
 
   const s = SCENARIOS[idx]
 
   return (
     <>
-      <style>{`
-        @keyframes orbitPulse {
-          0%, 100% { transform: scale(1); opacity: 0.9; }
-          50%       { transform: scale(1.15); opacity: 1; }
-        }
-      `}</style>
-
       <motion.div
-        className="hero-card w-full max-w-[38rem] p-6 sm:p-7"
+        className="surface-card w-full max-w-[38rem] p-6 sm:p-7"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+        transition={{ duration: DURATION.slow, delay: 0.3, ease: EASE_OUT }}
       >
         {/* Header */}
         <AnimatePresence mode="wait">
           <motion.div key={`hdr-${idx}`} {...FADE} className="mb-5">
             <div className="flex items-center gap-2 mb-2.5">
-              <span style={SIGNAL_DOT} />
+              <span style={{ width: 7, height: 7, borderRadius: 999, background: 'var(--accent)', flexShrink: 0 }} />
               <p className="font-mono-label text-[11px] text-accent-light/80 leading-none">
                 {s.tag}
               </p>
@@ -221,14 +208,14 @@ export function DiagnosticCard() {
               </div>
 
               <div className="mt-4 space-y-3">
-                <div className="rounded-xl border px-4 py-3.5" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.015)' }}>
+                <div className="rounded-xl border px-4 py-3.5 surface-card-muted">
                   <div className="mb-1.5 flex items-baseline justify-between gap-3">
                     <span className="text-[11px] font-medium leading-tight text-foreground/70">{s.row2.label}</span>
                     <span className={`font-mono-label text-sm font-bold ${s.row2.valueClass}`}>{s.row2.value}</span>
                   </div>
                   <p className="text-[11px] leading-relaxed text-muted-foreground">{s.row2.subtext}</p>
                 </div>
-                <div className="rounded-xl border px-4 py-3.5" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.015)' }}>
+                <div className="rounded-xl border px-4 py-3.5 surface-card-muted">
                   <div className="mb-1.5 flex items-baseline justify-between gap-3">
                     <span className="text-[11px] font-medium leading-tight text-foreground/70">{s.row3.label}</span>
                     <span className={`font-mono-label text-sm font-bold ${s.row3.valueClass}`}>{s.row3.value}</span>
@@ -239,8 +226,7 @@ export function DiagnosticCard() {
             </div>
 
             <div
-              className="rounded-2xl border px-4 py-4 sm:px-5"
-              style={{ borderColor: 'rgba(127,178,255,0.16)', background: 'linear-gradient(180deg, rgba(127,178,255,0.06), rgba(255,255,255,0.015))' }}
+              className="rounded-2xl border px-4 py-4 sm:px-5 surface-card-muted"
             >
               <p className="mb-4 font-mono-label text-[11px] text-accent-light">
                 Diagnosis
@@ -255,11 +241,11 @@ export function DiagnosticCard() {
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-xl border px-3 py-3" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(7,13,20,0.28)' }}>
+                <div className="rounded-xl border px-3 py-3 surface-card-muted">
                   <p className="mb-0.5 font-mono-label text-[10px] text-muted-foreground">Match</p>
                   <p className="font-display text-2xl font-bold text-foreground">{s.match}</p>
                 </div>
-                <div className="rounded-xl border px-3 py-3" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(7,13,20,0.28)' }}>
+                <div className="rounded-xl border px-3 py-3 surface-card-muted">
                   <p className="mb-0.5 font-mono-label text-[10px] text-muted-foreground">{s.metricLabel}</p>
                   <p className="font-display text-2xl font-bold leading-none text-accent-light">{s.metricValue}</p>
                   <p className="mt-0.5 font-mono-label text-[10px] text-muted-foreground">{s.metricSub}</p>
@@ -278,17 +264,19 @@ export function DiagnosticCard() {
             <button
               key={i}
               onClick={() => setIdx(i)}
-              className="transition-all duration-300"
-              style={{
-                width: i === idx ? 18 : 5,
-                height: 5,
-                borderRadius: 999,
-                background: i === idx ? 'var(--accent)' : 'rgba(255,255,255,0.14)',
-                border: 'none',
-                cursor: 'pointer',
-              }}
+              className="flex items-center justify-center p-3 -m-2 cursor-pointer transition-all duration-300"
+              style={{ background: 'transparent', border: 'none' }}
               aria-label={`Show insight ${i + 1}`}
-            />
+            >
+              <span
+                className="block rounded-full transition-all duration-300"
+                style={{
+                  width: i === idx ? 18 : 5,
+                  height: 5,
+                  background: i === idx ? 'var(--accent)' : 'rgba(255,255,255,0.14)',
+                }}
+              />
+            </button>
           ))}
           <span className="ml-auto font-mono text-[10px] text-muted-foreground/40">
             {idx + 1}/{SCENARIOS.length}

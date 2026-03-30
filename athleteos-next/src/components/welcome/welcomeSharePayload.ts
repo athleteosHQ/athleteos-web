@@ -23,7 +23,7 @@ export function getWelcomeSharePayload({
   return {
     badgeLabel: 'Early Athlete',
     foundingLabel: `Founding Member #${founderNumber}`,
-    diagnosisLabel: 'First Read',
+    diagnosisLabel: 'Primary Constraint',
     shareMessage: `I got into AthleteOS early as Founding Member #${founderNumber}. I'm in the top ${topPercent}% and my first read says: ${diagnosisHeadline} Check yours 👇`,
   }
 }

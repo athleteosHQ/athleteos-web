@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
+import { EASE_OUT, useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
 
 interface FAQ {
   q: string
@@ -11,27 +12,42 @@ interface FAQ {
 
 const FAQS: FAQ[] = [
   {
+    q: 'Who is athleteOS for?',
+    a: 'Self-coached lifters with 1–3 years of training who are strong enough to plateau, but not experienced enough to diagnose the plateau clearly.',
+  },
+  {
     q: 'Is the rank calculator free?',
     a: 'Yes. No account, no email, no card. Enter your lifts and get your benchmark rank instantly.',
   },
   {
     q: 'How accurate are the percentiles?',
-    a: 'They are calibrated against IPF standards and 3,200+ competitive Indian athlete records. Not perfect, but far more useful than vague labels like beginner or advanced.',
+    a: 'They are calibrated against IPF standards and 3,200+ competitive athlete records. Not perfect, but far more useful than vague labels like beginner or advanced.',
   },
   {
-    q: 'Am I being compared against all of India?',
-    a: 'No. Your result is not against the general population. It is benchmarked against our competitive Indian strength-athlete dataset in your weight class, using meet-calibrated and athlete-submitted records.',
+    q: 'Who am I being compared against?',
+    a: 'Not the general population. Your result is benchmarked against competitive strength athletes in your weight class, using meet-calibrated and athlete-submitted records.',
   },
   {
     q: 'I only train one or two lifts. Can I still use it?',
     a: 'Yes. Leave any lift empty and the system scores what you provide. Three lifts give the strongest benchmark, but partial data still works.',
   },
   {
-    q: 'What is the ₹4,999 founding price?',
+    q: 'What does founding membership cost?',
     a: (
       <>
-        <span>It is the lowest annual price athleteOS will ever offer. Founding members join before public launch, keep the founding rate, and get direct access during beta.</span>
-        <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>No payment required to reserve. You pay only when you activate.</span>
+        <span>Founding members lock in the lowest price athleteOS will ever offer. No payment is required to reserve your spot — you pay only when the product activates.</span>
+        <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>Join now, pay later. Your founding rate is locked forever.</span>
+      </>
+    ),
+  },
+  {
+    q: 'How is athleteOS different from HealthifyMe or Whoop?',
+    a: (
+      <>
+        <span className="block mb-3">athleteOS is not a fitness app. It is a performance diagnosis system.</span>
+        <span className="block mb-2"><span className="font-semibold text-foreground">HealthifyMe</span> — weight loss focus, crowdsourced food data with high error rates, generic workout log, no plateau analysis.</span>
+        <span className="block mb-2"><span className="font-semibold text-foreground">Whoop</span> — recovery/sleep focus, cardio strain bias, vague readiness scores, no strength context.</span>
+        <span className="block"><span className="font-semibold text-accent">athleteOS</span> — verified food composition data, strength-block-aware training context, specific variable isolation for plateaus, actionable diagnostic output.</span>
       </>
     ),
   },
@@ -44,11 +60,8 @@ const FAQS: FAQ[] = [
 function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; onToggle: () => void }) {
   return (
     <div
-      className="rounded-xl overflow-hidden transition-all"
-      style={{
-        background: isOpen ? 'rgba(127,178,255,0.04)' : 'rgba(255,255,255,0.028)',
-        border: `1px solid ${isOpen ? 'rgba(127,178,255,0.18)' : 'rgba(255,255,255,0.09)'}`,
-      }}
+      className="surface-card-muted rounded-xl overflow-hidden transition-all"
+      style={{ borderColor: isOpen ? 'rgba(107,122,237,0.3)' : undefined }}
     >
       <button
         onClick={onToggle}
@@ -57,7 +70,7 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
         <span className="text-base font-semibold text-foreground leading-snug">{faq.q}</span>
         <span
           className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full flex items-center justify-center transition-colors"
-          style={{ background: isOpen ? 'rgba(127,178,255,0.14)' : 'rgba(255,255,255,0.06)' }}
+          style={{ background: isOpen ? 'rgba(94,106,210,0.14)' : 'rgba(255,255,255,0.06)' }}
         >
           {isOpen
             ? <Minus size={11} className="text-accent" />
@@ -72,7 +85,7 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+            transition={{ duration: 0.28, ease: EASE_OUT }}
             style={{ overflow: 'hidden' }}
           >
             <div
@@ -89,8 +102,8 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
 }
 
 export function FAQSection() {
-  const [open, setOpen] = useState<number | null>(0)
-  const mobileFaqs = FAQS.slice(0, 3)
+  const [open, setOpen] = useState<number | null>(null)
+  const parallax = useHeadingParallax()
 
   const toggle = (i: number) => setOpen(prev => (prev === i ? null : i))
 
@@ -99,17 +112,19 @@ export function FAQSection() {
       <div className="mx-auto max-w-4xl">
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          ref={parallax.ref}
+          style={parallax.style}
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
           className="mb-10"
         >
-          <p className="font-mono-label text-accent mb-3">FAQ</p>
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
+          <motion.p variants={staggerItem} className="font-mono-label text-accent mb-3">FAQ</motion.p>
+          <motion.h2 variants={staggerItem} className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
             Questions answered.
-          </h2>
-          <p className="text-base text-muted-foreground">The ones serious athletes actually ask.</p>
+          </motion.h2>
+          <motion.p variants={staggerItem} className="text-base text-muted-foreground">The ones serious athletes actually ask.</motion.p>
         </motion.div>
 
         <motion.div
@@ -117,26 +132,9 @@ export function FAQSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="space-y-2 hidden md:block"
+          className="space-y-2"
         >
           {FAQS.map((faq, i) => (
-            <AccordionItem
-              key={i}
-              faq={faq}
-              isOpen={open === i}
-              onToggle={() => toggle(i)}
-            />
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="space-y-2 md:hidden"
-        >
-          {mobileFaqs.map((faq, i) => (
             <AccordionItem
               key={i}
               faq={faq}

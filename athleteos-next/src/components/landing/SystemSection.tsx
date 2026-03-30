@@ -2,15 +2,10 @@
 
 import { motion, useReducedMotion } from 'framer-motion'
 import { Activity, Zap, Flame, BarChart2, ChevronRight } from 'lucide-react'
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-})
+import { fadeUp, useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
 
 export function SystemSection() {
+  const parallax = useHeadingParallax()
   const prefersReducedMotion = useReducedMotion()
 
   const inputCards = [
@@ -18,7 +13,7 @@ export function SystemSection() {
       key: 'nutrition',
       title: 'IFCT-Verified Intake',
       eyebrow: 'Nutrition',
-      description: 'Indian food logging grounded in IFCT data.',
+      description: 'Food logging grounded in verified composition data.',
       Icon: Flame,
       delay: 0.1,
       funnelClassName: 'lg:mr-14 xl:mr-16',
@@ -51,14 +46,22 @@ export function SystemSection() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-screen-xl">
-        <motion.div {...fadeUp(0)} className="mb-16 text-center max-w-3xl mx-auto">
-          <p className="font-mono-label text-accent mb-4">How athleteOS diagnoses the stall</p>
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
+        <motion.div
+          ref={parallax.ref}
+          style={parallax.style}
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="mb-16 text-center max-w-3xl mx-auto"
+        >
+          <motion.p variants={staggerItem} className="font-mono-label text-accent mb-4">How athleteOS diagnoses the stall</motion.p>
+          <motion.h2 variants={staggerItem} className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
             Three inputs. One answer.
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          </motion.h2>
+          <motion.p variants={staggerItem} className="text-lg text-muted-foreground leading-relaxed">
             Training load, nutrition accuracy, and recovery context point to one likely reason progress is not moving.
-          </p>
+          </motion.p>
         </motion.div>
 
         <div className="space-y-5 md:hidden">
@@ -67,7 +70,7 @@ export function SystemSection() {
               <motion.div
                 key={key}
                 {...fadeUp(delay)}
-                className="card-surface p-5"
+                className="surface-card p-5"
               >
                 <div className="mb-3 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/20 bg-accent/10">
@@ -143,7 +146,7 @@ export function SystemSection() {
                 <motion.div
                   key={key}
                   {...fadeUp(delay)}
-                  className={`card-surface p-6 relative group overflow-hidden lg:ml-auto ${funnelClassName}`}
+                  className={`surface-card p-6 relative group overflow-hidden lg:ml-auto ${funnelClassName}`}
                 >
                   <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                     <Icon size={48} />

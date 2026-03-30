@@ -14,6 +14,8 @@ function makeResult(overrides: Partial<RankResult>): RankResult {
     squat: { estimated1RM: 220, percentile: 78 },
     bench: { estimated1RM: 130, percentile: 46 },
     deadlift: { estimated1RM: 250, percentile: 81 },
+    strengthAge: { years: '2–3', description: 'Consistent with 2–3 years of structured training' },
+    efficiencyScore: { pct: 45, ceilingTotal: 800, actualTotal: 360 },
     ...overrides,
   }
 }
@@ -22,7 +24,7 @@ describe('getFirstReadDiagnosis', () => {
   it('flags a clearly lagging lift as the first read', () => {
     const diagnosis = getFirstReadDiagnosis(makeResult({}))
 
-    expect(diagnosis.label).toBe('First Read')
+    expect(diagnosis.label).toBe('Primary Constraint')
     expect(diagnosis.headline).toBe('Bench is the clearest gap in your current profile.')
     expect(diagnosis.body).toContain('Bringing it closer to your squat and deadlift')
   })

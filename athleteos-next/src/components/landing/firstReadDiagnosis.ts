@@ -25,7 +25,7 @@ export function getFirstReadDiagnosis(result: RankResult): FirstReadDiagnosis {
 
   if (lifts.length <= 1) {
     return {
-      label: 'First Read',
+      label: 'Primary Constraint',
       headline: 'This is a useful start, but the read is still partial.',
       body: 'Add your other lifts to see the clearest next move instead of guessing from one number.',
     }
@@ -39,7 +39,7 @@ export function getFirstReadDiagnosis(result: RankResult): FirstReadDiagnosis {
 
   if (spread >= 18) {
     return {
-      label: 'First Read',
+      label: 'Primary Constraint',
       headline: `${LIFT_LABELS[weakest.key as LiftKey]} is the clearest gap in your current profile.`,
       body: `Bringing it closer to your ${sorted.filter((lift) => lift.key !== weakest.key).map((lift) => LIFT_LABELS[lift.key as LiftKey].toLowerCase()).join(' and ')} is the fastest way to move your overall standing.`,
     }
@@ -47,14 +47,14 @@ export function getFirstReadDiagnosis(result: RankResult): FirstReadDiagnosis {
 
   if (average >= 80) {
     return {
-      label: 'First Read',
+      label: 'Primary Constraint',
       headline: 'Your profile is already well balanced.',
       body: 'The next jump is less about doing more everywhere and more about precision on the smallest weakness in your current setup.',
     }
   }
 
   return {
-    label: 'First Read',
+    label: 'Primary Constraint',
     headline: 'You have a real base to build from.',
     body: 'The next jump will come from tightening the weakest part of your lift profile instead of spreading effort across everything at once.',
   }

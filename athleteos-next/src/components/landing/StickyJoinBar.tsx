@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { hasFounderData } from './landingFlow'
+import { useMotionSafe } from '@/lib/motion'
 
 export function StickyJoinBar() {
+  const { reduced } = useMotionSafe()
   const [visible, setVisible] = useState(false)
   const [alreadyJoined] = useState(() =>
     typeof window !== 'undefined' && hasFounderData(localStorage.getItem('aos_founder_data')),
@@ -29,25 +31,26 @@ export function StickyJoinBar() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ y: 72 }}
+          initial={reduced ? false : { y: 72 }}
           animate={{ y: 0 }}
-          exit={{ y: 72 }}
-          transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+          exit={reduced ? undefined : { y: 72 }}
+          transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 350, damping: 28 }}
           className="fixed inset-x-0 bottom-0 z-50 border-t border-white/8"
           style={{
-            background: 'rgba(7,13,20,0.92)',
+            background: 'rgba(12,12,14,0.95)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
           }}
         >
           <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <p className="hidden text-sm text-muted-foreground sm:block">Lock founding member pricing</p>
+            <p className="hidden text-sm text-muted-foreground sm:block">Get your full performance diagnosis</p>
             <a
               href="#inline-signup-gate"
-              className="cta-glow ml-auto rounded-lg bg-accent px-4 py-2 text-sm font-bold text-white transition hover:bg-accent-light"
+              className="ml-auto cursor-pointer rounded-md bg-accent px-4 py-2.5 min-h-[44px] text-sm font-bold text-white transition-all hover:bg-accent-light"
+              style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
             >
-              <span className="sm:hidden">Lock spot</span>
-              <span className="hidden sm:inline">Lock my spot →</span>
+              <span className="sm:hidden">Full system read</span>
+              <span className="hidden sm:inline">Get Full System Read →</span>
             </a>
           </div>
         </motion.div>

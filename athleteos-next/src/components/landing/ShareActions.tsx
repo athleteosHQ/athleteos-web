@@ -26,6 +26,7 @@ export function ShareActions({ result, diagnosisLabel, diagnosisHeadline }: Shar
     typeof window === 'undefined' ? '' : getFounderLabel(window.localStorage.getItem('aos_founder_data'))
 
   const handleShare = async () => {
+    trackEvent('card_share_attempted', { method: 'share_api', overallPct: result.overallPct })
     try {
       if (navigator.share) {
         await navigator.share({
@@ -38,7 +39,7 @@ export function ShareActions({ result, diagnosisLabel, diagnosisHeadline }: Shar
         setFeedback('Link copied. Share it where serious athletes will see it.')
       }
 
-      trackEvent('rank_card_shared', { overallPct: result.overallPct, tier: result.tier })
+      trackEvent('card_share_completed', { method: typeof navigator.share === 'function' ? 'native' : 'clipboard', overallPct: result.overallPct })
     } catch {
       setFeedback('Sharing was interrupted. You can try again.')
     }
@@ -46,6 +47,7 @@ export function ShareActions({ result, diagnosisLabel, diagnosisHeadline }: Shar
 
   const handleDownload = async () => {
     if (!cardRef.current) return
+    trackEvent('card_share_attempted', { method: 'download', overallPct: result.overallPct })
 
     try {
       const canvas = await html2canvas(cardRef.current, {
@@ -56,7 +58,7 @@ export function ShareActions({ result, diagnosisLabel, diagnosisHeadline }: Shar
       link.href = canvas.toDataURL('image/png')
       link.download = `athleteos-rank-top${100 - result.overallPct}pct.png`
       link.click()
-      trackEvent('rank_card_downloaded', { overallPct: result.overallPct, tier: result.tier })
+      trackEvent('card_share_completed', { method: 'download', overallPct: result.overallPct })
     } catch {
       setFeedback('Download failed. Please try again.')
     }
@@ -64,31 +66,22 @@ export function ShareActions({ result, diagnosisLabel, diagnosisHeadline }: Shar
 
   return (
     <>
-      <div
-        className="rounded-2xl p-5"
-        style={{ background: 'rgba(255,255,255,0.026)', border: '1px solid rgba(255,255,255,0.09)' }}
-      >
-        <p className="font-mono-label text-accent mb-2">Share your signal</p>
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          Capture the rank moment now. Share it first, then continue into the full diagnosis.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={handleShare}
-            className="rounded-xl bg-accent px-4 py-3 text-sm font-bold text-white transition hover:bg-accent-light"
-          >
-            Share My Rank
-          </button>
-          <button
-            type="button"
-            onClick={handleDownload}
-            className="rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-white/20"
-          >
-            Download Card
-          </button>
-        </div>
-        {feedback && <p className="mt-3 text-xs text-muted-foreground">{feedback}</p>}
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={handleShare}
+          className="cursor-pointer rounded-md bg-accent px-4 py-2.5 text-sm font-bold text-white transition hover:bg-accent-light"
+        >
+          Share My Rank
+        </button>
+        <button
+          type="button"
+          onClick={handleDownload}
+          className="cursor-pointer rounded-md border border-white/8 px-4 py-2.5 text-sm font-semibold text-foreground transition hover:border-white/16"
+        >
+          Download Card
+        </button>
+        {feedback && <span className="text-xs text-muted-foreground">{feedback}</span>}
       </div>
 
       <RankShareCard

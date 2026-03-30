@@ -55,8 +55,8 @@ export function ReferralEntryBanner() {
       <div
         className="rounded-2xl p-5 md:p-6"
         style={{
-          background: 'linear-gradient(135deg, rgba(127,178,255,0.10), rgba(255,255,255,0.02))',
-          border: '1px solid rgba(127,178,255,0.18)',
+          background: 'linear-gradient(135deg, rgba(94,106,210,0.10), rgba(255,255,255,0.02))',
+          border: '1px solid rgba(94,106,210,0.18)',
         }}
       >
         <p className="font-mono-label text-accent mb-2">{state.eyebrow}</p>
@@ -65,7 +65,7 @@ export function ReferralEntryBanner() {
         <a
           href="#rank"
           onClick={() => trackEvent('referral_entry_cta_clicked', { referrerId: ref, target: 'rank' })}
-          className="cta-glow mt-4 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-3 font-bold text-white transition hover:bg-accent-light"
+          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-3 font-bold text-white transition hover:bg-accent-light"
         >
           {state.primaryCta}
         </a>

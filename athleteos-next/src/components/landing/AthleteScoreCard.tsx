@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { AnimatedCounter } from './rank/AnimatedCounter'
 
 type Status = 'up' | 'neutral' | 'down'
 
@@ -50,7 +51,7 @@ const DEFAULT_METRICS: ScoreMetric[] = [
 export function AthleteScoreCard({
   score = 84,
   systemStatus = 'Optimal',
-  percentileLabel = 'Top 16% of competitive Indian strength athletes',
+  percentileLabel = 'Top 16% of competitive strength athletes',
   metrics = DEFAULT_METRICS,
   animate = true,
   variant = 'default',
@@ -62,8 +63,8 @@ export function AthleteScoreCard({
     : {}
 
   const cardClass = isHero
-    ? 'hero-card relative p-6 md:p-8 max-w-sm w-full'
-    : 'card-surface relative p-6 md:p-8 max-w-sm w-full'
+    ? 'surface-card relative p-6 md:p-8 max-w-sm w-full'
+    : 'surface-card relative p-6 md:p-8 max-w-sm w-full'
 
   return (
     <Wrapper className={cardClass} {...motionProps}>
@@ -71,22 +72,37 @@ export function AthleteScoreCard({
       {isHero && (
         <div
           className="pointer-events-none absolute top-0 right-0 w-32 h-32 rounded-tr-2xl"
-          style={{ background: 'radial-gradient(circle at top right, rgba(127,178,255,0.18), transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle at top right, rgba(94,106,210,0.18), transparent 70%)' }}
         />
       )}
 
       {/* Header */}
       <div className="flex justify-between items-start gap-4 mb-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.18, delay: 0.2 }}
+        >
           <p className="font-mono-label text-muted-foreground mb-1">Competitive benchmark percentile</p>
           <h3 className="text-3xl font-display font-bold text-foreground leading-none">{percentileLabel}</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Tier: <span className="font-bold text-foreground">{systemStatus}</span> · benchmarked in your weight class
+            Tier:{' '}
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25, delay: 0.2 }}
+              className="font-bold text-foreground inline-block"
+            >
+              {systemStatus}
+            </motion.span>{' '}
+            · benchmarked in your weight class
           </p>
-        </div>
+        </motion.div>
         <div className="text-right">
           <p className="font-mono-label text-muted-foreground mb-1">Score</p>
-          <p className="text-4xl font-display font-bold text-accent tabular-nums">{score}</p>
+          <p className="text-4xl font-display font-bold text-accent tabular-nums">
+            <AnimatedCounter value={score} />
+          </p>
         </div>
       </div>
 
@@ -95,8 +111,8 @@ export function AthleteScoreCard({
         <svg viewBox="0 0 300 48" className="w-full h-full" preserveAspectRatio="none">
           <defs>
             <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stopColor="#7FB2FF" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#7FB2FF" stopOpacity="0" />
+              <stop offset="0%"   stopColor="#5E6AD2" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#5E6AD2" stopOpacity="0" />
             </linearGradient>
           </defs>
           <path
@@ -106,12 +122,12 @@ export function AthleteScoreCard({
           <path
             d="M0 40 Q30 35 60 30 T120 20 T180 25 T240 12 T300 8"
             fill="none"
-            stroke="#7FB2FF"
+            stroke="#5E6AD2"
             strokeWidth="2"
             strokeLinecap="round"
           />
           {/* Live dot at end */}
-          <circle cx="296" cy="9" r="3" fill="#7FB2FF">
+          <circle cx="296" cy="9" r="3" fill="#5E6AD2">
             <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
             <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"/>
           </circle>
@@ -124,12 +140,12 @@ export function AthleteScoreCard({
           <span className="font-mono-label text-muted-foreground">Overall Performance</span>
           <span className="font-mono text-accent font-bold">{score}/100</span>
         </div>
-        <div className="h-1.5 rounded-full overflow-hidden signal-bar" style={{ background: 'rgba(255,255,255,0.08)' }}>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
           <motion.div
             className="h-full rounded-full bg-accent"
             initial={{ width: 0 }}
             animate={{ width: `${score}%` }}
-            transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
+            transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
           />
         </div>
       </div>
@@ -142,7 +158,7 @@ export function AthleteScoreCard({
       {/* Footer */}
       <div className="mt-5 pt-5 border-t border-white/[0.06]">
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Compared against competitive Indian strength-athlete records in your weight class.
+          Compared against competitive strength-athlete records in your weight class.
           The score is secondary. The rank tells you where you stand first.
         </p>
       </div>

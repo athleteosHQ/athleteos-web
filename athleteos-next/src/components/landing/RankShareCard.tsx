@@ -7,7 +7,7 @@ import type { RankResult } from '@/lib/rankCalc'
 // All styles are inline (no CSS vars, no Tailwind) so html2canvas can capture them.
 
 const BG = '#070D14'
-const ACCENT = '#7FB2FF'
+const ACCENT = '#5E6AD2'
 
 function Bar({ label, pct, est1rm, color }: { label: string; pct: number; est1rm: number; color: string }) {
   return (
@@ -198,13 +198,13 @@ export const RankShareCard = React.forwardRef<
             LIFT BREAKDOWN
           </div>
           {result.squat.estimated1RM > 0 && (
-            <Bar label="Squat" pct={result.squat.percentile} est1rm={result.squat.estimated1RM} color="#7FB2FF" />
+            <Bar label="Squat" pct={result.squat.percentile} est1rm={result.squat.estimated1RM} color="#5E6AD2" />
           )}
           {result.bench.estimated1RM > 0 && (
             <Bar label="Bench" pct={result.bench.percentile} est1rm={result.bench.estimated1RM} color="#F59E0B" />
           )}
           {result.deadlift.estimated1RM > 0 && (
-            <Bar label="Deadlift" pct={result.deadlift.percentile} est1rm={result.deadlift.estimated1RM} color="#E24B4A" />
+            <Bar label="Deadlift" pct={result.deadlift.percentile} est1rm={result.deadlift.estimated1RM} color="#EF4444" />
           )}
           {result.run5k && (
             <Bar label="5K Run" pct={result.run5k.percentile} est1rm={1} color="#2DDC8F" />
