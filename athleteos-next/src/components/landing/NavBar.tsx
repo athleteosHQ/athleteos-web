@@ -66,7 +66,7 @@ export function NavBar() {
         </Link>
 
         <div className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-          {(['Problem', 'System', 'Rank', 'Join'] as const).map(link => (
+          {(['Rank', 'Join'] as const).map(link => (
             <a
               key={link}
               href={`#${link.toLowerCase()}`}

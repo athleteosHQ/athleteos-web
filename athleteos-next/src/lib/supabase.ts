@@ -7,6 +7,7 @@ export interface FounderInsert {
   source: string
   discipline?: string
   experience?: string
+  referrer_id?: string
 }
 
 export async function insertFounder(data: FounderInsert): Promise<{ data: { id: string; founder_number: number }; error: { message: string } | null }> {

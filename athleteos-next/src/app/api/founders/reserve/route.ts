@@ -8,10 +8,12 @@ interface ReserveBody {
   source: string
   discipline?: string
   experience?: string
+  referrer_id?: string
 }
 
 const VALID_DISCIPLINES = ['POWERLIFTING', 'WEIGHTLIFTING', 'HYBRID', 'BODYBUILDING']
 const VALID_EXPERIENCE = ['< 1 YR', '1–3 YR', '3–5 YR', '5+ YR']
+const OPTIONAL_COLUMNS = ['discipline', 'experience', 'referrer_id'] as const
 
 function isValidEmail(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)
@@ -19,6 +21,14 @@ function isValidEmail(v: string) {
 
 function isValidPhone(v: string) {
   return /^\+?[0-9\s()-]{10,15}$/.test(v)
+}
+
+function getMissingOptionalColumns(message: string) {
+  return OPTIONAL_COLUMNS.filter((column) => message.includes(`'${column}' column`))
+}
+
+async function insertFounderRow(insertData: Record<string, string>) {
+  return supabaseAdmin.from('founders_waitlist').insert(insertData).select('id, founder_number').single()
 }
 
 export async function POST(req: NextRequest) {
@@ -29,7 +39,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { name, email, whatsapp, source, discipline, experience } = body
+  const { name, email, whatsapp, source, discipline, experience, referrer_id } = body
 
   // Validate required fields
   if (!name?.trim()) {
@@ -61,31 +71,37 @@ export async function POST(req: NextRequest) {
   }
   if (discipline) insertData.discipline = discipline
   if (experience) insertData.experience = experience
+  const trimmedReferrerId = referrer_id?.trim()
+  if (trimmedReferrerId) insertData.referrer_id = trimmedReferrerId
 
-  const { data, error } = await supabaseAdmin
-    .from('founders_waitlist')
-    .insert(insertData)
-    .select('id, founder_number')
-    .single()
+  let currentInsertData = insertData
+  for (let attempt = 0; attempt <= OPTIONAL_COLUMNS.length; attempt += 1) {
+    const { data, error } = await insertFounderRow(currentInsertData)
 
-  if (error) {
-    // Handle optional column missing gracefully
-    const msg = error.message ?? ''
-    if (msg.includes("Could not find the 'discipline' column") || msg.includes("Could not find the 'experience' column")) {
-      const { data: retryData, error: retryError } = await supabaseAdmin
-        .from('founders_waitlist')
-        .insert({ name: insertData.name, email: insertData.email, whatsapp: insertData.whatsapp, source: insertData.source })
-        .select('id, founder_number')
-        .single()
-
-      if (retryError) {
-        return NextResponse.json({ error: retryError.message }, { status: 500 })
-      }
-      return NextResponse.json({ id: retryData.id, founder_number: retryData.founder_number })
+    if (data) {
+      return NextResponse.json({ id: data.id, founder_number: data.founder_number })
     }
 
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    if (error?.code === '23505') {
+      return NextResponse.json({ error: 'This email is already registered' }, { status: 409 })
+    }
+
+    const missingOptionalColumns = getMissingOptionalColumns(error?.message ?? '')
+    if (!missingOptionalColumns.length) {
+      return NextResponse.json({ error: error?.message ?? 'Something went wrong' }, { status: 500 })
+    }
+
+    const nextInsertData = { ...currentInsertData }
+    for (const column of missingOptionalColumns) {
+      delete nextInsertData[column]
+    }
+
+    if (Object.keys(nextInsertData).length === Object.keys(currentInsertData).length) {
+      return NextResponse.json({ error: error?.message ?? 'Something went wrong' }, { status: 500 })
+    }
+
+    currentInsertData = nextInsertData
   }
 
-  return NextResponse.json({ id: data.id, founder_number: data.founder_number })
+  return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
 }

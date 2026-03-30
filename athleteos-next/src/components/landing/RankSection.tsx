@@ -9,16 +9,20 @@ import { trackEvent } from '@/lib/analytics'
 import { AthleteScoreCard } from './AthleteScoreCard'
 import { getFirstReadDiagnosis } from './firstReadDiagnosis'
 import { validateFounderForm } from './founderFormValidation'
+import { getFounderLabel, getInlineSignupGateContent, hasFounderData } from './landingFlow'
 import { getRankResultMessaging } from './rankResultMessaging'
+import { ShareActions } from './ShareActions'
 import { insertFounder } from '@/lib/supabase'
 
 // ── Shared number input ───────────────────────────────────────────────────────
-function GlassInput({ label, value, onChange, placeholder, min, max, step }: {
+function GlassInput({ id, label, value, onChange, placeholder, min, max, step }: {
+  id?: string
   label?: string; value: string; onChange: (v: string) => void
   placeholder: string; min?: number; max?: number; step?: number
 }) {
   return (
     <input
+      id={id}
       type="number"
       aria-label={label ?? placeholder}
       placeholder={placeholder}
@@ -41,25 +45,28 @@ function GlassInput({ label, value, onChange, placeholder, min, max, step }: {
 }
 
 // ── Shared text/email/tel input ───────────────────────────────────────────────
-function GlassField({ type, placeholder, value, onChange }: {
-  type: string; placeholder: string; value: string; onChange: (v: string) => void
+function GlassField({ type, placeholder, value, onChange, error }: {
+  type: string; placeholder: string; value: string; onChange: (v: string) => void; error?: string
 }) {
   return (
-    <input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={e => onChange(e.target.value)}
-      className="w-full rounded-xl font-sans text-sm text-foreground placeholder:text-muted-foreground/50 transition-all focus:outline-none"
-      style={{
-        background: 'rgba(11,17,24,0.8)',
-        border: '1px solid rgba(255,255,255,0.10)',
-        borderRadius: 12,
-        padding: '12px 14px',
-      }}
-      onFocus={e => { e.target.style.borderColor = 'rgba(127,178,255,0.48)'; e.target.style.boxShadow = '0 0 0 3px rgba(127,178,255,0.08)' }}
-      onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.boxShadow = 'none' }}
-    />
+    <div>
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        className="w-full rounded-xl font-sans text-sm text-foreground placeholder:text-muted-foreground/50 transition-all focus:outline-none"
+        style={{
+          background: 'rgba(11,17,24,0.8)',
+          border: `1px solid ${error ? 'rgba(226,75,74,0.5)' : 'rgba(255,255,255,0.10)'}`,
+          borderRadius: 12,
+          padding: '12px 14px',
+        }}
+        onFocus={e => { e.target.style.borderColor = 'rgba(127,178,255,0.48)'; e.target.style.boxShadow = '0 0 0 3px rgba(127,178,255,0.08)' }}
+        onBlur={e => { e.target.style.borderColor = error ? 'rgba(226,75,74,0.5)' : 'rgba(255,255,255,0.10)'; e.target.style.boxShadow = 'none' }}
+      />
+      {error && <p className="mt-1 font-mono text-xs text-destructive">{error}</p>}
+    </div>
   )
 }
 
@@ -197,30 +204,6 @@ function ResultInsightPanel({ result }: { result: RankResult }) {
   )
 }
 
-function ResultActions({ result, onReset }: { result: RankResult; onReset: () => void }) {
-  const messaging = getRankResultMessaging({
-    overallPct: result.overallPct,
-    weightClass: result.weightClass,
-  })
-
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      <button
-        onClick={onReset}
-        className="border border-white/10 text-muted-foreground py-3 rounded-xl text-sm font-semibold transition hover:text-foreground hover:border-white/20"
-      >
-        ↩ Re-run
-      </button>
-      <a
-        href="#waitlist"
-        className="cta-glow bg-accent text-white py-3 rounded-xl text-sm font-bold text-center transition hover:bg-accent-light"
-      >
-        {messaging.cta} →
-      </a>
-    </div>
-  )
-}
-
 // ── Ghost tier preview (idle state right column) ──────────────────────────────
 const GHOST_BARS = [
   { label: 'Squat',    color: '#7FB2FF', pct: 78 },
@@ -325,71 +308,78 @@ function GhostTierPreview() {
 // ── Inline signup gate (post-result, peak motivation) ─────────────────────────
 interface GateForm { name: string; email: string; whatsapp: string }
 
-function InlineSignupGate() {
+function InlineSignupGate({ overallPct }: { overallPct: number }) {
   const router = useRouter()
   const [form, setForm] = useState<GateForm>({ name: '', email: '', whatsapp: '' })
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [done, setDone] = useState(() => (
-    typeof window !== 'undefined' && !!localStorage.getItem('aos_waitlist')
-  ))
-  const [founderNum, setFounderNum] = useState<number | null>(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [apiError, setApiError] = useState('')
+  const [founderLabel] = useState(() =>
+    typeof window !== 'undefined' ? getFounderLabel(localStorage.getItem('aos_founder_data')) : '',
+  )
+
+  const gateContent = getInlineSignupGateContent(overallPct)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-    const errors = validateFounderForm(form)
-    if (Object.keys(errors).length > 0) {
-      setError(errors.name ?? errors.email ?? errors.whatsapp ?? 'Invalid input')
+    setErrors({})
+    setApiError('')
+
+    const validationErrors = validateFounderForm(form)
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
       return
     }
+
     setLoading(true)
+    const referrerId = typeof window !== 'undefined' ? localStorage.getItem('aos_referrer_id') : null
     const { data, error: apiErr } = await insertFounder({
       name: form.name.trim(),
       email: form.email.trim(),
       whatsapp: form.whatsapp.trim(),
       source: 'rank-gate',
+      ...(referrerId ? { referrer_id: referrerId } : {}),
     })
     setLoading(false)
-    if (apiErr) { setError(apiErr.message); return }
-    setFounderNum(data.founder_number)
-    setDone(true)
+    if (apiErr) {
+      setApiError(apiErr.message)
+      return
+    }
+
     localStorage.setItem('aos_waitlist', '1')
     localStorage.setItem('aos_founder_data', JSON.stringify({
       id: data.id, num: data.founder_number, shareCount: 0,
     }))
+    window.dispatchEvent(new Event('aos-founder-data-changed'))
     router.push('/welcome')
   }
 
-  if (done) {
+  if (founderLabel) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
+        id="inline-signup-gate"
         className="rounded-2xl p-5"
         style={{ background: 'rgba(45,220,143,0.05)', border: '1px solid rgba(45,220,143,0.2)' }}
       >
-        <div className="flex items-center gap-3 mb-1.5">
+        <div className="flex items-center gap-3">
           <div
             className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
             style={{ background: 'rgba(45,220,143,0.15)' }}
           >
             <Check className="w-3.5 h-3.5 text-success" />
           </div>
-          <p className="font-bold text-foreground">
-            {founderNum ? `Founding Member #${founderNum} confirmed` : `You're on the founding list`}
-          </p>
+          <p className="font-bold text-foreground">You&apos;re in. {founderLabel}.</p>
         </div>
-        <p className="text-sm text-muted-foreground pl-9">
-          Price locked at ₹4,999/year.{' '}
-          <a href="#waitlist" className="text-accent hover:underline">View full details →</a>
+        <p className="mt-2 pl-9 text-sm text-muted-foreground">
+          <a href="/welcome" className="text-accent hover:underline">Go to your welcome page →</a>
         </p>
-      </motion.div>
+      </div>
     )
   }
 
   return (
     <motion.div
+      id="inline-signup-gate"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.25 }}
@@ -400,23 +390,18 @@ function InlineSignupGate() {
         boxShadow: '0 0 40px rgba(255,122,47,0.06)',
       }}
     >
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
+      <div className="mb-5">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="mb-1.5 flex items-center gap-2">
             <Users className="w-3.5 h-3.5 text-accent" />
-            <span className="font-mono-label text-accent">Founding cohort · 500 spots</span>
+            <span className="font-mono-label text-accent">{gateContent.eyebrow}</span>
           </div>
-          <p className="text-lg font-bold text-foreground leading-snug">
-            Your rank is the starting point.<br className="hidden sm:block" />
-            <span className="gradient-text"> The diagnosis shows what&apos;s holding you back.</span>
+          <p className="text-lg font-bold leading-snug text-foreground">{gateContent.headline}</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {gateContent.productLine}
+            <br />
+            {gateContent.pricingLine}
           </p>
-          <p className="text-sm text-muted-foreground mt-1">Founding members get first access when we launch · no payment now</p>
-        </div>
-        <div
-          className="flex-shrink-0 rounded-xl px-3 py-1.5 font-mono text-sm font-bold text-accent self-start"
-          style={{ background: 'rgba(255,122,47,0.12)', border: '1px solid rgba(255,122,47,0.25)' }}
-        >
-          29% OFF
         </div>
       </div>
 
@@ -427,12 +412,14 @@ function InlineSignupGate() {
             placeholder="Your name"
             value={form.name}
             onChange={v => setForm(f => ({ ...f, name: v }))}
+            error={errors.name}
           />
           <GlassField
             type="tel"
             placeholder="WhatsApp number"
             value={form.whatsapp}
             onChange={v => setForm(f => ({ ...f, whatsapp: v }))}
+            error={errors.whatsapp}
           />
         </div>
         <GlassField
@@ -440,16 +427,17 @@ function InlineSignupGate() {
           placeholder="Email address"
           value={form.email}
           onChange={v => setForm(f => ({ ...f, email: v }))}
+          error={errors.email}
         />
-        {error && <p className="font-mono text-xs text-destructive">{error}</p>}
+        {apiError && <p className="font-mono text-xs text-destructive">{apiError}</p>}
         <button
           type="submit"
           disabled={loading}
           className="cta-glow w-full rounded-xl bg-accent py-3.5 font-bold text-white transition hover:bg-accent-light accent-glow disabled:opacity-50 flex items-center justify-center gap-2 group"
         >
-          {loading ? 'Reserving…' : (
+          {loading ? 'Locking…' : (
             <>
-              Reserve My Founding Spot — Free
+              Lock My Spot — Free
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </>
           )}
@@ -457,7 +445,7 @@ function InlineSignupGate() {
       </form>
 
       <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-3">
-        {['No payment now', '7-day cancel', 'Price locks on confirm'].map(t => (
+        {gateContent.trustChips.map(t => (
           <div key={t} className="flex items-center gap-1.5">
             <Check className="w-3 h-3 text-success flex-shrink-0" />
             <span className="text-xs text-muted-foreground">{t}</span>
@@ -495,6 +483,7 @@ export function RankSection() {
     const r = calculateRank(input)
     if (!r) { setError('Could not calculate. Check your inputs.'); return }
     localStorage.setItem('aos_rank_result', JSON.stringify(r))
+    window.dispatchEvent(new Event('aos-rank-result-changed'))
     trackEvent('rank_result_viewed', {
       overallPct: r.overallPct,
       tier: r.tier,
@@ -517,28 +506,7 @@ export function RankSection() {
           viewport={{ once: true }}
           className="mb-8"
         >
-          <p className="font-mono-label text-accent mb-3">Step 1 · Free rank check</p>
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-            Know where you stand.
-          </h2>
-          <p className="body-copy mb-5 max-w-3xl">
-            Start with your rank inside our competitive Indian strength-athlete benchmark. Then use athleteOS to diagnose whether training, nutrition, or recovery is limiting progress.
-          </p>
-
-          <div className="flex flex-wrap gap-2">
-            {['IPF-calibrated', 'Weight-class benchmark', 'Free · no account'].map(chip => (
-              <span
-                key={chip}
-                className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                }}
-              >
-                {chip}
-              </span>
-            ))}
-          </div>
+          <h2 className="text-3xl font-display font-bold text-foreground md:text-4xl">Where do you stand?</h2>
         </motion.div>
 
         <AnimatePresence mode="wait">
@@ -582,7 +550,15 @@ export function RankSection() {
                   <div>
                     <p className="text-sm font-semibold text-muted-foreground mb-1.5">Bodyweight</p>
                     <div className="w-40">
-                      <GlassInput placeholder="kg" value={f.bw} onChange={upd('bw')} min={40} max={250} step={0.5} />
+                      <GlassInput
+                        id="rank-bw-input"
+                        placeholder="kg"
+                        value={f.bw}
+                        onChange={upd('bw')}
+                        min={40}
+                        max={250}
+                        step={0.5}
+                      />
                     </div>
                   </div>
                   <div
@@ -658,12 +634,21 @@ export function RankSection() {
                 <div className="space-y-4">
                   <DiagnosticBars result={result} />
                   <ResultInsightPanel result={result} />
-                  <ResultActions result={result} onReset={reset} />
                 </div>
               </div>
-
-              {/* Inline gate — peak motivation */}
-              <InlineSignupGate />
+              <button
+                type="button"
+                onClick={reset}
+                className="text-sm text-muted-foreground transition hover:text-foreground"
+              >
+                ↩ Check again
+              </button>
+              <ShareActions
+                result={result}
+                diagnosisLabel={getFirstReadDiagnosis(result).label}
+                diagnosisHeadline={getFirstReadDiagnosis(result).headline}
+              />
+              <InlineSignupGate overallPct={result.overallPct} />
             </motion.div>
           )}
         </AnimatePresence>
