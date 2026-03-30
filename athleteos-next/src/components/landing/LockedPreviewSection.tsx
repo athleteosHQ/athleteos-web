@@ -74,7 +74,7 @@ export function LockedPreviewSection() {
         </motion.div>
 
         <motion.p {...fadeUp(0.15)} className="mt-6 text-sm text-muted-foreground">
-          Founding members unlock the full performance readout — percentile breakdown, bottleneck isolation, and a recommended fix.
+          The rank calculator shows where you stand. Founding members get the full system — training, nutrition, and recovery data connected into one diagnostic read.
         </motion.p>
       </div>
     </section>

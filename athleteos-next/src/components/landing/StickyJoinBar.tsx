@@ -43,7 +43,7 @@ export function StickyJoinBar() {
           }}
         >
           <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <p className="hidden text-sm text-muted-foreground sm:block">Get your full performance diagnosis</p>
+            <p className="hidden text-sm text-muted-foreground sm:block">Join to connect training, nutrition, and recovery</p>
             <a
               href="#inline-signup-gate"
               className="ml-auto cursor-pointer rounded-md bg-accent px-4 py-2.5 min-h-[44px] text-sm font-bold text-white transition-all hover:bg-accent-light"

@@ -94,7 +94,7 @@ export function GhostTierPreview({ mode }: { mode: AthleteMode }) {
           </p>
         </div>
         <div className="flex gap-3 flex-wrap justify-center">
-          {['IPF-calibrated', '3,200+ competitive athletes'].map(t => (
+          {['Competition-calibrated', '3,200+ competitive athletes'].map(t => (
             <span key={t} className="font-mono-label text-muted-foreground/60" style={{ fontSize: '10px' }}>
               {t}
             </span>

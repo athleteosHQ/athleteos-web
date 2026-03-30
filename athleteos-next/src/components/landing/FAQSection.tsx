@@ -21,7 +21,7 @@ const FAQS: FAQ[] = [
   },
   {
     q: 'How accurate are the percentiles?',
-    a: 'They are calibrated against IPF standards and 3,200+ competitive athlete records. Not perfect, but far more useful than vague labels like beginner or advanced.',
+    a: 'They are calibrated against competition standards and 3,200+ competitive athlete records. Not perfect, but far more useful than vague labels like beginner or advanced.',
   },
   {
     q: 'Who am I being compared against?',

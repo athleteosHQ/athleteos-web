@@ -29,7 +29,12 @@ export function ModeSelector({ mode, onModeChange }: ModeSelectorProps) {
 
   return (
     <LayoutGroup>
-      <div className="surface-control inline-flex" role="radiogroup" aria-label="Training mode">
+      <div
+        className="relative inline-flex p-1 rounded-lg"
+        role="radiogroup"
+        aria-label="Training mode"
+        style={{ background: '#111113', border: '1px solid rgba(255,255,255,0.06)' }}
+      >
         {MODES.map(({ value, label }) => {
           const active = mode === value
           return (
@@ -40,22 +45,21 @@ export function ModeSelector({ mode, onModeChange }: ModeSelectorProps) {
               tabIndex={active ? 0 : -1}
               onClick={() => onModeChange(value)}
               onKeyDown={e => handleKeyDown(e, value)}
-              className="relative px-6 py-2 font-mono-label transition-colors duration-200"
-              style={{
-                minWidth: 120,
-                color: active ? '#fff' : 'var(--muted-foreground)',
-                background: active ? 'var(--accent)' : 'transparent',
-                borderRadius: 4,
-              }}
+              className="relative px-8 py-2.5 font-mono-label transition-colors duration-200"
+              style={{ minWidth: 120, color: active ? '#fff' : 'var(--muted-foreground)' }}
             >
-              {label}
               {active && (
-                <motion.span
-                  layoutId="mode-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5"
-                  style={{ background: 'var(--accent-light)' }}
+                <motion.div
+                  layoutId="mode-pill"
+                  className="absolute inset-0 rounded-md"
+                  style={{
+                    background: 'var(--accent)',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)',
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
+              <span className="relative z-10">{label}</span>
             </button>
           )
         })}

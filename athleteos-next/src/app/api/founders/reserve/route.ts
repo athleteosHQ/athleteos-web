@@ -5,6 +5,7 @@ interface ReserveBody {
   name: string
   email: string
   whatsapp: string
+  country: string
   source: string
   discipline?: string
   experience?: string
@@ -13,7 +14,7 @@ interface ReserveBody {
 
 const VALID_DISCIPLINES = ['POWERLIFTING', 'WEIGHTLIFTING', 'HYBRID', 'BODYBUILDING']
 const VALID_EXPERIENCE = ['< 1 YR', '1–3 YR', '3–5 YR', '5+ YR']
-const OPTIONAL_COLUMNS = ['discipline', 'experience', 'referrer_id'] as const
+const OPTIONAL_COLUMNS = ['discipline', 'experience', 'referrer_id', 'country'] as const
 
 function isValidEmail(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { name, email, whatsapp, source, discipline, experience, referrer_id } = body
+  const { name, email, whatsapp, country, source, discipline, experience, referrer_id } = body
 
   // Validate required fields
   if (!name?.trim()) {
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
   if (!email?.trim() || !isValidEmail(email.trim())) {
     return NextResponse.json({ error: 'Valid email is required' }, { status: 400 })
   }
-  if (!whatsapp?.trim() || !isValidPhone(whatsapp.trim())) {
+  if (whatsapp?.trim() && !isValidPhone(whatsapp.trim())) {
     return NextResponse.json({ error: 'Valid WhatsApp number is required' }, { status: 400 })
   }
   if (!source?.trim()) {
@@ -66,7 +67,8 @@ export async function POST(req: NextRequest) {
   const insertData: Record<string, string> = {
     name: name.trim(),
     email: email.trim(),
-    whatsapp: whatsapp.trim(),
+    whatsapp: whatsapp?.trim() || '',
+    country: country?.trim() || '',
     source: source.trim(),
   }
   if (discipline) insertData.discipline = discipline

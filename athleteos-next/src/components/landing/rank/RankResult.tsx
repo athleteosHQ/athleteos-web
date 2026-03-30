@@ -187,7 +187,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       </motion.div>
 
       <p className="mt-3 text-xs text-muted-foreground">
-        Founding members unlock the full performance readout.
+        Founding members get the full system — nutrition and recovery data layered on top of this.
       </p>
     </motion.div>
   )

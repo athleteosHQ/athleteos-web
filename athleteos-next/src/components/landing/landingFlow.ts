@@ -33,7 +33,7 @@ export function getInlineSignupGateContent(overallPct: number): InlineSignupGate
 }
 
 export function getShareMessage(overallPct: number): string {
-  return `I'm in the top ${100 - overallPct}% of competitive strength athletes. Check yours -> athleteos.in`
+  return `I'm in the top ${100 - overallPct}% of competitive strength athletes. Check yours -> athleteos.app`
 }
 
 export function shouldShowSampleOutcome(result: { overallPct?: number } | null): boolean {

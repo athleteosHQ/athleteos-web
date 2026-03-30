@@ -222,7 +222,7 @@ export const RankShareCard = React.forwardRef<
           }}
         >
           <div style={{ fontFamily: 'monospace', fontSize: 14, color: 'rgba(255,255,255,0.25)', letterSpacing: 2 }}>
-            IPF-CALIBRATED · 3,200+ INDIAN ATHLETES
+            COMPETITION-CALIBRATED · 3,200+ ATHLETES
           </div>
           <div style={{ fontFamily: 'monospace', fontSize: 16, fontWeight: 700, color: ACCENT, letterSpacing: 1 }}>
             athleteos.in

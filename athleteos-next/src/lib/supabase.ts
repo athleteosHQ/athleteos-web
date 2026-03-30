@@ -4,6 +4,7 @@ export interface FounderInsert {
   name: string
   email: string
   whatsapp: string
+  country: string
   source: string
   discipline?: string
   experience?: string

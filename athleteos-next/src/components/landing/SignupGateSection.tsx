@@ -10,13 +10,19 @@ import { getFounderLabel, getInlineSignupGateContent } from './landingFlow'
 import { GlassField } from './rank/SystemInput'
 import { insertFounder } from '@/lib/supabase'
 
-interface GateForm { name: string; email: string; whatsapp: string }
+const COUNTRIES = [
+  'India', 'UAE', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman',
+  'UK', 'Germany', 'Netherlands', 'Poland', 'Turkey',
+  'USA', 'Canada', 'Australia', 'Singapore', 'Other',
+]
+
+interface GateForm { name: string; email: string; whatsapp: string; country: string }
 
 /** Full-width signup gate section — appears after locked preview, peak motivation moment. */
 export function SignupGateSection() {
   const router = useRouter()
   const [overallPct, setOverallPct] = useState<number | null>(null)
-  const [form, setForm] = useState<GateForm>({ name: '', email: '', whatsapp: '' })
+  const [form, setForm] = useState<GateForm>({ name: '', email: '', whatsapp: '', country: '' })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [apiError, setApiError] = useState('')
@@ -66,6 +72,7 @@ export function SignupGateSection() {
       name: form.name.trim(),
       email: form.email.trim(),
       whatsapp: form.whatsapp.trim(),
+      country: form.country,
       source: 'rank-gate',
       ...(referrerId ? { referrer_id: referrerId } : {}),
     })
@@ -82,6 +89,7 @@ export function SignupGateSection() {
     trackEvent('signup_conversion', {
       overallPct: overallPct ?? 0,
       source: 'rank-gate',
+      country: form.country,
     })
     window.dispatchEvent(new Event('aos-founder-data-changed'))
     router.push('/welcome')
@@ -145,7 +153,7 @@ export function SignupGateSection() {
               />
               <GlassField
                 type="tel"
-                placeholder="WhatsApp number"
+                placeholder="WhatsApp (optional)"
                 value={form.whatsapp}
                 onChange={v => setForm(f => ({ ...f, whatsapp: v }))}
                 error={errors.whatsapp}
@@ -158,6 +166,21 @@ export function SignupGateSection() {
               onChange={v => setForm(f => ({ ...f, email: v }))}
               error={errors.email}
             />
+            <div>
+              <select
+                value={form.country}
+                onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
+                className={`system-input font-mono ${errors.country ? 'input-error' : ''}`}
+                aria-invalid={errors.country ? 'true' : undefined}
+                style={{ color: form.country ? 'var(--foreground)' : 'rgba(107,114,128,0.5)' }}
+              >
+                <option value="" disabled>Country</option>
+                {COUNTRIES.map(c => (
+                  <option key={c} value={c} style={{ color: 'var(--foreground)', background: '#0F0F11' }}>{c}</option>
+                ))}
+              </select>
+              {errors.country && <p className="mt-1 font-mono text-xs text-destructive" role="alert">{errors.country}</p>}
+            </div>
             {apiError && <p className="font-mono text-xs text-destructive">{apiError}</p>}
             <button
               type="submit"
