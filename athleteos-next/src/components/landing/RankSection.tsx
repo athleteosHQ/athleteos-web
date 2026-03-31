@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { calculateRank, type RankInput, type RankResult } from '@/lib/rankCalc'
 import { trackEvent } from '@/lib/analytics'
@@ -26,20 +26,35 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
   const [f, setF] = useState<RankFormFields>({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
   const [result, setResult] = useState<RankResult | null>(null)
   const [error, setError] = useState('')
+  const focusedFieldsRef = useRef<Set<string>>(new Set())
+  const hasMountedRef = useRef(false)
 
   useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+    } else {
+      trackEvent('rank_mode_changed', { from_mode: mode === 'gym' ? 'hybrid' : 'gym', to_mode: mode === 'gym' ? 'gym' : 'hybrid', had_result: result !== null })
+    }
     setF({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
     setResult(null)
     setError('')
+    focusedFieldsRef.current = new Set()
   }, [mode])
 
   const upd = (k: keyof RankFormFields) => (v: string) => setF(prev => ({ ...prev, [k]: v }))
+
+  const handleFieldFocus = (field: keyof RankFormFields) => {
+    if (focusedFieldsRef.current.has(field)) return
+    focusedFieldsRef.current.add(field)
+    const filledCount = Object.values(f).filter(v => v !== '').length
+    trackEvent('rank_form_field_focused', { field, mode: trainingType, fields_already_filled: filledCount })
+  }
 
   const submit = () => {
     setError('')
     trackEvent('rank_check_started', { trainingType })
     const bw = parseFloat(f.bw)
-    if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); trackEvent('rank_form_error', { field: 'bodyweight', trainingType }); return }
+    if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); trackEvent('rank_form_error', { error_type: 'invalid_bodyweight', mode: trainingType, fields_filled: Object.values(f).filter(v => v !== '').length }); return }
     const input: RankInput = {
       bodyweight: bw,
       trainingType,
@@ -49,9 +64,9 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
       ...(trainingType === 'hybrid' ? { run5k: { minutes: parseInt(f.runMin) || 0, seconds: parseInt(f.runSec) || 0 } } : {}),
     }
     const hasLift = input.squat.weight > 20 || input.bench.weight > 20 || input.deadlift.weight > 20
-    if (!hasLift) { setError('Enter at least one lift above 20 kg'); trackEvent('rank_form_error', { field: 'no_lift', trainingType }); return }
+    if (!hasLift) { setError('Enter at least one lift above 20 kg'); trackEvent('rank_form_error', { error_type: 'no_lift_above_20', mode: trainingType, fields_filled: Object.values(f).filter(v => v !== '').length }); return }
     const r = calculateRank(input)
-    if (!r) { setError('Could not calculate. Check your inputs.'); trackEvent('rank_form_error', { field: 'calculation_failed', trainingType }); return }
+    if (!r) { setError('Could not calculate. Check your inputs.'); trackEvent('rank_form_error', { error_type: 'calculation_failed', mode: trainingType, fields_filled: Object.values(f).filter(v => v !== '').length }); return }
     localStorage.setItem('aos_rank_result', JSON.stringify(r))
     trackEvent('rank_result_viewed', {
       overallPct: r.overallPct,
@@ -68,7 +83,11 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
     }, 800)
   }
 
-  const reset = () => { trackEvent('rank_check_again', { trainingType }); setResult(null); setError('') }
+  const reset = () => {
+    trackEvent('rank_check_again', { previous_tier: result?.tier ?? '', previous_overallPct: result?.overallPct ?? 0 })
+    setResult(null)
+    setError('')
+  }
 
   return (
     <section id="rank" className="section-fade-top py-24 px-6 md:px-10">
@@ -110,6 +129,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
                 onFieldChange={upd}
                 onSubmit={submit}
                 error={error}
+                onFieldFocus={handleFieldFocus}
               />
               <GhostTierPreview mode={mode} />
             </motion.div>

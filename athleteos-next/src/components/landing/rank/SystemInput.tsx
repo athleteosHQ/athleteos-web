@@ -1,9 +1,9 @@
 /** Shared form inputs for the rank calculator. */
 
-export function GlassInput({ id, label, value, onChange, placeholder, min, max, step }: {
+export function GlassInput({ id, label, value, onChange, placeholder, min, max, step, onFocus }: {
   id?: string
   label?: string; value: string; onChange: (v: string) => void
-  placeholder: string; min?: number; max?: number; step?: number
+  placeholder: string; min?: number; max?: number; step?: number; onFocus?: () => void
 }) {
   return (
     <input
@@ -16,6 +16,7 @@ export function GlassInput({ id, label, value, onChange, placeholder, min, max, 
       max={max}
       step={step}
       onChange={e => onChange(e.target.value)}
+      onFocus={onFocus}
       className="system-input font-mono"
     />
   )
@@ -44,15 +45,16 @@ export function GlassField({ type, placeholder, value, onChange, error, required
   )
 }
 
-export function LiftRow({ label, weightVal, repsVal, onWeight, onReps }: {
+export function LiftRow({ label, weightVal, repsVal, onWeight, onReps, onWeightFocus, onRepsFocus }: {
   label: string; weightVal: string; repsVal: string
   onWeight: (v: string) => void; onReps: (v: string) => void
+  onWeightFocus?: () => void; onRepsFocus?: () => void
 }) {
   return (
     <div className="grid grid-cols-[80px_1fr_72px] items-center gap-2">
       <p className="font-mono-label text-muted-foreground">{label}</p>
-      <GlassInput placeholder="kg (1 set)" value={weightVal} onChange={onWeight} min={0} step={0.5} label={`${label} weight for one set`} />
-      <GlassInput placeholder="reps" value={repsVal} onChange={onReps} min={1} max={30} label={`${label} reps in one set`} />
+      <GlassInput placeholder="kg (1 set)" value={weightVal} onChange={onWeight} min={0} step={0.5} label={`${label} weight for one set`} onFocus={onWeightFocus} />
+      <GlassInput placeholder="reps" value={repsVal} onChange={onReps} min={1} max={30} label={`${label} reps in one set`} onFocus={onRepsFocus} />
     </div>
   )
 }

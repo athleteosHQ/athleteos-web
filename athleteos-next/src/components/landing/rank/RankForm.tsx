@@ -15,9 +15,10 @@ interface RankFormProps {
   onFieldChange: (key: keyof RankFormFields) => (value: string) => void
   onSubmit: () => void
   error: string
+  onFieldFocus?: (field: keyof RankFormFields) => void
 }
 
-export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error }: RankFormProps) {
+export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error, onFieldFocus }: RankFormProps) {
   return (
     <div className="surface-card p-6 sm:p-8">
       <div className="space-y-4">
@@ -33,19 +34,20 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error 
               max={250}
               step={0.5}
               label="Bodyweight"
+              onFocus={() => onFieldFocus?.('bw')}
             />
           </div>
         </div>
-        <LiftRow label="Squat"    weightVal={f.sqW} repsVal={f.sqR} onWeight={upd('sqW')} onReps={upd('sqR')} />
+        <LiftRow label="Squat"    weightVal={f.sqW} repsVal={f.sqR} onWeight={upd('sqW')} onReps={upd('sqR')} onWeightFocus={() => onFieldFocus?.('sqW')} onRepsFocus={() => onFieldFocus?.('sqR')} />
         {mode === 'gym' ? (
-          <LiftRow label="Bench" weightVal={f.bpW} repsVal={f.bpR} onWeight={upd('bpW')} onReps={upd('bpR')} />
+          <LiftRow label="Bench" weightVal={f.bpW} repsVal={f.bpR} onWeight={upd('bpW')} onReps={upd('bpR')} onWeightFocus={() => onFieldFocus?.('bpW')} onRepsFocus={() => onFieldFocus?.('bpR')} />
         ) : null}
-        <LiftRow label="Deadlift" weightVal={f.dlW} repsVal={f.dlR} onWeight={upd('dlW')} onReps={upd('dlR')} />
+        <LiftRow label="Deadlift" weightVal={f.dlW} repsVal={f.dlR} onWeight={upd('dlW')} onReps={upd('dlR')} onWeightFocus={() => onFieldFocus?.('dlW')} onRepsFocus={() => onFieldFocus?.('dlR')} />
         {mode === 'hybrid' && (
           <div className="grid grid-cols-[80px_1fr_72px] items-center gap-2">
             <p className="font-mono-label text-muted-foreground">5K Run</p>
-            <GlassInput placeholder="min" value={f.runMin} onChange={upd('runMin')} min={12} max={60} label="5K minutes" />
-            <GlassInput placeholder="sec" value={f.runSec} onChange={upd('runSec')} min={0} max={59} label="5K seconds" />
+            <GlassInput placeholder="min" value={f.runMin} onChange={upd('runMin')} min={12} max={60} label="5K minutes" onFocus={() => onFieldFocus?.('runMin')} />
+            <GlassInput placeholder="sec" value={f.runSec} onChange={upd('runSec')} min={0} max={59} label="5K seconds" onFocus={() => onFieldFocus?.('runSec')} />
           </div>
         )}
         {mode === 'hybrid' && (
