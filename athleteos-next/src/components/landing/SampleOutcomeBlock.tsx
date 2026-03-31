@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { trackEvent } from '@/lib/analytics'
 
 const OUTCOME_ROWS = [
   {
@@ -133,7 +134,7 @@ export function SampleOutcomeBlock() {
             </div>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-muted-foreground">Sample output only. Your exact rank and diagnosis will differ.</p>
-              <a href="#rank" className="font-mono-label text-accent hover:text-accent-light transition">Check yours →</a>
+              <a href="#rank" className="font-mono-label text-accent hover:text-accent-light transition" onClick={() => trackEvent('sample_outcome_cta_clicked', { time_on_page_seconds: Math.round((Date.now() - performance.timeOrigin) / 1000) })}>Check yours →</a>
             </div>
           </div>
         </motion.div>

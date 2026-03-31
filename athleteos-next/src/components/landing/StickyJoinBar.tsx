@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { hasFounderData } from './landingFlow'
 import { useMotionSafe } from '@/lib/motion'
+import { trackEvent } from '@/lib/analytics'
 
 export function StickyJoinBar() {
   const { reduced } = useMotionSafe()
@@ -48,6 +49,7 @@ export function StickyJoinBar() {
               href="#inline-signup-gate"
               className="ml-auto cursor-pointer rounded-md bg-accent px-4 py-2.5 min-h-[44px] text-sm font-bold text-white transition-all hover:bg-accent-light"
               style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
+              onClick={() => trackEvent('cta_clicked', { cta_source: 'sticky_bar', cta_text: 'Reserve My Diagnosis', has_rank_result: false })}
             >
               <span className="sm:hidden">Reserve →</span>
               <span className="hidden sm:inline">Reserve My Diagnosis</span>

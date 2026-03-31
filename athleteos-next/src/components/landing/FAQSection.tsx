@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
 import { EASE_OUT, useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
+import { trackEvent } from '@/lib/analytics'
 
 interface FAQ {
   q: string
@@ -106,10 +107,19 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
   const parallax = useHeadingParallax()
 
-  const toggle = (i: number) => setOpen(prev => (prev === i ? null : i))
+  const toggle = (i: number) => {
+    const isOpening = open !== i
+    if (isOpening) {
+      trackEvent('faq_item_toggled', {
+        question_index: i,
+        question_text: FAQS[i].q.slice(0, 50),
+      })
+    }
+    setOpen(prev => (prev === i ? null : i))
+  }
 
   return (
-    <section className="px-6 py-20 md:px-10">
+    <section id="faq" className="px-6 py-20 md:px-10">
       <div className="mx-auto max-w-4xl">
 
         <motion.div

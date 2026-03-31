@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Activity, Flame, BarChart2, ChevronRight } from 'lucide-react'
 import { fadeUp, useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
+import { trackEvent } from '@/lib/analytics'
 
 export function SystemSection() {
   const parallax = useHeadingParallax()
@@ -121,6 +122,7 @@ export function SystemSection() {
                 <a
                   href="#rank"
                   className="mt-6 inline-flex items-center gap-2 font-bold text-foreground group"
+                  onClick={() => trackEvent('cta_clicked', { cta_source: 'system_section', cta_text: 'See Where You Rank', has_rank_result: false })}
                 >
                   <span className="border-b border-accent pb-0.5 transition-all group-hover:border-accent-light">See Where You Rank</span>
                   <ArrowRight size={16} className="text-accent transition-transform group-hover:translate-x-1" />
@@ -213,6 +215,7 @@ export function SystemSection() {
                     <a
                       href="#rank"
                       className="inline-flex items-center gap-2 text-foreground font-bold group"
+                      onClick={() => trackEvent('cta_clicked', { cta_source: 'system_section', cta_text: 'See Where You Rank', has_rank_result: false })}
                     >
                       <span className="pb-0.5 border-b border-accent group-hover:border-accent-light transition-all">See Where You Rank</span>
                       <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform text-accent" />

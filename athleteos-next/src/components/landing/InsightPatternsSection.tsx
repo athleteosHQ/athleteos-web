@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { fadeUp } from '@/lib/motion'
+import { trackEvent } from '@/lib/analytics'
 
 const INSIGHT_PATTERNS = [
   {
@@ -26,7 +27,7 @@ const INSIGHT_PATTERNS = [
 
 export function InsightPatternsSection() {
   return (
-    <section className="px-6 py-20 md:px-10">
+    <section id="insight-patterns" className="px-6 py-20 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -69,6 +70,7 @@ export function InsightPatternsSection() {
           <a
             href="#sample-outcome"
             className="font-mono-label text-accent hover:text-accent-light transition"
+            onClick={() => trackEvent('cta_clicked', { cta_source: 'insight_patterns', cta_text: 'See it in action', has_rank_result: false })}
           >
             See it in action ↓
           </a>

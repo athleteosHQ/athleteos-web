@@ -1,7 +1,10 @@
 'use client'
 
+import { trackEvent } from '@/lib/analytics'
+
 export function HeroSection() {
   const handleCTA = () => {
+    trackEvent('cta_clicked', { cta_source: 'hero', cta_text: 'See Where You Rank', has_rank_result: false })
     document.getElementById('rank')?.scrollIntoView({ behavior: 'smooth' })
     window.setTimeout(() => {
       document.getElementById('rank-bw-input')?.focus()
@@ -9,7 +12,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative flex min-h-[55vh] flex-col items-center justify-center px-6 py-20 text-center">
+    <section id="hero" className="relative flex min-h-[55vh] flex-col items-center justify-center px-6 py-20 text-center">
       <div className="max-w-2xl">
         <h1 className="text-4xl font-display font-bold text-foreground leading-tight sm:text-5xl md:text-6xl">
           You train. You track.{' '}

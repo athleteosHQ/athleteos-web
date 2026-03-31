@@ -14,7 +14,7 @@ export function TrustStrip() {
   const parallax = useHeadingParallax()
 
   return (
-    <section className="px-4 py-14 sm:px-6 md:px-10">
+    <section id="trust" className="px-4 py-14 sm:px-6 md:px-10">
       <motion.div
         className="mx-auto max-w-screen-xl"
         initial={{ opacity: 0 }}
