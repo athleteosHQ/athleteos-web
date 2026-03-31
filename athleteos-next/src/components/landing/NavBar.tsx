@@ -21,6 +21,7 @@ export function NavBar() {
 
   return (
     <nav
+      aria-label="Main navigation"
       className="sticky top-0 z-50 transition-all duration-500"
       style={{
         backdropFilter: scrolled ? 'blur(20px) saturate(1.4)' : 'none',
@@ -83,7 +84,7 @@ export function NavBar() {
               <a
                 key={label}
                 href={href}
-                className="relative rounded-full px-4 py-1.5 text-[13px] font-medium text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-white/[0.06]"
+                className="relative rounded-full px-4 py-2 text-[13px] font-medium text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-white/[0.06]"
               >
                 {label}
               </a>
@@ -94,7 +95,7 @@ export function NavBar() {
         {/* ── CTA ── */}
         <a
           href="#rank"
-          className="group/cta relative cursor-pointer overflow-hidden rounded-full px-4 py-2 text-[13px] font-semibold text-foreground transition-all duration-200 hover:text-white whitespace-nowrap"
+          className="group/cta relative cursor-pointer overflow-hidden rounded-full px-4 py-2.5 text-[13px] font-semibold text-foreground transition-all duration-200 hover:text-white whitespace-nowrap min-h-[44px]"
           style={{
             background: 'rgba(255,255,255,0.06)',
             border: '1px solid rgba(255,255,255,0.1)',
