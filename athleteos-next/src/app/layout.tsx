@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from 'next/font/google'
+import { PostHogProvider } from '@/components/PostHogProvider'
 import './globals.css'
 
 const jakarta = Plus_Jakarta_Sans({
@@ -28,7 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${jakarta.variable} ${inter.variable} ${jetbrainsMono.variable} bg-background font-sans text-white antialiased`}>
-        {children}
+        <Suspense fallback={null}>
+          <PostHogProvider>{children}</PostHogProvider>
+        </Suspense>
       </body>
     </html>
   )
