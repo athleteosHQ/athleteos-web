@@ -21,8 +21,9 @@ export function GlassInput({ id, label, value, onChange, placeholder, min, max, 
   )
 }
 
-export function GlassField({ type, placeholder, value, onChange, error }: {
+export function GlassField({ type, placeholder, value, onChange, error, required, autoComplete, ariaLabel }: {
   type: string; placeholder: string; value: string; onChange: (v: string) => void; error?: string
+  required?: boolean; autoComplete?: string; ariaLabel?: string
 }) {
   return (
     <div>
@@ -33,6 +34,9 @@ export function GlassField({ type, placeholder, value, onChange, error }: {
         onChange={e => onChange(e.target.value)}
         className={`system-input ${error ? 'input-error' : ''}`}
         aria-invalid={error ? 'true' : undefined}
+        aria-label={ariaLabel ?? placeholder}
+        required={required}
+        autoComplete={autoComplete}
       />
       {error && <p className="mt-1 font-mono text-xs text-destructive" role="alert">{error}</p>}
     </div>

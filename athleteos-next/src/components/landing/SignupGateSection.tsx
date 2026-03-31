@@ -10,6 +10,27 @@ import { getFounderLabel, getInlineSignupGateContent } from './landingFlow'
 import { GlassField } from './rank/SystemInput'
 import { insertFounder } from '@/lib/supabase'
 
+const DIAGNOSTIC_LOOP = [
+  { step: 'First week', description: 'You log training and nutrition. The system builds your baseline.' },
+  { step: 'First read', description: 'Rank, limiter, correction, projected gain — from your actual training data.' },
+  { step: 'Correction', description: 'One change. You track it. The system watches whether the numbers move.' },
+  { step: 'Re-read', description: 'New diagnosis. Did the correction land? What\u2019s the next limiter?' },
+] as const
+
+const FOUNDING_DELIVERABLES = [
+  'Full diagnostic system at launch — rank, limiter, correction, projected gain',
+  'IFCT-verified nutrition tracking — Indian and South Asian food data',
+  'Direct WhatsApp access to the founder — first 90 days',
+  'Your feature requests shape the roadmap',
+  'Founding price locked forever',
+] as const
+
+const TRUST_CHIPS = [
+  'No payment until launch',
+  'Founding rate locked forever',
+  'Full refund if we don\u2019t deliver',
+] as const
+
 interface GateForm { email: string; whatsapp: string }
 
 interface SignupGateSectionProps {
@@ -101,22 +122,50 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
   return (
     <section id="inline-signup-gate" className="section-fade-top px-6 py-16 md:px-10 md:py-20">
       <div className="mx-auto max-w-2xl">
+
+        {/* Zone 1 — Diagnostic loop (freestanding, above the panel) */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
+          <p className="font-mono-label text-accent mb-4">Your first month</p>
+          <div className="space-y-3">
+            {DIAGNOSTIC_LOOP.map(({ step, description }) => (
+              <div key={step} className="flex gap-3">
+                <span className="font-mono-label text-accent shrink-0 w-24 pt-0.5">{step}</span>
+                <span className="text-sm text-muted-foreground leading-relaxed">{description}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Zone 2 — Gate panel (commitment block) */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="gate-panel rounded-lg p-6 md:p-8"
         >
-          <div className="mb-6">
+          <div className="mb-5">
             <div className="mb-1.5 flex items-center gap-2">
               <Users className="w-3.5 h-3.5 text-accent" />
               <span className="font-mono-label text-accent">{gateContent.eyebrow}</span>
             </div>
             <p className="text-xl font-bold leading-snug text-foreground md:text-2xl">{gateContent.headline}</p>
-            <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-              {gateContent.productLine}
-            </p>
+          </div>
+
+          {/* Founding member deliverables */}
+          <div className="mb-5 space-y-2">
+            {FOUNDING_DELIVERABLES.map(d => (
+              <div key={d} className="flex items-start gap-2">
+                <Check className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" style={{ filter: 'drop-shadow(0 0 4px rgba(45,220,143,0.4))' }} />
+                <span className="text-sm text-muted-foreground leading-snug">{d}</span>
+              </div>
+            ))}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -126,6 +175,9 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
               value={form.email}
               onChange={v => setForm(f => ({ ...f, email: v }))}
               error={errors.email}
+              required
+              autoComplete="email"
+              ariaLabel="Email address (required)"
             />
             <div>
               <GlassField
@@ -134,6 +186,8 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
                 value={form.whatsapp}
                 onChange={v => setForm(f => ({ ...f, whatsapp: v }))}
                 error={errors.whatsapp}
+                autoComplete="tel"
+                ariaLabel="WhatsApp number (optional)"
               />
               <p className="mt-1 text-xs text-muted-foreground/60">WhatsApp (for early access updates) · optional</p>
             </div>
@@ -154,7 +208,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
           </form>
 
           <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-4">
-            {gateContent.trustChips.map(t => (
+            {TRUST_CHIPS.map(t => (
               <div key={t} className="flex items-center gap-1.5">
                 <Check className="w-3 h-3 text-success flex-shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(45,220,143,0.4))' }} />
                 <span className="text-xs text-muted-foreground">{t}</span>

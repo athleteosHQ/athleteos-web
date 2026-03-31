@@ -65,16 +65,17 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
     >
       <button
         onClick={onToggle}
+        aria-expanded={isOpen}
         className="w-full flex items-start justify-between gap-4 p-5 text-left transition"
       >
         <span className="text-base font-semibold text-foreground leading-snug">{faq.q}</span>
         <span
-          className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full flex items-center justify-center transition-colors"
+          className="flex-shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
           style={{ background: isOpen ? 'rgba(94,106,210,0.14)' : 'rgba(255,255,255,0.06)' }}
         >
           {isOpen
-            ? <Minus size={11} className="text-accent" />
-            : <Plus size={11} className="text-muted-foreground" />
+            ? <Minus size={13} className="text-accent" />
+            : <Plus size={13} className="text-muted-foreground" />
           }
         </span>
       </button>
