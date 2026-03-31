@@ -1,9 +1,11 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Lock } from 'lucide-react'
 import type { RankResult } from '@/lib/rankCalc'
 import { fadeUp } from '@/lib/motion'
+import { trackEvent } from '@/lib/analytics'
 
 interface PersonalizedUpsellStripProps {
   rankResult: RankResult
@@ -59,6 +61,15 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
   const weakest = getWeakestLift(rankResult)
   const strongest = getStrongestLift(rankResult)
   const topPct = 100 - rankResult.overallPct
+
+  useEffect(() => {
+    trackEvent('upsell_strip_viewed', {
+      overallPct: rankResult.overallPct,
+      tier: rankResult.tier,
+      weakest_lift: getWeakestLift(rankResult).name,
+      strongest_lift: getStrongestLift(rankResult).name,
+    })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const limiterCopy = `Your ${strongest.name.toLowerCase()} is Top ${100 - strongest.pct}% but your ${weakest.name.toLowerCase()} is Top ${100 - weakest.pct}%. The full system read identifies whether the gap is training distribution, nutrition timing, or recovery debt — and tells you exactly what to change first.`
 
@@ -142,6 +153,12 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
             href="#inline-signup-gate"
             className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-light"
             style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
+            onClick={() => trackEvent('upsell_strip_cta_clicked', {
+              overallPct: rankResult.overallPct,
+              tier: rankResult.tier,
+              weakest_lift: getWeakestLift(rankResult).name,
+              strongest_lift: getStrongestLift(rankResult).name,
+            })}
           >
             Unlock your full read
           </a>

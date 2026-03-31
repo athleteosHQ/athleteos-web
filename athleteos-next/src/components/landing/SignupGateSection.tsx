@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, Users } from 'lucide-react'
@@ -40,11 +40,12 @@ interface SignupGateSectionProps {
 export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
   const router = useRouter()
   const [form, setForm] = useState<GateForm>({ email: '', whatsapp: '' })
-  const [formFocused, setFormFocused] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [apiError, setApiError] = useState('')
   const [founderLabel, setFounderLabel] = useState('')
+  const formStartRef = useRef<number | null>(null)
+  const fieldsFocusedRef = useRef<Set<string>>(new Set())
 
   useEffect(() => {
     const syncFounder = () => {
@@ -55,12 +56,37 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
     return () => window.removeEventListener('aos-founder-data-changed', syncFounder)
   }, [])
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const hasValues = form.email.trim() || form.whatsapp.trim()
+      if (!hasValues) return
+
+      const timeInForm = formStartRef.current ? Math.round((Date.now() - formStartRef.current) / 1000) : 0
+      trackEvent('signup_form_abandoned', {
+        fields_filled: [
+          form.email.trim() ? 'email' : null,
+          form.whatsapp.trim() ? 'whatsapp' : null,
+        ].filter(Boolean).join(','),
+        has_rank_result: overallPct !== null,
+        overallPct: overallPct ?? 0,
+        time_in_form_seconds: timeInForm,
+      })
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [form, overallPct])
+
   const gateContent = getInlineSignupGateContent(overallPct)
 
-  const handleFormFocus = () => {
-    if (formFocused) return
-    setFormFocused(true)
+  const handleFieldFocus = (field: string) => {
+    if (!formStartRef.current) {
+      formStartRef.current = Date.now()
+    }
+    if (fieldsFocusedRef.current.has(field)) return
+    fieldsFocusedRef.current.add(field)
     trackEvent('signup_form_focused', {
+      field,
       has_rank_result: overallPct !== null,
       overallPct: overallPct ?? 0,
     })
@@ -74,9 +100,19 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
     const validationErrors = validateFounderForm(form)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
+      for (const [field, msg] of Object.entries(validationErrors)) {
+        trackEvent('signup_form_validation_error', { field, error_type: msg })
+      }
       return
     }
 
+    const timeInForm = formStartRef.current ? Math.round((Date.now() - formStartRef.current) / 1000) : 0
+    trackEvent('signup_form_submitted', {
+      has_whatsapp: form.whatsapp.trim().length > 0,
+      has_rank_result: overallPct !== null,
+      overallPct: overallPct ?? 0,
+      time_in_form_seconds: timeInForm,
+    })
     setLoading(true)
     const referrerId = typeof window !== 'undefined' ? localStorage.getItem('aos_referrer_id') : null
     const { data, error: apiErr } = await insertFounder({
@@ -87,6 +123,8 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
     })
     setLoading(false)
     if (apiErr) {
+      const emailDomain = form.email.includes('@') ? form.email.split('@')[1] : 'unknown'
+      trackEvent('signup_api_error', { error_message: apiErr.message, email_domain: emailDomain })
       setApiError(apiErr.message)
       return
     }
@@ -194,7 +232,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
               required
               autoComplete="email"
               ariaLabel="Email address (required)"
-              onFocus={handleFormFocus}
+              onFocus={() => handleFieldFocus('email')}
             />
             <div>
               <GlassField
@@ -205,7 +243,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
                 error={errors.whatsapp}
                 autoComplete="tel"
                 ariaLabel="WhatsApp number (optional)"
-                onFocus={handleFormFocus}
+                onFocus={() => handleFieldFocus('whatsapp')}
               />
               <p className="mt-1 text-xs text-muted-foreground/60">WhatsApp (for early access updates) · optional</p>
             </div>
