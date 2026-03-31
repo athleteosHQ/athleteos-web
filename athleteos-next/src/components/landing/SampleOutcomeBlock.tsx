@@ -43,7 +43,7 @@ const OUTCOME_ROWS = [
 
 export function SampleOutcomeBlock() {
   return (
-    <section className="px-4 py-20 sm:px-6 md:px-10">
+    <section id="sample-outcome" className="px-4 py-20 sm:px-6 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -133,7 +133,7 @@ export function SampleOutcomeBlock() {
             </div>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-muted-foreground">Sample output only. Your exact rank and diagnosis will differ.</p>
-              <a href="#rank" className="font-mono-label text-accent hover:text-accent-light transition">Get mine →</a>
+              <a href="#rank" className="font-mono-label text-accent hover:text-accent-light transition">Check yours →</a>
             </div>
           </div>
         </motion.div>
