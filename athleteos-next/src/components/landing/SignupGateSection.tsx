@@ -130,7 +130,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
             <div>
               <GlassField
                 type="tel"
-                placeholder="+91 9XXXXXXXXX"
+                placeholder="+XX XXXXXXXXXX"
                 value={form.whatsapp}
                 onChange={v => setForm(f => ({ ...f, whatsapp: v }))}
                 error={errors.whatsapp}

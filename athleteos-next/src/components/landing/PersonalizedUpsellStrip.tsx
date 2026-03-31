@@ -126,12 +126,12 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
                 </div>
                 <Lock className="w-3.5 h-3.5 mt-1 text-muted-foreground/40" />
               </div>
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed" style={{ filter: 'blur(1px)' }}>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed select-none" style={{ filter: 'blur(3.5px)', opacity: 0.65 }}>
                 {lockedContent[key]}
               </p>
               <div
                 className="pointer-events-none absolute inset-0"
-                style={{ background: 'linear-gradient(180deg, transparent 30%, rgba(5,5,6,0.6) 100%)' }}
+                style={{ background: 'linear-gradient(180deg, transparent 25%, rgba(5,5,6,0.4) 70%, rgba(5,5,6,0.65) 100%)' }}
               />
             </motion.div>
           ))}
