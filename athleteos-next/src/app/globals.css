@@ -115,6 +115,9 @@ body {
   25%      { opacity: 0.8; }
   45%, 70% { transform: translateX(120%) skewX(-12deg); opacity: 0; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .locked-peek::after { animation: none; }
+}
 
 /* ── Section fade-top divider ────────────────────────────────── */
 .section-fade-top { position: relative; }
@@ -144,7 +147,8 @@ body {
   opacity: 0.5;
 }
 .system-input:focus-visible {
-  outline: none;
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
   border-color: var(--accent);
 }
 .system-input[aria-invalid="true"],
@@ -195,6 +199,19 @@ input[type=number] { -moz-appearance: textfield; }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--background); }
 ::-webkit-scrollbar-thumb { background: rgba(94,106,210,0.18); border-radius: 3px; }
+
+/* ── Focus states ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 /* ── Reduced motion ──────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
