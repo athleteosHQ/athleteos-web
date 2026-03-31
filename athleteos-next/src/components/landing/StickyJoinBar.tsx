@@ -43,14 +43,14 @@ export function StickyJoinBar() {
           }}
         >
           <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <p className="hidden text-sm text-muted-foreground sm:block">Join to connect training, nutrition, and recovery</p>
+            <p className="hidden text-sm text-muted-foreground sm:block">Join founding members — reserve your full diagnosis</p>
             <a
               href="#inline-signup-gate"
               className="ml-auto cursor-pointer rounded-md bg-accent px-4 py-2.5 min-h-[44px] text-sm font-bold text-white transition-all hover:bg-accent-light"
               style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
             >
-              <span className="sm:hidden">Full system read</span>
-              <span className="hidden sm:inline">Get Full System Read →</span>
+              <span className="sm:hidden">Reserve →</span>
+              <span className="hidden sm:inline">Reserve My Diagnosis</span>
             </a>
           </div>
         </motion.div>
