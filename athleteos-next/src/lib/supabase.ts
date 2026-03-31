@@ -1,10 +1,10 @@
 /** Client-side API helpers — all writes go through Next.js API routes (service role key stays server-side). */
 
 export interface FounderInsert {
-  name: string
+  name?: string
   email: string
   whatsapp: string
-  country: string
+  country?: string
   source: string
   discipline?: string
   experience?: string

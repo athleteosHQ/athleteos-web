@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 interface ReserveBody {
-  name: string
+  name?: string
   email: string
   whatsapp: string
-  country: string
+  country?: string
   source: string
   discipline?: string
   experience?: string
@@ -43,9 +43,6 @@ export async function POST(req: NextRequest) {
   const { name, email, whatsapp, country, source, discipline, experience, referrer_id } = body
 
   // Validate required fields
-  if (!name?.trim()) {
-    return NextResponse.json({ error: 'Name is required' }, { status: 400 })
-  }
   if (!email?.trim() || !isValidEmail(email.trim())) {
     return NextResponse.json({ error: 'Valid email is required' }, { status: 400 })
   }
@@ -65,7 +62,7 @@ export async function POST(req: NextRequest) {
   }
 
   const insertData: Record<string, string> = {
-    name: name.trim(),
+    name: name?.trim() || '',
     email: email.trim(),
     whatsapp: whatsapp?.trim() || '',
     country: country?.trim() || '',
