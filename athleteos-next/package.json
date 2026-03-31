@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "reset-founder": "node scripts/reset-founder-entry.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.2",

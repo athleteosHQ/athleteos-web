@@ -138,7 +138,7 @@ export function SystemSection() {
             
             {/* 1. INPUTS COLUMN */}
             <div className="space-y-6">
-              <p className="font-mono-label text-muted-foreground mb-8 block lg:hidden">Input Layer ↓</p>
+              <p className="font-mono-label text-muted-foreground mb-8 block lg:hidden">Diagnostic steps ↓</p>
 
               {inputCards.map(({ key, title, eyebrow, description, Icon, delay, funnelClassName }) => (
                 <motion.div
@@ -163,7 +163,7 @@ export function SystemSection() {
 
             {/* 2. OUTPUT COLUMN */}
             <div className="relative">
-              <p className="font-mono-label text-muted-foreground mb-8 block lg:hidden">Outcome Layer ↓</p>
+              <p className="font-mono-label text-muted-foreground mb-8 block lg:hidden">What you get ↓</p>
               
               <motion.div 
                 {...fadeUp(0.4)} 

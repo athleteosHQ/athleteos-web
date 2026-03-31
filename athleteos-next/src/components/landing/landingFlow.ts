@@ -15,7 +15,7 @@ export function getInlineSignupGateContent(overallPct: number | null): InlineSig
   if (overallPct === null) {
     return {
       ...SHARED_GATE_CONTENT,
-      headline: "See what's actually limiting your progress — training, nutrition, or recovery.",
+      headline: "Your training data tells a story. The full system reads it.",
     }
   }
 

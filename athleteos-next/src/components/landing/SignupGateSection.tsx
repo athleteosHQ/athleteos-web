@@ -148,7 +148,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="gate-panel rounded-lg p-6 md:p-8"
+          className="gate-panel p-6 md:p-8"
         >
           <div className="mb-5">
             <div className="mb-1.5 flex items-center gap-2">
@@ -198,7 +198,15 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
               className="w-full cursor-pointer rounded-xl bg-accent py-4 text-base font-bold text-white transition-all hover:bg-accent-light disabled:opacity-50 flex items-center justify-center gap-2 group"
               style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
             >
-              {loading ? 'Submitting…' : (
+              {loading ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" opacity="0.25" />
+                    <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                  Submitting…
+                </>
+              ) : (
                 <>
                   Reserve My Diagnosis
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

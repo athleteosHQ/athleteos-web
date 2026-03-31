@@ -214,31 +214,6 @@ button:focus-visible {
   border-radius: 4px;
 }
 
-/* ── Section continuity thread ──────────────────────────────── */
-.section-thread {
-  position: relative;
-}
-.section-thread::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-  pointer-events: none;
-  z-index: 0;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(107,122,237,0.08) 10%,
-    rgba(107,122,237,0.12) 30%,
-    rgba(107,122,237,0.08) 50%,
-    rgba(107,122,237,0.12) 70%,
-    rgba(107,122,237,0.06) 90%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(180deg, transparent 0%, black 5%, black 95%, transparent 100%);
-}
 
 /* ── Button press feedback ──────────────────────────────────── */
 button:active:not(:disabled),

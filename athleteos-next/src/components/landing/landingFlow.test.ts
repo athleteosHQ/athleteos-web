@@ -10,7 +10,7 @@ describe('getInlineSignupGateContent', () => {
   it('returns default gate content when overallPct is null', () => {
     const content = getInlineSignupGateContent(null)
     expect(content.headline).toBe(
-      "See what's actually limiting your progress — training, nutrition, or recovery.",
+      "Your training data tells a story. The full system reads it.",
     )
   })
 

@@ -40,7 +40,7 @@ export default function LandingV2() {
       <Suspense fallback={null}>
         <ReferralEntryBanner />
       </Suspense>
-      <main className="relative z-10 flex flex-col section-thread">
+      <main className="relative z-10 flex flex-col">
         <HeroSection />
         <InsightPatternsSection />
         <SampleOutcomeBlock />
