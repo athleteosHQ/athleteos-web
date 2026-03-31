@@ -1,16 +1,19 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import type { AthleteMode } from '@/components/landing/ModeSelector'
+import type { RankResult } from '@/lib/rankCalc'
 
-import { ConditionalSampleOutcome } from '@/components/landing/ConditionalSampleOutcome'
 import { FAQSection } from '@/components/landing/FAQSection'
 import { Footer } from '@/components/landing/Footer'
 import { HeroSection } from '@/components/landing/HeroSection'
-import { LockedPreviewSection } from '@/components/landing/LockedPreviewSection'
+import { InsightPatternsSection } from '@/components/landing/InsightPatternsSection'
 import { NavBar } from '@/components/landing/NavBar'
+import { PersonalizedUpsellStrip } from '@/components/landing/PersonalizedUpsellStrip'
+import { ProblemSection } from '@/components/landing/ProblemSection'
 import { RankSection } from '@/components/landing/RankSection'
 import { ReferralEntryBanner } from '@/components/landing/ReferralEntryBanner'
+import { SampleOutcomeBlock } from '@/components/landing/SampleOutcomeBlock'
 import { SignupGateSection } from '@/components/landing/SignupGateSection'
 import { StickyJoinBar } from '@/components/landing/StickyJoinBar'
 import { SystemSection } from '@/components/landing/SystemSection'
@@ -18,6 +21,17 @@ import { TrustStrip } from '@/components/landing/TrustStrip'
 
 export default function LandingV2() {
   const [mode, setMode] = useState<AthleteMode>('gym')
+  const [rankResult, setRankResult] = useState<RankResult | null>(null)
+
+  // Recover rank result from localStorage on mount (page reload recovery)
+  useEffect(() => {
+    const stored = localStorage.getItem('aos_rank_result')
+    if (stored) {
+      try {
+        setRankResult(JSON.parse(stored))
+      } catch { /* ignore corrupt data */ }
+    }
+  }, [])
 
   return (
     <div className="grid-bg relative min-h-screen antialiased">
@@ -27,12 +41,14 @@ export default function LandingV2() {
         <ReferralEntryBanner />
       </Suspense>
       <main className="relative z-10 flex flex-col">
-        <HeroSection mode={mode} onModeChange={setMode} />
-        <RankSection mode={mode} />
-        <ConditionalSampleOutcome />
+        <HeroSection />
+        <InsightPatternsSection />
+        <SampleOutcomeBlock />
+        <RankSection mode={mode} onModeChange={setMode} onRankResult={setRankResult} />
+        {rankResult && <PersonalizedUpsellStrip rankResult={rankResult} />}
+        <SignupGateSection overallPct={rankResult?.overallPct ?? null} />
         <SystemSection />
-        <LockedPreviewSection />
-        <SignupGateSection />
+        <ProblemSection />
         <TrustStrip />
         <FAQSection />
       </main>
