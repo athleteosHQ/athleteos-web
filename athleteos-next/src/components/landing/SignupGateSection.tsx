@@ -10,48 +10,28 @@ import { getFounderLabel, getInlineSignupGateContent } from './landingFlow'
 import { GlassField } from './rank/SystemInput'
 import { insertFounder } from '@/lib/supabase'
 
-const COUNTRIES = [
-  'India', 'UAE', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman',
-  'UK', 'Germany', 'Netherlands', 'Poland', 'Turkey',
-  'USA', 'Canada', 'Australia', 'Singapore', 'Other',
-]
+interface GateForm { email: string; whatsapp: string }
 
-interface GateForm { name: string; email: string; whatsapp: string; country: string }
+interface SignupGateSectionProps {
+  overallPct: number | null
+}
 
-/** Full-width signup gate section — appears after locked preview, peak motivation moment. */
-export function SignupGateSection() {
+export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
   const router = useRouter()
-  const [overallPct, setOverallPct] = useState<number | null>(null)
-  const [form, setForm] = useState<GateForm>({ name: '', email: '', whatsapp: '', country: '' })
+  const [form, setForm] = useState<GateForm>({ email: '', whatsapp: '' })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [apiError, setApiError] = useState('')
   const [founderLabel, setFounderLabel] = useState('')
 
   useEffect(() => {
-    const syncResult = () => {
-      const stored = localStorage.getItem('aos_rank_result')
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored)
-          setOverallPct(parsed.overallPct ?? null)
-        } catch { /* ignore */ }
-      }
-    }
     const syncFounder = () => {
       setFounderLabel(getFounderLabel(localStorage.getItem('aos_founder_data')))
     }
-    syncResult()
     syncFounder()
-    window.addEventListener('aos-rank-result-changed', syncResult)
     window.addEventListener('aos-founder-data-changed', syncFounder)
-    return () => {
-      window.removeEventListener('aos-rank-result-changed', syncResult)
-      window.removeEventListener('aos-founder-data-changed', syncFounder)
-    }
+    return () => window.removeEventListener('aos-founder-data-changed', syncFounder)
   }, [])
-
-  if (overallPct === null) return null
 
   const gateContent = getInlineSignupGateContent(overallPct)
 
@@ -69,10 +49,8 @@ export function SignupGateSection() {
     setLoading(true)
     const referrerId = typeof window !== 'undefined' ? localStorage.getItem('aos_referrer_id') : null
     const { data, error: apiErr } = await insertFounder({
-      name: form.name.trim(),
       email: form.email.trim(),
       whatsapp: form.whatsapp.trim(),
-      country: form.country,
       source: 'rank-gate',
       ...(referrerId ? { referrer_id: referrerId } : {}),
     })
@@ -89,7 +67,6 @@ export function SignupGateSection() {
     trackEvent('signup_conversion', {
       overallPct: overallPct ?? 0,
       source: 'rank-gate',
-      country: form.country,
     })
     window.dispatchEvent(new Event('aos-founder-data-changed'))
     router.push('/welcome')
@@ -143,22 +120,6 @@ export function SignupGateSection() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
-            <div className="grid sm:grid-cols-2 gap-3">
-              <GlassField
-                type="text"
-                placeholder="Your name"
-                value={form.name}
-                onChange={v => setForm(f => ({ ...f, name: v }))}
-                error={errors.name}
-              />
-              <GlassField
-                type="tel"
-                placeholder="WhatsApp (optional)"
-                value={form.whatsapp}
-                onChange={v => setForm(f => ({ ...f, whatsapp: v }))}
-                error={errors.whatsapp}
-              />
-            </div>
             <GlassField
               type="email"
               placeholder="Email address"
@@ -167,19 +128,14 @@ export function SignupGateSection() {
               error={errors.email}
             />
             <div>
-              <select
-                value={form.country}
-                onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
-                className={`system-input font-mono ${errors.country ? 'input-error' : ''}`}
-                aria-invalid={errors.country ? 'true' : undefined}
-                style={{ color: form.country ? 'var(--foreground)' : 'rgba(107,114,128,0.5)' }}
-              >
-                <option value="" disabled>Country</option>
-                {COUNTRIES.map(c => (
-                  <option key={c} value={c} style={{ color: 'var(--foreground)', background: '#0F0F11' }}>{c}</option>
-                ))}
-              </select>
-              {errors.country && <p className="mt-1 font-mono text-xs text-destructive" role="alert">{errors.country}</p>}
+              <GlassField
+                type="tel"
+                placeholder="+91 9XXXXXXXXX"
+                value={form.whatsapp}
+                onChange={v => setForm(f => ({ ...f, whatsapp: v }))}
+                error={errors.whatsapp}
+              />
+              <p className="mt-1 text-xs text-muted-foreground/60">WhatsApp (for early access updates) · optional</p>
             </div>
             {apiError && <p className="font-mono text-xs text-destructive">{apiError}</p>}
             <button
@@ -190,7 +146,7 @@ export function SignupGateSection() {
             >
               {loading ? 'Submitting…' : (
                 <>
-                  Get My Full System Read
+                  Reserve My Diagnosis
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
