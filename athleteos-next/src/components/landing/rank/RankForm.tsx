@@ -57,8 +57,8 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error 
 
       <button
         onClick={onSubmit}
-        className="mt-6 w-full cursor-pointer bg-accent text-white font-bold py-3.5 rounded-md flex items-center justify-center gap-2 group transition-all hover:bg-accent-light"
-        style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
+        className="mt-6 w-full cursor-pointer bg-accent text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 group transition-all hover:bg-accent-light"
+        style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
       >
         See My Rank
         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

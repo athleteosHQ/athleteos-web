@@ -9,7 +9,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative flex min-h-[70vh] flex-col items-center justify-center px-6 py-24 text-center">
+    <section className="relative flex min-h-[55vh] flex-col items-center justify-center px-6 py-20 text-center">
       <div className="max-w-2xl">
         <h1 className="text-4xl font-display font-bold text-foreground leading-tight sm:text-5xl md:text-6xl">
           You train. You track.{' '}
@@ -25,8 +25,8 @@ export function HeroSection() {
         <button
           type="button"
           onClick={handleCTA}
-          className="mt-8 inline-flex cursor-pointer items-center gap-2 rounded-md bg-accent px-8 py-4 text-base font-bold text-white transition-colors hover:bg-accent-light"
-          style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
+          className="mt-8 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-light"
+          style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
         >
           See Where You Rank
         </button>

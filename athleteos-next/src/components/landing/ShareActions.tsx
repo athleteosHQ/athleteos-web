@@ -70,14 +70,14 @@ export function ShareActions({ result, diagnosisLabel, diagnosisHeadline }: Shar
         <button
           type="button"
           onClick={handleShare}
-          className="cursor-pointer rounded-md bg-accent px-4 py-2.5 text-sm font-bold text-white transition hover:bg-accent-light min-h-[44px]"
+          className="cursor-pointer rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-accent-light min-h-[44px]"
         >
           Share My Rank
         </button>
         <button
           type="button"
           onClick={handleDownload}
-          className="cursor-pointer rounded-md border border-white/8 px-4 py-2.5 text-sm font-semibold text-foreground transition hover:border-white/16 min-h-[44px]"
+          className="cursor-pointer rounded-xl border border-white/8 px-4 py-2.5 text-sm font-semibold text-foreground transition-all hover:border-white/16 min-h-[44px]"
         >
           Download Card
         </button>

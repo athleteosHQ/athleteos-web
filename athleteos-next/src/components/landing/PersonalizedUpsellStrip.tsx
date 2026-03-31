@@ -126,12 +126,12 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
                 </div>
                 <Lock className="w-3.5 h-3.5 mt-1 text-muted-foreground/40" />
               </div>
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed select-none" style={{ filter: 'blur(3.5px)', opacity: 0.65 }}>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed select-none" style={{ filter: 'blur(2.5px)', opacity: 0.75 }}>
                 {lockedContent[key]}
               </p>
               <div
                 className="pointer-events-none absolute inset-0"
-                style={{ background: 'linear-gradient(180deg, transparent 25%, rgba(5,5,6,0.4) 70%, rgba(5,5,6,0.65) 100%)' }}
+                style={{ background: 'linear-gradient(180deg, transparent 40%, rgba(5,5,6,0.25) 75%, rgba(5,5,6,0.45) 100%)' }}
               />
             </motion.div>
           ))}
@@ -140,8 +140,8 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
         <motion.div {...fadeUp(0.4)} className="mt-8 text-center">
           <a
             href="#inline-signup-gate"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-accent px-8 py-4 text-base font-bold text-white transition-colors hover:bg-accent-light"
-            style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-light"
+            style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
           >
             Unlock your full read
           </a>

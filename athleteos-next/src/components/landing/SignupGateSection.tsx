@@ -195,8 +195,8 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full cursor-pointer rounded-md bg-accent py-4 text-base font-bold text-white transition-all hover:bg-accent-light disabled:opacity-50 flex items-center justify-center gap-2 group"
-              style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
+              className="w-full cursor-pointer rounded-xl bg-accent py-4 text-base font-bold text-white transition-all hover:bg-accent-light disabled:opacity-50 flex items-center justify-center gap-2 group"
+              style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
             >
               {loading ? 'Submitting…' : (
                 <>
