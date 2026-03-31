@@ -11,7 +11,14 @@ const SHARED_GATE_CONTENT = {
   trustChips: ['No payment required', 'Cancel anytime', 'Founding rate locked'],
 } as const
 
-export function getInlineSignupGateContent(overallPct: number): InlineSignupGateContent {
+export function getInlineSignupGateContent(overallPct: number | null): InlineSignupGateContent {
+  if (overallPct === null) {
+    return {
+      ...SHARED_GATE_CONTENT,
+      headline: "See what's actually limiting your progress — training, nutrition, or recovery.",
+    }
+  }
+
   if (overallPct >= 90) {
     return {
       ...SHARED_GATE_CONTENT,
@@ -34,10 +41,6 @@ export function getInlineSignupGateContent(overallPct: number): InlineSignupGate
 
 export function getShareMessage(overallPct: number): string {
   return `I'm in the top ${100 - overallPct}% of competitive strength athletes. Check yours -> athleteos.app`
-}
-
-export function shouldShowSampleOutcome(result: { overallPct?: number } | null): boolean {
-  return result === null
 }
 
 export function getFounderLabel(serializedFounderData: string | null): string {
