@@ -11,10 +11,16 @@ import { ShareActions } from './ShareActions'
 import { RankForm, type RankFormFields } from './rank/RankForm'
 import { DiagnosticBars, ResultInsightPanel } from './rank/RankResult'
 import { GhostTierPreview } from './rank/GhostTierPreview'
-import { type AthleteMode } from './ModeSelector'
+import { type AthleteMode, ModeSelector } from './ModeSelector'
 
 // ── Main export ───────────────────────────────────────────────────────────
-export function RankSection({ mode }: { mode: AthleteMode }) {
+interface RankSectionProps {
+  mode: AthleteMode
+  onModeChange: (mode: AthleteMode) => void
+  onRankResult: (result: RankResult) => void
+}
+
+export function RankSection({ mode, onModeChange, onRankResult }: RankSectionProps) {
   const parallax = useHeadingParallax()
   const trainingType = mode === 'gym' ? 'strength' : 'hybrid'
   const [f, setF] = useState<RankFormFields>({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
@@ -47,7 +53,6 @@ export function RankSection({ mode }: { mode: AthleteMode }) {
     const r = calculateRank(input)
     if (!r) { setError('Could not calculate. Check your inputs.'); return }
     localStorage.setItem('aos_rank_result', JSON.stringify(r))
-    window.dispatchEvent(new Event('aos-rank-result-changed'))
     trackEvent('rank_result_viewed', {
       overallPct: r.overallPct,
       tier: r.tier,
@@ -55,6 +60,7 @@ export function RankSection({ mode }: { mode: AthleteMode }) {
       trainingType,
     })
     setResult(r)
+    onRankResult(r)
   }
 
   const reset = () => { setResult(null); setError('') }
@@ -73,8 +79,14 @@ export function RankSection({ mode }: { mode: AthleteMode }) {
           viewport={{ once: true }}
           className="mb-8"
         >
-          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">Where are you strong. Where are you leaking.</motion.h2>
+          <motion.p variants={staggerItem} className="font-mono-label text-accent mb-2">Step 1</motion.p>
+          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">See where you stand</motion.h2>
         </motion.div>
+
+        <div className="mb-8 flex items-center gap-3">
+          <span className="text-sm text-muted-foreground">I train for</span>
+          <ModeSelector mode={mode} onModeChange={onModeChange} />
+        </div>
 
         <AnimatePresence mode="wait">
           {!result ? (
