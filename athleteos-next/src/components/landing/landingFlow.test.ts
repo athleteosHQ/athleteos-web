@@ -37,7 +37,7 @@ describe('getInlineSignupGateContent', () => {
 describe('getShareMessage', () => {
   it('formats the share message from the rank percentile', () => {
     expect(getShareMessage(77)).toBe(
-      "I'm in the top 23% of competitive strength athletes. Check yours -> athleteos.app",
+      "I'm in the top 23% of competitive strength athletes. Check yours -> athleteos.io",
     )
   })
 })

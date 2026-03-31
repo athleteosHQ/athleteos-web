@@ -82,8 +82,8 @@ export function WelcomePage() {
   }, [welcomeState])
 
   const inviteLink = welcomeState
-    ? `https://athleteos.in/?ref=${welcomeState.founderId}`
-    : 'https://athleteos.in/'
+    ? `https://athleteos.io/?ref=${welcomeState.founderId}`
+    : 'https://athleteos.io/'
 
   async function copyInviteLink() {
     await navigator.clipboard.writeText(inviteLink)

@@ -15,7 +15,7 @@ interface ShareActionsProps {
   diagnosisHeadline: string
 }
 
-const SHARE_URL = 'https://athleteos.in'
+const SHARE_URL = 'https://athleteos.io'
 
 export function ShareActions({ result, diagnosisLabel, diagnosisHeadline }: ShareActionsProps) {
   const cardRef = useRef<HTMLDivElement>(null)
