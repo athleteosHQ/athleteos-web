@@ -39,7 +39,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
     setError('')
     trackEvent('rank_check_started', { trainingType })
     const bw = parseFloat(f.bw)
-    if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); return }
+    if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); trackEvent('rank_form_error', { field: 'bodyweight', trainingType }); return }
     const input: RankInput = {
       bodyweight: bw,
       trainingType,
@@ -49,9 +49,9 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
       ...(trainingType === 'hybrid' ? { run5k: { minutes: parseInt(f.runMin) || 0, seconds: parseInt(f.runSec) || 0 } } : {}),
     }
     const hasLift = input.squat.weight > 20 || input.bench.weight > 20 || input.deadlift.weight > 20
-    if (!hasLift) { setError('Enter at least one lift above 20 kg'); return }
+    if (!hasLift) { setError('Enter at least one lift above 20 kg'); trackEvent('rank_form_error', { field: 'no_lift', trainingType }); return }
     const r = calculateRank(input)
-    if (!r) { setError('Could not calculate. Check your inputs.'); return }
+    if (!r) { setError('Could not calculate. Check your inputs.'); trackEvent('rank_form_error', { field: 'calculation_failed', trainingType }); return }
     localStorage.setItem('aos_rank_result', JSON.stringify(r))
     trackEvent('rank_result_viewed', {
       overallPct: r.overallPct,
@@ -68,7 +68,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
     }, 800)
   }
 
-  const reset = () => { setResult(null); setError('') }
+  const reset = () => { trackEvent('rank_check_again', { trainingType }); setResult(null); setError('') }
 
   return (
     <section id="rank" className="section-fade-top py-24 px-6 md:px-10">
