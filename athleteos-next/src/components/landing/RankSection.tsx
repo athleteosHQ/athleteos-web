@@ -61,6 +61,11 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
     })
     setResult(r)
     onRankResult(r)
+
+    // Auto-scroll to personalized upsell strip after a brief pause
+    window.setTimeout(() => {
+      document.getElementById('personalized-upsell')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 800)
   }
 
   const reset = () => { setResult(null); setError('') }

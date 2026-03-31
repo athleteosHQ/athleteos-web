@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
-import { motion, useSpring, useTransform, useMotionValue } from 'framer-motion'
-import { Activity } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { motion, useSpring, useTransform, useMotionValue, AnimatePresence } from 'framer-motion'
+import { Activity, ChevronDown } from 'lucide-react'
 import type { RankResult as RankResultType } from '@/lib/rankCalc'
 import { getFirstReadDiagnosis } from '../firstReadDiagnosis'
 import { getRankResultMessaging } from '../rankResultMessaging'
@@ -89,6 +89,7 @@ export function DiagnosticBars({ result }: { result: RankResultType }) {
 
 // ── Result insight panel ──────────────────────────────────────────────────
 export function ResultInsightPanel({ result }: { result: RankResultType }) {
+  const [expanded, setExpanded] = useState(false)
   const messaging = getRankResultMessaging({
     overallPct: result.overallPct,
     weightClass: result.weightClass,
@@ -103,29 +104,11 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       className="surface-card-muted rounded-2xl px-4 py-4"
       style={{ borderColor: 'rgba(94,106,210,0.14)' }}
     >
+      {/* ── Primary: always visible ── */}
       <motion.div variants={cascadeChild}>
         <p className="font-mono-label text-accent mb-2">{messaging.status}</p>
         <p className="text-lg font-semibold text-foreground">{messaging.identity}</p>
         <p className="mt-1 text-base font-medium text-foreground/90">{messaging.progression}</p>
-      </motion.div>
-
-      {/* Efficiency + Strength Age */}
-      <motion.div variants={cascadeChild} className="mt-3 grid grid-cols-2 gap-2">
-        <div
-          className="surface-card-muted rounded-xl px-3.5 py-3"
-          style={{ borderColor: 'rgba(94,106,210,0.14)' }}
-        >
-          <p className="font-mono-label text-accent mb-1">System Efficiency</p>
-          <p className="text-xl font-display font-bold text-accent">{result.efficiencyScore.pct}%</p>
-          <p className="text-xs text-muted-foreground mt-0.5">of theoretical ceiling</p>
-        </div>
-        <div
-          className="surface-card-muted rounded-xl px-3.5 py-3"
-        >
-          <p className="font-mono-label text-muted-foreground mb-1">Strength Age</p>
-          <p className="text-xl font-display font-bold text-foreground">{result.strengthAge.years} <span className="text-sm font-normal text-muted-foreground">years</span></p>
-          <p className="text-xs text-muted-foreground mt-0.5">estimated training time</p>
-        </div>
       </motion.div>
 
       <motion.div
@@ -135,23 +118,6 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
         <p className="font-mono-label text-muted-foreground mb-1.5">{diagnosis.label}</p>
         <p className="text-sm font-semibold text-foreground">{diagnosis.headline}</p>
         <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{diagnosis.body}</p>
-      </motion.div>
-
-      <motion.div
-        variants={cascadeChild}
-        className="surface-card-muted mt-3 rounded-xl px-3.5 py-3"
-      >
-        <p className="font-mono-label text-muted-foreground mb-1.5">System Read</p>
-        <p className="text-sm leading-relaxed text-muted-foreground">{messaging.preview}</p>
-      </motion.div>
-
-      <motion.div
-        variants={cascadeChild}
-        className="mt-3 rounded-xl px-3.5 py-3"
-        style={{ background: 'rgba(45,220,143,0.04)', border: '1px solid rgba(45,220,143,0.14)' }}
-      >
-        <p className="font-mono-label text-success mb-1.5">World Benchmark</p>
-        <p className="text-sm leading-relaxed text-muted-foreground">{messaging.worldBenchmark}</p>
       </motion.div>
 
       {result.nextThreshold && (
@@ -170,24 +136,67 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
         </motion.div>
       )}
 
-      <motion.div variants={cascadeChild} className="mt-4 grid gap-2 sm:grid-cols-3">
-        {messaging.lockedCards.map((label) => (
-          <div
-            key={label}
-            className="surface-card-muted locked-peek relative overflow-hidden rounded-lg px-3 py-3"
-          >
-            <p className="text-sm font-semibold text-foreground select-none" style={{ filter: 'blur(4px)' }}>{label}</p>
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{ background: 'linear-gradient(180deg, rgba(5,5,6,0) 0%, rgba(5,5,6,0.55) 45%, rgba(5,5,6,0.92) 100%)' }}
-            />
-            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 font-mono text-[9px] text-muted-foreground/30 uppercase tracking-widest">locked</span>
-          </div>
-        ))}
+      {/* ── Secondary: collapsible ── */}
+      <motion.div variants={cascadeChild} className="mt-3">
+        <button
+          type="button"
+          onClick={() => setExpanded(prev => !prev)}
+          aria-expanded={expanded}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground py-2"
+        >
+          <ChevronDown
+            className="w-3.5 h-3.5 transition-transform duration-200"
+            style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          />
+          {expanded ? 'Hide full breakdown' : 'See full breakdown'}
+        </button>
+
+        <AnimatePresence initial={false}>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.28, ease: EASE_OUT }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="space-y-3 pt-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div
+                    className="surface-card-muted rounded-xl px-3.5 py-3"
+                    style={{ borderColor: 'rgba(94,106,210,0.14)' }}
+                  >
+                    <p className="font-mono-label text-accent mb-1">System Efficiency</p>
+                    <p className="text-xl font-display font-bold text-accent">{result.efficiencyScore.pct}%</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">of theoretical ceiling</p>
+                  </div>
+                  <div className="surface-card-muted rounded-xl px-3.5 py-3">
+                    <p className="font-mono-label text-muted-foreground mb-1">Strength Age</p>
+                    <p className="text-xl font-display font-bold text-foreground">{result.strengthAge.years} <span className="text-sm font-normal text-muted-foreground">years</span></p>
+                    <p className="text-xs text-muted-foreground mt-0.5">estimated training time</p>
+                  </div>
+                </div>
+
+                <div className="surface-card-muted rounded-xl px-3.5 py-3">
+                  <p className="font-mono-label text-muted-foreground mb-1.5">System Read</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{messaging.preview}</p>
+                </div>
+
+                <div
+                  className="rounded-xl px-3.5 py-3"
+                  style={{ background: 'rgba(45,220,143,0.04)', border: '1px solid rgba(45,220,143,0.14)' }}
+                >
+                  <p className="font-mono-label text-success mb-1.5">World Benchmark</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{messaging.worldBenchmark}</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       <p className="mt-3 text-xs text-muted-foreground">
-        Founding members get the full system — nutrition and recovery data layered on top of this.
+        This is your rank. Scroll down to see what the full diagnosis would reveal.
       </p>
     </motion.div>
   )

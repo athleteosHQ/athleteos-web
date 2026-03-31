@@ -69,7 +69,7 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
   }
 
   return (
-    <section className="px-6 py-16 md:px-10">
+    <section id="personalized-upsell" className="px-6 py-16 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
