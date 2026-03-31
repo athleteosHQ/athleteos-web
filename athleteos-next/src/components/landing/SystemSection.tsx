@@ -8,28 +8,28 @@ export function SystemSection() {
   const parallax = useHeadingParallax()
   const inputCards = [
     {
-      key: 'nutrition',
-      title: 'Research-Verified Intake',
-      eyebrow: 'Nutrition',
-      description: 'Macro tracking backed by research-grade food composition data — not crowdsourced guesses.',
+      key: 'rank',
+      title: 'Competitive Rank',
+      eyebrow: 'Step 1',
+      description: 'See where your lifts land against athletes in your weight class. Identify which lift is the gap.',
       Icon: Flame,
       delay: 0.1,
       funnelClassName: '',
     },
     {
-      key: 'training',
-      title: 'Multi-Modal Stress',
-      eyebrow: 'Training',
-      description: 'Session load, intensity, and accumulated stress.',
+      key: 'isolate',
+      title: 'Bottleneck Isolation',
+      eyebrow: 'Step 2',
+      description: 'Training, nutrition, and recovery data read together to identify the one variable limiting progress.',
       Icon: BarChart2,
       delay: 0.2,
       funnelClassName: '',
     },
     {
-      key: 'recovery',
-      title: 'Block Scheduling',
-      eyebrow: 'Recovery + context',
-      description: 'Phase context changes what good progress should look like.',
+      key: 'correct',
+      title: 'Correction + Tracking',
+      eyebrow: 'Step 3',
+      description: 'One specific change to make. One metric to track. Re-read after each block to verify the fix landed.',
       Icon: Activity,
       delay: 0.3,
       funnelClassName: '',
@@ -55,10 +55,10 @@ export function SystemSection() {
         >
           <motion.p variants={staggerItem} className="font-mono-label text-accent mb-4">How athleteOS diagnoses the stall</motion.p>
           <motion.h2 variants={staggerItem} className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
-            Three inputs. One answer.
+            Rank. Isolate. Correct. Track.
           </motion.h2>
           <motion.p variants={staggerItem} className="text-lg text-muted-foreground leading-relaxed">
-            Training load, nutrition accuracy, and recovery context point to one likely reason progress is not moving.
+            Your rank shows where you stand. The system finds the one variable holding you back, tells you what to change, and tracks whether it worked.
           </motion.p>
         </motion.div>
 
@@ -98,16 +98,16 @@ export function SystemSection() {
                 </div>
 
                 <h3 className="mb-3 text-2xl font-display font-bold text-foreground">
-                  One likely bottleneck. One next move.
+                  The output is a decision, not a dashboard.
                 </h3>
                 <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
-                  athleteOS combines those inputs so you stop guessing whether the issue is food, recovery, or training distribution.
+                  athleteOS doesn&apos;t give you more data to interpret. It tells you what&apos;s limiting progress and what to change next.
                 </p>
 
                 <div className="space-y-4">
                   {[
-                    'See what is actually limiting progress.',
-                    'Know what to change next and what to keep tracking.',
+                    'One bottleneck identified with confidence score',
+                    'One correction path with a projected outcome to track',
                   ].map((item) => (
                     <div key={item} className="flex gap-4">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5">
@@ -122,7 +122,7 @@ export function SystemSection() {
                   href="#rank"
                   className="mt-6 inline-flex items-center gap-2 font-bold text-foreground group"
                 >
-                  <span className="border-b border-accent pb-0.5 transition-all group-hover:border-accent-light">Start your first scan</span>
+                  <span className="border-b border-accent pb-0.5 transition-all group-hover:border-accent-light">See Where You Rank</span>
                   <ArrowRight size={16} className="text-accent transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
@@ -181,18 +181,18 @@ export function SystemSection() {
                     </div>
 
                     <h3 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-6">
-                      One likely bottleneck. One next move.
+                      The output is a decision, not a dashboard.
                     </h3>
-                    
+
                     <div className="space-y-8 mb-10">
                       <div className="flex gap-5">
                         <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
                           <ChevronRight size={20} className="text-accent" />
                         </div>
                         <div>
-                          <p className="text-base font-semibold text-foreground mb-1">See what is actually limiting progress</p>
+                          <p className="text-base font-semibold text-foreground mb-1">One bottleneck identified with confidence score</p>
                           <p className="text-sm text-muted-foreground leading-relaxed">
-                            Stop guessing whether the problem is food, recovery, or training distribution.
+                            athleteOS doesn&apos;t give you more data to interpret. It tells you what&apos;s limiting progress and what to change next.
                           </p>
                         </div>
                       </div>
@@ -202,19 +202,19 @@ export function SystemSection() {
                           <ChevronRight size={20} className="text-accent" />
                         </div>
                         <div>
-                          <p className="text-base font-semibold text-foreground mb-1">Know what changes next</p>
+                          <p className="text-base font-semibold text-foreground mb-1">One correction path with a projected outcome to track</p>
                           <p className="text-sm text-muted-foreground leading-relaxed">
-                            The output tells you what to adjust next and what to keep tracking.
+                            One specific change to make. One metric to watch. Re-read after each block to verify the fix landed.
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    <a 
-                      href="#rank" 
+                    <a
+                      href="#rank"
                       className="inline-flex items-center gap-2 text-foreground font-bold group"
                     >
-                      <span className="pb-0.5 border-b border-accent group-hover:border-accent-light transition-all">Start your first scan</span>
+                      <span className="pb-0.5 border-b border-accent group-hover:border-accent-light transition-all">See Where You Rank</span>
                       <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform text-accent" />
                     </a>
                   </div>
