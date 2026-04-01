@@ -49,8 +49,18 @@ export async function POST(req: NextRequest) {
   if (whatsapp?.trim() && !isValidPhone(whatsapp.trim())) {
     return NextResponse.json({ error: 'Valid WhatsApp number is required' }, { status: 400 })
   }
-  if (!source?.trim()) {
-    return NextResponse.json({ error: 'Source is required' }, { status: 400 })
+  // Validate source against allowlist
+  const VALID_SOURCES = ['rank-gate', 'hero', 'sticky-bar', 'direct']
+  if (!source?.trim() || !VALID_SOURCES.includes(source.trim())) {
+    return NextResponse.json({ error: 'Invalid source' }, { status: 400 })
+  }
+
+  // Validate name and country length limits
+  if (name && name.trim().length > 100) {
+    return NextResponse.json({ error: 'Name too long' }, { status: 400 })
+  }
+  if (country && country.trim().length > 60) {
+    return NextResponse.json({ error: 'Invalid country' }, { status: 400 })
   }
 
   // Validate optional fields
@@ -59,6 +69,13 @@ export async function POST(req: NextRequest) {
   }
   if (experience && !VALID_EXPERIENCE.includes(experience)) {
     return NextResponse.json({ error: 'Invalid experience' }, { status: 400 })
+  }
+
+  // Validate referrer_id as UUID
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  const trimmedReferrerId = referrer_id?.trim()
+  if (trimmedReferrerId && !UUID_RE.test(trimmedReferrerId)) {
+    return NextResponse.json({ error: 'Invalid referrer' }, { status: 400 })
   }
 
   const insertData: Record<string, string> = {
@@ -70,7 +87,6 @@ export async function POST(req: NextRequest) {
   }
   if (discipline) insertData.discipline = discipline
   if (experience) insertData.experience = experience
-  const trimmedReferrerId = referrer_id?.trim()
   if (trimmedReferrerId) insertData.referrer_id = trimmedReferrerId
 
   let currentInsertData = insertData
@@ -87,7 +103,8 @@ export async function POST(req: NextRequest) {
 
     const missingOptionalColumns = getMissingOptionalColumns(error?.message ?? '')
     if (!missingOptionalColumns.length) {
-      return NextResponse.json({ error: error?.message ?? 'Something went wrong' }, { status: 500 })
+      console.error('[reserve] error:', error)
+      return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
     }
 
     const nextInsertData = { ...currentInsertData }
@@ -96,7 +113,8 @@ export async function POST(req: NextRequest) {
     }
 
     if (Object.keys(nextInsertData).length === Object.keys(currentInsertData).length) {
-      return NextResponse.json({ error: error?.message ?? 'Something went wrong' }, { status: 500 })
+      console.error('[reserve] error:', error)
+      return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
     }
 
     currentInsertData = nextInsertData

@@ -8,7 +8,7 @@ import { trackEvent, identifyUser } from '@/lib/analytics'
 import { validateFounderForm } from './founderFormValidation'
 import { getFounderLabel, getInlineSignupGateContent } from './landingFlow'
 import { GlassField } from './rank/SystemInput'
-import { insertFounder } from '@/lib/supabase'
+import { insertFounder, getFounderCount } from '@/lib/supabase'
 
 const DIAGNOSTIC_LOOP = [
   { step: 'First week', description: 'You log training and nutrition. The system builds your baseline.' },
@@ -21,8 +21,7 @@ const FOUNDING_DELIVERABLES = [
   'Full diagnostic system at launch — rank, limiter, correction, projected gain',
   'IFCT-verified nutrition tracking — Indian and South Asian food data',
   'Direct WhatsApp access to the founder — first 90 days',
-  'Your feature requests shape the roadmap',
-  'Founding price locked forever',
+  'You decide what gets built next',
 ] as const
 
 const TRUST_CHIPS = [
@@ -44,6 +43,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [apiError, setApiError] = useState('')
   const [founderLabel, setFounderLabel] = useState('')
+  const [founderCount, setFounderCount] = useState<number | null>(null)
   const formStartRef = useRef<number | null>(null)
   const fieldsFocusedRef = useRef<Set<string>>(new Set())
 
@@ -54,6 +54,10 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
     syncFounder()
     window.addEventListener('aos-founder-data-changed', syncFounder)
     return () => window.removeEventListener('aos-founder-data-changed', syncFounder)
+  }, [])
+
+  useEffect(() => {
+    getFounderCount().then(setFounderCount)
   }, [])
 
   useEffect(() => {
@@ -134,7 +138,6 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
       id: data.id, num: data.founder_number, shareCount: 0,
     }))
     identifyUser(data.id, {
-      email: form.email.trim(),
       founder_number: data.founder_number,
       source: 'rank-gate',
     })
@@ -196,13 +199,41 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
           </div>
         </motion.div>
 
-        {/* Zone 2 — Gate panel (commitment block) */}
+        {/* Zone 2 — Three clarity blocks (method, offer, process) */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="mb-8 grid gap-4 sm:grid-cols-3"
+        >
+          <div className="surface-card-muted rounded-xl p-4">
+            <p className="font-mono-label text-accent mb-2">What the system reads</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Training load, food intake, and recovery signals — interpreted together to identify what is limiting progress.
+            </p>
+          </div>
+          <div className="surface-card-muted rounded-xl p-4">
+            <p className="font-mono-label text-accent mb-2">What founding members get</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Locked founding rate, beta access, direct access to the core team, and influence over what gets built first.
+            </p>
+          </div>
+          <div className="surface-card-muted rounded-xl p-4">
+            <p className="font-mono-label text-accent mb-2">What happens next</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Reserve your spot. Before launch, the team contacts you directly — and in some cases schedules a short conversation to understand your needs.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Zone 3 — Gate panel (commitment block) */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="gate-panel p-6 md:p-8"
+          className="gate-panel p-4 sm:p-6 md:p-8"
         >
           <div className="mb-5">
             <div className="mb-1.5 flex items-center gap-2">
@@ -222,19 +253,60 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
             ))}
           </div>
 
+          {/* Pricing — founding price dominant, others as context */}
+          <div
+            className="mb-5 rounded-2xl px-5 py-5"
+            style={{ background: 'rgba(107,122,237,0.06)', border: '1px solid rgba(107,122,237,0.12)' }}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-3xl font-display font-bold text-foreground">
+                  {'\u20B9'}2,999<span className="text-base font-normal text-muted-foreground">/year</span>
+                </p>
+                <p className="mt-1 text-base text-foreground/80">
+                  {'\u20B9'}250/month · locked forever
+                </p>
+              </div>
+              <span className="shrink-0 rounded-full bg-accent/10 border border-accent/20 px-3 py-1 font-mono-label text-accent text-[10px]">
+                {founderCount !== null && founderCount > 0 ? `${Math.max(0, 50 - founderCount)} of 50 left` : 'Limited spots'}
+              </span>
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground/60">
+              Regular price will be {'\u20B9'}599/month after launch.
+            </p>
+          </div>
+
+          <div
+            className="mb-5 flex items-center gap-2.5 rounded-xl px-4 py-3"
+            style={{ background: 'rgba(45,220,143,0.06)', border: '1px solid rgba(45,220,143,0.12)' }}
+          >
+            <Check className="w-4 h-4 text-success shrink-0" />
+            <p className="text-sm font-medium text-foreground">No payment until launch. <span className="text-muted-foreground font-normal">Reserve now, pay only when the product activates.</span></p>
+          </div>
+
+          {founderCount !== null && founderCount > 0 && (
+            <p className="mb-4 text-sm text-muted-foreground">
+              <span className="font-bold text-foreground">{founderCount} athletes</span> have reserved their spot.
+            </p>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-3">
-            <GlassField
-              type="email"
-              placeholder="Email address"
-              value={form.email}
-              onChange={v => setForm(f => ({ ...f, email: v }))}
-              error={errors.email}
-              required
-              autoComplete="email"
-              ariaLabel="Email address (required)"
-              onFocus={() => handleFieldFocus('email')}
-            />
             <div>
+              <label htmlFor="gate-email" className="block text-xs font-medium text-muted-foreground mb-1.5">Email address</label>
+              <GlassField
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={v => setForm(f => ({ ...f, email: v }))}
+                error={errors.email}
+                required
+                autoComplete="email"
+                ariaLabel="Email address"
+                onFocus={() => handleFieldFocus('email')}
+              />
+            </div>
+            <div>
+              <label htmlFor="gate-whatsapp" className="block text-xs font-medium text-muted-foreground mb-1.5">WhatsApp <span className="text-muted-foreground/60">· optional</span></label>
               <GlassField
                 type="tel"
                 placeholder="+XX XXXXXXXXXX"
@@ -245,7 +317,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
                 ariaLabel="WhatsApp number (optional)"
                 onFocus={() => handleFieldFocus('whatsapp')}
               />
-              <p className="mt-1 text-xs text-muted-foreground/60">WhatsApp (for early access updates) · optional</p>
+              <p className="mt-1 text-xs text-muted-foreground/60">For early access updates</p>
             </div>
             {apiError && <p className="font-mono text-xs text-destructive">{apiError}</p>}
             <button

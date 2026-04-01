@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabaseAdmin.rpc('increment_share_count', { row_id: body.id.trim() })
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('[boost] error:', error)
+    return NextResponse.json({ error: 'Could not update share count' }, { status: 500 })
   }
 
   return NextResponse.json({ shareCount: data })
