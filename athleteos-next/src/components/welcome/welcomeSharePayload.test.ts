@@ -25,9 +25,10 @@ describe('getWelcomeSharePayload', () => {
       diagnosisHeadline: 'Bench is the clearest gap in your current profile.',
     })
 
+    expect(payload.shareMessage).toContain('Top 6%')
+    expect(payload.shareMessage).toContain('bench')
     expect(payload.shareMessage).toContain('Founding Member #23')
-    expect(payload.shareMessage).toContain("I'm in the top 6%")
-    expect(payload.shareMessage).toContain('Bench is the clearest gap')
+    expect(payload.shareMessage).toContain('athleteos.io')
   })
 
   it('builds card labels that reinforce identity and next-step utility', () => {

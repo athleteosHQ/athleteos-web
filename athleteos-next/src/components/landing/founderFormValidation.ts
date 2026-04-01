@@ -1,5 +1,4 @@
 interface FounderFormInput {
-  name: string
   email: string
   whatsapp: string
 }
@@ -15,15 +14,13 @@ function isValidPhone(value: string): boolean {
 }
 
 export function validateFounderForm({
-  name,
   email,
   whatsapp,
 }: FounderFormInput): FounderFormErrors {
   const errors: FounderFormErrors = {}
 
-  if (!name.trim()) errors.name = 'Required'
   if (!isValidEmail(email)) errors.email = 'Invalid email'
-  if (!isValidPhone(whatsapp)) errors.whatsapp = 'Invalid number'
+  if (whatsapp.trim() && !isValidPhone(whatsapp)) errors.whatsapp = 'Invalid number'
 
   return errors
 }

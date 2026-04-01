@@ -14,10 +14,12 @@ describe('getWelcomeState', () => {
     expect(state.founderNumber).toBe(23)
     expect(state.percentileLabel).toBe('Top 6%')
     expect(state.percentileSubline).toBe("You're ahead of 94% of athletes in your weight class.")
-    expect(state.primaryCtaLabel).toBe('Share My Card')
+    expect(state.primaryCtaLabel).toBe('Share My Rank')
     expect(state.tierLabel).toBe('Core')
     expect(state.invitesRemaining).toBe(2)
     expect(state.momentumLine).toBe('142 athletes already joined.')
+    expect(state.shareMessage).toContain('Top 6%')
+    expect(state.shareMessage).toContain('athleteos.io')
   })
 
   it('builds the no-result activation state for founders without a stored result', () => {

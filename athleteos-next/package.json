@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "reset-founder": "node scripts/reset-founder-entry.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.2",
@@ -15,8 +16,10 @@
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.577.0",
     "next": "16.1.7",
+    "posthog-js": "^1.364.4",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "resend": "^6.10.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -1,3 +1,5 @@
+import { posthog } from './posthog'
+
 interface AnalyticsPayload {
   event: string
   path: string
@@ -24,6 +26,14 @@ export function trackEvent(
 ): void {
   if (typeof window === 'undefined') return
 
+  // Send to PostHog (primary)
+  try {
+    posthog.capture(event, props)
+  } catch {
+    // PostHog must never break the user flow.
+  }
+
+  // Send to internal endpoint (fallback/backup)
   const payload = buildAnalyticsEvent(event, props, window.location.pathname + window.location.search)
 
   try {
@@ -39,6 +49,19 @@ export function trackEvent(
       body,
       keepalive: true,
     })
+  } catch {
+    // Analytics must never break the user flow.
+  }
+}
+
+/** Identify a user in PostHog after signup */
+export function identifyUser(
+  userId: string,
+  traits: Record<string, string | number | boolean | null> = {},
+): void {
+  if (typeof window === 'undefined') return
+  try {
+    posthog.identify(userId, traits)
   } catch {
     // Analytics must never break the user flow.
   }

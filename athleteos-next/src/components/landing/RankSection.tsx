@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { calculateRank, type RankInput, type RankResult } from '@/lib/rankCalc'
 import { trackEvent } from '@/lib/analytics'
@@ -11,29 +11,50 @@ import { ShareActions } from './ShareActions'
 import { RankForm, type RankFormFields } from './rank/RankForm'
 import { DiagnosticBars, ResultInsightPanel } from './rank/RankResult'
 import { GhostTierPreview } from './rank/GhostTierPreview'
-import { type AthleteMode } from './ModeSelector'
+import { type AthleteMode, ModeSelector } from './ModeSelector'
 
 // ── Main export ───────────────────────────────────────────────────────────
-export function RankSection({ mode }: { mode: AthleteMode }) {
+interface RankSectionProps {
+  mode: AthleteMode
+  onModeChange: (mode: AthleteMode) => void
+  onRankResult: (result: RankResult) => void
+}
+
+export function RankSection({ mode, onModeChange, onRankResult }: RankSectionProps) {
   const parallax = useHeadingParallax()
   const trainingType = mode === 'gym' ? 'strength' : 'hybrid'
   const [f, setF] = useState<RankFormFields>({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
   const [result, setResult] = useState<RankResult | null>(null)
   const [error, setError] = useState('')
+  const focusedFieldsRef = useRef<Set<string>>(new Set())
+  const hasMountedRef = useRef(false)
 
   useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+    } else {
+      trackEvent('rank_mode_changed', { from_mode: mode === 'gym' ? 'hybrid' : 'gym', to_mode: mode === 'gym' ? 'gym' : 'hybrid', had_result: result !== null })
+    }
     setF({ bw: '', sqW: '', sqR: '', bpW: '', bpR: '', dlW: '', dlR: '', runMin: '', runSec: '' })
     setResult(null)
     setError('')
+    focusedFieldsRef.current = new Set()
   }, [mode])
 
   const upd = (k: keyof RankFormFields) => (v: string) => setF(prev => ({ ...prev, [k]: v }))
+
+  const handleFieldFocus = (field: keyof RankFormFields) => {
+    if (focusedFieldsRef.current.has(field)) return
+    focusedFieldsRef.current.add(field)
+    const filledCount = Object.values(f).filter(v => v !== '').length
+    trackEvent('rank_form_field_focused', { field, mode: trainingType, fields_already_filled: filledCount })
+  }
 
   const submit = () => {
     setError('')
     trackEvent('rank_check_started', { trainingType })
     const bw = parseFloat(f.bw)
-    if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); return }
+    if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); trackEvent('rank_form_error', { error_type: 'invalid_bodyweight', mode: trainingType, fields_filled: Object.values(f).filter(v => v !== '').length }); return }
     const input: RankInput = {
       bodyweight: bw,
       trainingType,
@@ -43,11 +64,10 @@ export function RankSection({ mode }: { mode: AthleteMode }) {
       ...(trainingType === 'hybrid' ? { run5k: { minutes: parseInt(f.runMin) || 0, seconds: parseInt(f.runSec) || 0 } } : {}),
     }
     const hasLift = input.squat.weight > 20 || input.bench.weight > 20 || input.deadlift.weight > 20
-    if (!hasLift) { setError('Enter at least one lift above 20 kg'); return }
+    if (!hasLift) { setError('Enter at least one lift above 20 kg'); trackEvent('rank_form_error', { error_type: 'no_lift_above_20', mode: trainingType, fields_filled: Object.values(f).filter(v => v !== '').length }); return }
     const r = calculateRank(input)
-    if (!r) { setError('Could not calculate. Check your inputs.'); return }
+    if (!r) { setError('Could not calculate. Check your inputs.'); trackEvent('rank_form_error', { error_type: 'calculation_failed', mode: trainingType, fields_filled: Object.values(f).filter(v => v !== '').length }); return }
     localStorage.setItem('aos_rank_result', JSON.stringify(r))
-    window.dispatchEvent(new Event('aos-rank-result-changed'))
     trackEvent('rank_result_viewed', {
       overallPct: r.overallPct,
       tier: r.tier,
@@ -55,9 +75,19 @@ export function RankSection({ mode }: { mode: AthleteMode }) {
       trainingType,
     })
     setResult(r)
+    onRankResult(r)
+
+    // Auto-scroll to personalized upsell strip after a brief pause
+    window.setTimeout(() => {
+      document.getElementById('personalized-upsell')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 800)
   }
 
-  const reset = () => { setResult(null); setError('') }
+  const reset = () => {
+    trackEvent('rank_check_again', { previous_tier: result?.tier ?? '', previous_overallPct: result?.overallPct ?? 0 })
+    setResult(null)
+    setError('')
+  }
 
   return (
     <section id="rank" className="section-fade-top py-24 px-6 md:px-10">
@@ -73,8 +103,36 @@ export function RankSection({ mode }: { mode: AthleteMode }) {
           viewport={{ once: true }}
           className="mb-8"
         >
-          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">Where are you strong. Where are you leaking.</motion.h2>
+          <motion.span variants={staggerItem} className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 border border-accent/20 px-3 py-1 font-mono-label text-accent mb-3">Step 1</motion.span>
+          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">See where you stand</motion.h2>
+          <motion.p variants={staggerItem} className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
+            Rank tells you where you stand. AthleteOS turns that into a system read:
+            <span className="text-foreground"> what&apos;s limiting progress</span>, <span className="text-foreground">what to change</span>, and <span className="text-foreground">what outcome to track next</span>.
+          </motion.p>
+          <motion.div
+            variants={staggerItem}
+            className="mt-5 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-3"
+          >
+            {[
+              'Rank',
+              'Limiter',
+              'Correction',
+              'Projected gain',
+            ].map((step, index) => (
+              <div key={step} className="inline-flex items-center gap-2">
+                <span className="rounded-full bg-white/[0.05] px-2.5 py-1 font-mono-label text-muted-foreground">
+                  {step}
+                </span>
+                {index < 3 && <span className="text-accent/70">→</span>}
+              </div>
+            ))}
+          </motion.div>
         </motion.div>
+
+        <div className="mb-8 flex items-center gap-3">
+          <span className="text-sm text-muted-foreground">I train for</span>
+          <ModeSelector mode={mode} onModeChange={onModeChange} />
+        </div>
 
         <AnimatePresence mode="wait">
           {!result ? (
@@ -93,6 +151,7 @@ export function RankSection({ mode }: { mode: AthleteMode }) {
                 onFieldChange={upd}
                 onSubmit={submit}
                 error={error}
+                onFieldFocus={handleFieldFocus}
               />
               <GhostTierPreview mode={mode} />
             </motion.div>

@@ -106,34 +106,6 @@ export function AthleteScoreCard({
         </div>
       </div>
 
-      {/* Sparkline */}
-      <div className="mb-5 h-12 rounded-lg overflow-hidden relative" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-        <svg viewBox="0 0 300 48" className="w-full h-full" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stopColor="#5E6AD2" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#5E6AD2" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M0 40 Q30 35 60 30 T120 20 T180 25 T240 12 T300 8 V48 H0Z"
-            fill="url(#sparkGrad)"
-          />
-          <path
-            d="M0 40 Q30 35 60 30 T120 20 T180 25 T240 12 T300 8"
-            fill="none"
-            stroke="#5E6AD2"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-          {/* Live dot at end */}
-          <circle cx="296" cy="9" r="3" fill="#5E6AD2">
-            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
-            <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-      </div>
-
       {/* Score bar */}
       <div className="mb-5 space-y-1.5">
         <div className="flex justify-between text-xs">

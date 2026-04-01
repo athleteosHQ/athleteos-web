@@ -10,6 +10,8 @@ import { trackEvent } from '@/lib/analytics'
 
 import { getReferralLandingState } from './referralLandingState'
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 interface ReferrerPreview {
   firstName: string | null
   founderNumber: number
@@ -23,8 +25,10 @@ export function ReferralEntryBanner() {
   useEffect(() => {
     if (!ref) return
 
-    localStorage.setItem('aos_referrer_id', ref)
-    trackEvent('referral_entry_viewed', { referrerId: ref })
+    if (ref && UUID_RE.test(ref)) {
+      localStorage.setItem('aos_referrer_id', ref)
+      trackEvent('referral_entry_viewed', { referrerId: ref })
+    }
 
     fetch(`/api/founders/referrer?id=${encodeURIComponent(ref)}`)
       .then(async (response) => {

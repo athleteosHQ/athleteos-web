@@ -225,7 +225,7 @@ export const RankShareCard = React.forwardRef<
             COMPETITION-CALIBRATED · 3,200+ ATHLETES
           </div>
           <div style={{ fontFamily: 'monospace', fontSize: 16, fontWeight: 700, color: ACCENT, letterSpacing: 1 }}>
-            athleteos.in
+            athleteos.io
           </div>
         </div>
       </div>

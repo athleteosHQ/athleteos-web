@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
 
 const SOURCES = [
-  { id: 'FOOD_DATA', label: 'Verified intake data', note: 'Macros sourced from national food composition research — not crowdsourced estimates', color: '#2DDC8F' },
+  { id: 'FOOD_DATA', label: 'Verified intake data', note: 'Built on verified food composition data for Indian and South Asian diets — whether you train in Mumbai, Dubai, or London', color: '#2DDC8F' },
   { id: 'COMPETITION_DATA', label: 'Competition data', note: 'Calibrated against real meet records', color: '#00D9FF' },
   { id: 'ATHLETE_DATABASE', label: 'Global athlete baseline', note: 'Percentile rankings calibrated against competitive lifters across IPF-affiliated federations', color: '#5E6AD2' },
   { id: 'PRIVACY', label: 'No account required', note: 'Get your full rank instantly — no signup, no email, no tracking', color: '#2DDC8F' },
@@ -14,7 +14,7 @@ export function TrustStrip() {
   const parallax = useHeadingParallax()
 
   return (
-    <section className="px-4 py-14 sm:px-6 md:px-10">
+    <section id="trust" className="px-4 py-14 sm:px-6 md:px-10">
       <motion.div
         className="mx-auto max-w-screen-xl"
         initial={{ opacity: 0 }}

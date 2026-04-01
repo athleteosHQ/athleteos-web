@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="132" viewBox="0 0 320 132" fill="none">
+  <g transform="translate(14 16)">
+    <g transform="translate(0 2)">
+      <circle cx="34" cy="34" r="15" fill="#6B7AED" opacity="0.18"/>
+      <circle cx="34" cy="34" r="11.1" fill="#5B69E7"/>
+      <path d="M34 9.7 A24.3 24.3 0 0 1 53.7 19.9" stroke="#5B69E7" stroke-width="4.8" stroke-linecap="round" opacity="0.42"/>
+      <path d="M55.9 44.9 A24.3 24.3 0 0 1 35.9 58.3" stroke="#5B69E7" stroke-width="4.8" stroke-linecap="round" opacity="0.36"/>
+      <path d="M13.8 45.6 A24.3 24.3 0 0 1 18.9 20.4" stroke="#5B69E7" stroke-width="4.8" stroke-linecap="round" opacity="0.30"/>
+      <path d="M46.2 22.3 L39.9 27.9" stroke="#5B69E7" stroke-width="4.3" stroke-linecap="round" opacity="0.42"/>
+      <path d="M44.8 47.5 L38.9 42.6" stroke="#5B69E7" stroke-width="4.3" stroke-linecap="round" opacity="0.38"/>
+      <path d="M22.1 47 L27.8 42.3" stroke="#5B69E7" stroke-width="4.3" stroke-linecap="round" opacity="0.34"/>
+      <circle cx="34" cy="9.7" r="4.4" fill="#5B69E7" opacity="0.78"/>
+      <circle cx="53.7" cy="46.1" r="3.4" fill="#5B69E7" opacity="0.58"/>
+      <circle cx="14.7" cy="46.1" r="2.7" fill="#5B69E7" opacity="0.46"/>
+    </g>
+
+    <g transform="translate(78 19)">
+      <text
+        x="0"
+        y="35"
+        fill="#1A1D24"
+        font-family="Plus Jakarta Sans, Inter, Arial, sans-serif"
+        font-size="40"
+        font-weight="800"
+        letter-spacing="-1.6"
+      >athlete</text>
+      <text
+        x="121"
+        y="35"
+        fill="#5B69E7"
+        font-family="Plus Jakarta Sans, Inter, Arial, sans-serif"
+        font-size="40"
+        font-weight="800"
+        letter-spacing="-1.6"
+      >OS</text>
+    </g>
+  </g>
+</svg>

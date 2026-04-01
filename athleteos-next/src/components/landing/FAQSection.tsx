@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
 import { EASE_OUT, useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
+import { trackEvent } from '@/lib/analytics'
 
 interface FAQ {
   q: string
@@ -35,8 +36,8 @@ const FAQS: FAQ[] = [
     q: 'What does founding membership cost?',
     a: (
       <>
-        <span>Founding members lock in the lowest price athleteOS will ever offer. No payment is required to reserve your spot — you pay only when the product activates.</span>
-        <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>Join now, pay later. Your founding rate is locked forever.</span>
+        <span>Founding members lock in ₹2,999/year (₹250/month) — 58% off the regular ₹599/month. Only 50 spots. No payment is required now — you pay only when the product activates.</span>
+        <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>Your founding rate is locked forever. When pricing goes up, yours stays.</span>
       </>
     ),
   },
@@ -65,16 +66,17 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
     >
       <button
         onClick={onToggle}
+        aria-expanded={isOpen}
         className="w-full flex items-start justify-between gap-4 p-5 text-left transition"
       >
         <span className="text-base font-semibold text-foreground leading-snug">{faq.q}</span>
         <span
-          className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full flex items-center justify-center transition-colors"
+          className="flex-shrink-0 mt-0.5 w-9 h-9 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors"
           style={{ background: isOpen ? 'rgba(94,106,210,0.14)' : 'rgba(255,255,255,0.06)' }}
         >
           {isOpen
-            ? <Minus size={11} className="text-accent" />
-            : <Plus size={11} className="text-muted-foreground" />
+            ? <Minus size={13} className="text-accent" />
+            : <Plus size={13} className="text-muted-foreground" />
           }
         </span>
       </button>
@@ -105,10 +107,19 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
   const parallax = useHeadingParallax()
 
-  const toggle = (i: number) => setOpen(prev => (prev === i ? null : i))
+  const toggle = (i: number) => {
+    const isOpening = open !== i
+    if (isOpening) {
+      trackEvent('faq_item_toggled', {
+        question_index: i,
+        question_text: FAQS[i].q.slice(0, 50),
+      })
+    }
+    setOpen(prev => (prev === i ? null : i))
+  }
 
   return (
-    <section className="px-6 py-20 md:px-10">
+    <section id="faq" className="px-6 py-20 md:px-10">
       <div className="mx-auto max-w-4xl">
 
         <motion.div

@@ -7,6 +7,8 @@ const FOOD_DATA = [
   { food: 'Paneer (100g)',       mfp: '14.2g', ifct: '18.3g', diff: '−22%' },
   { food: 'Chicken curry',       mfp: '12.8g', ifct: '16.4g', diff: '−28%' },
   { food: 'Whole wheat roti',    mfp: '2.9g',  ifct: '4.0g',  diff: '−27%' },
+  { food: 'Chicken shawarma',    mfp: '16.5g', ifct: '20.8g', diff: '−21%' },
+  { food: 'Khubz (Arabic bread)', mfp: '3.4g', ifct: '4.6g',  diff: '−26%' },
 ]
 
 const IMPACT_CONTEXT = [

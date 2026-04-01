@@ -24,7 +24,7 @@ export function getWelcomeSharePayload({
     badgeLabel: 'Early Athlete',
     foundingLabel: `Founding Member #${founderNumber}`,
     diagnosisLabel: 'Primary Constraint',
-    shareMessage: `I got into AthleteOS early as Founding Member #${founderNumber}. I'm in the top ${topPercent}% and my first read says: ${diagnosisHeadline} Check yours 👇`,
+    shareMessage: `Top ${topPercent}% of competitive strength athletes. AthleteOS flagged my ${diagnosisHeadline.split(' ')[0].toLowerCase()} as the gap. Founding Member #${founderNumber} — check where you stand: athleteos.io`,
   }
 }
 

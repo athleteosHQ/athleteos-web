@@ -1,33 +1,35 @@
 import { describe, expect, it } from 'vitest'
-
 import {
   getFounderLabel,
   hasFounderData,
   getInlineSignupGateContent,
   getShareMessage,
-  shouldShowSampleOutcome,
 } from './landingFlow'
 
 describe('getInlineSignupGateContent', () => {
-  it('returns top-tier conversion copy for athletes in the top 10 percent', () => {
-    expect(getInlineSignupGateContent(93)).toEqual({
-      eyebrow: 'Founding members · first access',
-      headline: "You're ahead. Now see what separates you from the top 1%.",
-      productLine: 'athleteOS connects training, nutrition, and recovery into one diagnosis.',
-      pricingLine: 'No payment now. Founding price locked at ₹4,999/year.',
-      trustChips: ['No payment now', 'Cancel anytime', 'Price locked forever'],
-    })
+  it('returns default gate content when overallPct is null', () => {
+    const content = getInlineSignupGateContent(null)
+    expect(content.headline).toBe(
+      "Your training data tells a story. The full system reads it.",
+    )
   })
 
-  it('returns mid-tier conversion copy for athletes between 60 and 89 percent', () => {
+  it('returns top-tier copy for athletes in the top 10 percent', () => {
+    const content = getInlineSignupGateContent(93)
+    expect(content.headline).toBe(
+      "You're already ahead of most lifters. Now find the gap that keeps you from the next tier.",
+    )
+  })
+
+  it('returns mid-tier copy for athletes between 60 and 89 percent', () => {
     expect(getInlineSignupGateContent(72).headline).toBe(
-      "You're closer than you think. See the one thing holding you back.",
+      "You're closer than you think. The variable holding you back probably isn't the one you blame.",
     )
   })
 
   it('returns starting-point copy for athletes below the top 60 percent', () => {
     expect(getInlineSignupGateContent(41).headline).toBe(
-      'Your starting point is clear. See the fastest path up.',
+      'Your numbers show exactly where to start. AthleteOS shows what to fix first.',
     )
   })
 })
@@ -35,18 +37,8 @@ describe('getInlineSignupGateContent', () => {
 describe('getShareMessage', () => {
   it('formats the share message from the rank percentile', () => {
     expect(getShareMessage(77)).toBe(
-      "I'm in the top 23% of Indian strength athletes. Check yours -> athleteos.in",
+      "I'm in the top 23% of competitive strength athletes. Check yours -> athleteos.io",
     )
-  })
-})
-
-describe('shouldShowSampleOutcome', () => {
-  it('shows the sample outcome before the user has a result', () => {
-    expect(shouldShowSampleOutcome(null)).toBe(true)
-  })
-
-  it('hides the sample outcome once the user has a result', () => {
-    expect(shouldShowSampleOutcome({ overallPct: 63 })).toBe(false)
   })
 })
 
