@@ -19,11 +19,7 @@ export function HeroSection() {
           <span className="hero-gradient-word">Your total hasn&apos;t moved in months.</span>
         </h1>
         <p className="mt-4 text-lg text-muted-foreground sm:text-xl max-w-xl mx-auto">
-          AthleteOS finds the one variable actually holding you back — by reading your{' '}
-          <span className="text-foreground font-medium">training</span>,{' '}
-          <span className="text-foreground font-medium">nutrition</span>, and{' '}
-          <span className="text-foreground font-medium">recovery</span>{' '}
-          as one system, not three apps.
+          AthleteOS finds the <span className="text-foreground font-medium">one variable</span> actually holding you back — by reading your training, nutrition, and recovery as <span className="text-foreground font-medium">one system</span>, not three apps.
         </p>
         <button
           type="button"

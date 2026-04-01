@@ -78,7 +78,7 @@ export function GhostTierPreview({ mode }: { mode: AthleteMode }) {
 
       {/* Overlay */}
       <div
-        className="locked-peek absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-3 p-6 text-center"
+        className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-3 p-6 text-center"
         style={{ background: 'linear-gradient(180deg, rgba(5,5,6,0.5) 0%, rgba(5,5,6,0.85) 100%)', backdropFilter: 'blur(2px)' }}
       >
         <div

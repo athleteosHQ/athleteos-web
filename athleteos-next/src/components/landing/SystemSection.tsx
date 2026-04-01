@@ -120,11 +120,11 @@ export function SystemSection() {
                 </div>
 
                 <a
-                  href="#rank"
+                  href="#inline-signup-gate"
                   className="mt-6 inline-flex items-center gap-2 font-bold text-foreground group"
-                  onClick={() => trackEvent('cta_clicked', { cta_source: 'system_section', cta_text: 'See Where You Rank', has_rank_result: false })}
+                  onClick={() => trackEvent('cta_clicked', { cta_source: 'system_section', cta_text: 'Reserve My Diagnosis', has_rank_result: false })}
                 >
-                  <span className="border-b border-accent pb-0.5 transition-all group-hover:border-accent-light">See Where You Rank</span>
+                  <span className="border-b border-accent pb-0.5 transition-all group-hover:border-accent-light">Reserve My Diagnosis</span>
                   <ArrowRight size={16} className="text-accent transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
@@ -213,11 +213,11 @@ export function SystemSection() {
                     </div>
 
                     <a
-                      href="#rank"
+                      href="#inline-signup-gate"
                       className="inline-flex items-center gap-2 text-foreground font-bold group"
-                      onClick={() => trackEvent('cta_clicked', { cta_source: 'system_section', cta_text: 'See Where You Rank', has_rank_result: false })}
+                      onClick={() => trackEvent('cta_clicked', { cta_source: 'system_section', cta_text: 'Reserve My Diagnosis', has_rank_result: false })}
                     >
-                      <span className="pb-0.5 border-b border-accent group-hover:border-accent-light transition-all">See Where You Rank</span>
+                      <span className="pb-0.5 border-b border-accent group-hover:border-accent-light transition-all">Reserve My Diagnosis</span>
                       <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform text-accent" />
                     </a>
                   </div>

@@ -95,6 +95,20 @@ export function WelcomePage() {
     window.setTimeout(() => setCopied(false), 1800)
   }
 
+  async function generateCardImage(): Promise<File | null> {
+    if (!shareCardRef.current) return null
+    const canvas = await html2canvas(shareCardRef.current, {
+      backgroundColor: null,
+      scale: 2,
+    })
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        if (!blob) { resolve(null); return }
+        resolve(new File([blob], 'athleteos-rank-card.png', { type: 'image/png' }))
+      }, 'image/png')
+    })
+  }
+
   async function downloadCard() {
     if (!shareCardRef.current || !rankResult) return
     trackEvent('welcome_share_card_downloaded', {
@@ -105,7 +119,7 @@ export function WelcomePage() {
     try {
       const canvas = await html2canvas(shareCardRef.current, {
         backgroundColor: null,
-        scale: 1,
+        scale: 2,
       })
       const link = document.createElement('a')
       link.href = canvas.toDataURL('image/png')
@@ -116,28 +130,64 @@ export function WelcomePage() {
     }
   }
 
-  function shareOnWhatsApp() {
-    if (!welcomeState) return
+  async function shareToStory() {
+    if (!shareCardRef.current || !rankResult || !welcomeState) return
     trackEvent('welcome_share_clicked', {
-      channel: 'whatsapp',
+      channel: 'story',
       founderNumber: welcomeState.founderNumber,
       hasResult: welcomeState.hasResult,
     })
-    const message = sharePayload?.shareMessage ?? welcomeState.shareMessage
-    const text = encodeURIComponent(`${message}\n${inviteLink}`)
-    window.open(`https://wa.me/?text=${text}`, '_blank')
+    setDownloading(true)
+    try {
+      const file = await generateCardImage()
+      if (!file) { setDownloading(false); return }
+
+      // Web Share API with file — opens native share sheet with Instagram Stories as an option on mobile
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'AthleteOS',
+          text: `${sharePayload?.shareMessage ?? welcomeState.shareMessage}\n${inviteLink}`,
+        })
+      } else {
+        // Fallback: download the image so user can manually add to story
+        const url = URL.createObjectURL(file)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'athleteos-rank-card.png'
+        link.click()
+        URL.revokeObjectURL(url)
+      }
+    } catch {
+      // User cancelled share sheet
+    } finally {
+      setDownloading(false)
+    }
   }
 
-  function shareOnX() {
+  async function handleShare() {
     if (!welcomeState) return
+    const message = sharePayload?.shareMessage ?? welcomeState.shareMessage
     trackEvent('welcome_share_clicked', {
-      channel: 'x',
+      channel: 'native',
       founderNumber: welcomeState.founderNumber,
       hasResult: welcomeState.hasResult,
     })
-    const message = sharePayload?.shareMessage ?? welcomeState.shareMessage
-    const text = encodeURIComponent(`${message}\n${inviteLink}`)
-    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank')
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'AthleteOS',
+          text: message,
+          url: inviteLink,
+        })
+      } else {
+        await navigator.clipboard.writeText(`${message}\n${inviteLink}`)
+        setCopied(true)
+        window.setTimeout(() => setCopied(false), 1800)
+      }
+    } catch {
+      // User cancelled share sheet — not an error
+    }
   }
 
   if (!welcomeState || !founder) {
@@ -213,11 +263,11 @@ export function WelcomePage() {
               {welcomeState.hasResult ? (
                 <>
                   <button
-                    onClick={shareOnWhatsApp}
+                    onClick={handleShare}
                     className="cta-glow inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 font-bold text-white transition hover:bg-accent-light"
                   >
                     <Share2 className="h-4 w-4" />
-                    Share My Card
+                    Share My Rank
                   </button>
                   <Link
                     href="/#rank"
@@ -280,24 +330,26 @@ export function WelcomePage() {
 
               <div className="mt-5 flex flex-wrap gap-3">
                 <button
+                  onClick={shareToStory}
+                  disabled={downloading}
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-bold text-white transition hover:bg-accent-light disabled:opacity-50"
+                >
+                  <Share2 className="h-4 w-4" />
+                  {downloading ? 'Preparing…' : 'Share as Story'}
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-white/20 hover:bg-white/[0.03]"
+                >
+                  Share link
+                </button>
+                <button
                   onClick={downloadCard}
                   disabled={downloading}
                   className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-white/20 hover:bg-white/[0.03] disabled:opacity-50"
                 >
                   <Download className="h-4 w-4" />
-                  {downloading ? 'Preparing…' : 'Download as image'}
-                </button>
-                <button
-                  onClick={shareOnWhatsApp}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-semibold text-black transition hover:brightness-110"
-                >
-                  Share on WhatsApp
-                </button>
-                <button
-                  onClick={shareOnX}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-white/20 hover:bg-white/[0.03]"
-                >
-                  Share on X
+                  Save image
                 </button>
               </div>
             </div>
@@ -349,18 +401,13 @@ export function WelcomePage() {
                     {copied ? 'Invite link copied' : 'Copy invite link'}
                   </button>
                 </div>
-                <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-4">
                   <button
-                    onClick={shareOnWhatsApp}
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 font-bold text-black transition hover:brightness-110"
+                    onClick={handleShare}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 font-bold text-white transition hover:bg-accent-light"
                   >
-                    Share on WhatsApp
-                  </button>
-                  <button
-                    onClick={shareOnX}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-3 font-semibold text-foreground transition hover:border-white/20 hover:bg-white/[0.03]"
-                  >
-                    Share on X
+                    <Share2 className="h-4 w-4" />
+                    Share invite
                   </button>
                 </div>
               </div>
@@ -433,10 +480,11 @@ export function WelcomePage() {
                   </button>
                 </div>
                 <button
-                  onClick={shareOnWhatsApp}
-                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 font-bold text-black transition hover:brightness-110"
+                  onClick={handleShare}
+                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 font-bold text-white transition hover:bg-accent-light"
                 >
-                  Share on WhatsApp
+                  <Share2 className="h-4 w-4" />
+                  Share invite
                 </button>
               </div>
             </div>
@@ -449,7 +497,7 @@ export function WelcomePage() {
             <h2 className="text-3xl font-display font-bold text-foreground">Only founding members get this. Forever.</h2>
             <div className="mt-6 grid gap-3">
               {[
-                'Founding pricing locked for life',
+                '\u20B92,999/year (\u20B9250/mo vs \u20B9599 regular) — locked for life',
                 'Founding member badge',
                 'Early access before public launch',
                 'Priority access to new features',

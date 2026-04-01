@@ -106,7 +106,7 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="font-mono text-[10px] font-bold" style={{ color: 'var(--data-cyan, #00D9FF)', opacity: 0.9 }}>YOUR_RANK</p>
+              <p className="font-mono text-xs font-bold" style={{ color: 'var(--data-cyan, #00D9FF)', opacity: 0.9 }}>YOUR_RANK</p>
               <p className="font-mono-label text-muted-foreground/70 mt-1">Where you stand</p>
             </div>
             <span className="h-2 w-2 rounded-full mt-1" style={{ background: 'var(--data-cyan, #00D9FF)' }} />
@@ -132,7 +132,7 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-mono text-[10px] font-bold" style={{ color, opacity: 0.9 }}>{key}</p>
+                  <p className="font-mono text-xs font-bold" style={{ color, opacity: 0.9 }}>{key}</p>
                   <p className="font-mono-label text-muted-foreground/70 mt-1">{label}</p>
                 </div>
                 <Lock className="w-3.5 h-3.5 mt-1 text-muted-foreground/40" />

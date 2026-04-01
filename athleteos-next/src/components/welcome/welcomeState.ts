@@ -58,14 +58,14 @@ export function getWelcomeState({
       percentileSubline: `You're ahead of ${rankResult.overallPct}% of athletes in your weight class.`,
       helperLine: 'Based on real performance data from athletes like you.',
       bridgeLine: 'Want to move up?',
-      primaryCtaLabel: 'Share My Card',
+      primaryCtaLabel: 'Share My Rank',
       secondaryCtaLabel: 'See What Moves Me Higher',
       tierLabel,
       invitesRemaining,
       progressPercent,
       referralHint: invitesRemaining > 0 ? `${invitesRemaining} more invite${invitesRemaining === 1 ? '' : 's'} to unlock Elite` : 'Elite tier unlocked',
       momentumLine: `${totalFounders} athletes already joined.`,
-      shareMessage: `I just got into AthleteOS early. I'm in the top ${topPercent}%. Check yours 👇`,
+      shareMessage: `Top ${topPercent}% of competitive strength athletes. Founding Member #${founder.num} — check where you stand: athleteos.io`,
     }
   }
 

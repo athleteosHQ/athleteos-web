@@ -49,6 +49,10 @@ export default function LandingV2() {
         <SignupGateSection overallPct={rankResult?.overallPct ?? null} />
         <SystemSection />
         <ProblemSection />
+        <div className="py-10 text-center px-6">
+          <p className="text-sm text-muted-foreground">Athletes are already joining. The founding cohort won&apos;t stay open.</p>
+          <a href="#inline-signup-gate" className="mt-2 inline-block font-mono-label text-accent hover:text-accent-light transition">Reserve My Diagnosis →</a>
+        </div>
         <TrustStrip />
         <FAQSection />
       </main>

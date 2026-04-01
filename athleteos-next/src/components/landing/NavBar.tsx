@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { trackEvent } from '@/lib/analytics'
+import { useMotionSafe } from '@/lib/motion'
 
 const NAV_LINKS = [
   { label: 'Rank', href: '#rank' },
@@ -12,6 +14,7 @@ const NAV_LINKS = [
 
 export function NavBar() {
   const [scrolled, setScrolled] = useState(false)
+  const { reduced } = useMotionSafe()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -37,18 +40,81 @@ export function NavBar() {
 
         {/* ── Logo + wordmark ── */}
         <Link href="/" className="group flex items-center gap-2.5">
-          <div
+          <motion.div
             className="relative flex h-7 w-7 items-center justify-center"
-            style={{ flexShrink: 0 }}
+            style={{ flexShrink: 0, perspective: 160 }}
+            initial={false}
+            animate={reduced ? undefined : { rotateX: 0, rotateY: 0, scale: 1 }}
+            whileHover={
+              reduced
+                ? undefined
+                : {
+                    rotateX: -8,
+                    rotateY: 10,
+                    scale: 1.035,
+                  }
+            }
+            transition={{ type: 'spring', stiffness: 260, damping: 20, mass: 0.7 }}
           >
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-              <circle cx="14" cy="14" r="10" stroke="var(--accent)" strokeWidth="1.2" opacity="0.25" />
-              <circle cx="14" cy="14" r="4.5" fill="var(--accent)" />
-              <circle cx="14" cy="4" r="1.8" fill="var(--accent)" opacity="0.6" />
-              <circle cx="22" cy="19" r="1.4" fill="var(--accent)" opacity="0.4" />
-              <circle cx="6" cy="19" r="1.1" fill="var(--accent)" opacity="0.3" />
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" className="aos-logo" style={{ transformStyle: 'preserve-3d' }}>
+              {/* Interpreting core */}
+              <motion.circle
+                cx="14"
+                cy="14"
+                r="6.1"
+                fill="var(--accent)"
+                opacity="0.12"
+                animate={reduced ? undefined : { opacity: [0.09, 0.18, 0.09], scale: [1, 1.08, 1] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ transformOrigin: '14px 14px' }}
+              />
+              <motion.circle
+                cx="14"
+                cy="14"
+                r="4.5"
+                fill="var(--accent)"
+                animate={reduced ? undefined : { scale: [1, 1.045, 1] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ transformOrigin: '14px 14px' }}
+              />
+              {/* Three linked input streams */}
+              <path d="M14 4 A10 10 0 0 1 22.1 8.2" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" opacity="0.28" />
+              <path d="M23 18.5 A10 10 0 0 1 14.8 24" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" opacity="0.24" />
+              <path d="M5.7 18.8 A10 10 0 0 1 7.8 8.5" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" opacity="0.2" />
+              {/* Inward routing ticks */}
+              <path d="M19.1 9.3 L16.55 11.6" stroke="var(--accent)" strokeWidth="1.35" strokeLinecap="round" opacity="0.34" />
+              <path d="M18.55 19.2 L16.15 17.2" stroke="var(--accent)" strokeWidth="1.35" strokeLinecap="round" opacity="0.3" />
+              <path d="M9.1 19 L11.45 17.05" stroke="var(--accent)" strokeWidth="1.35" strokeLinecap="round" opacity="0.26" />
+              {/* Input nodes */}
+              <motion.circle
+                cx="14"
+                cy="4"
+                r="1.8"
+                fill="var(--accent)"
+                opacity="0.6"
+                animate={reduced ? undefined : { y: [0, -0.45, 0], opacity: [0.56, 0.72, 0.56] }}
+                transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <motion.circle
+                cx="22"
+                cy="19"
+                r="1.4"
+                fill="var(--accent)"
+                opacity="0.4"
+                animate={reduced ? undefined : { x: [0, 0.3, 0], y: [0, 0.22, 0], opacity: [0.36, 0.5, 0.36] }}
+                transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }}
+              />
+              <motion.circle
+                cx="6"
+                cy="19"
+                r="1.1"
+                fill="var(--accent)"
+                opacity="0.3"
+                animate={reduced ? undefined : { x: [0, -0.24, 0], y: [0, 0.18, 0], opacity: [0.28, 0.4, 0.28] }}
+                transition={{ duration: 3.7, repeat: Infinity, ease: 'easeInOut', delay: 0.45 }}
+              />
             </svg>
-          </div>
+          </motion.div>
           <span
             className="text-[15px] font-extrabold tracking-tight"
             style={{ fontFamily: 'var(--font-jakarta)', letterSpacing: '-0.03em' }}

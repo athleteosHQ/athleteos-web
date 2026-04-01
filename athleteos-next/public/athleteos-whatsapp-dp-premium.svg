@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <!-- Deep background with warmth at center -->
+    <radialGradient id="bg" cx="50%" cy="45%" r="55%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#12121A"/>
+      <stop offset="50%" stop-color="#0C0C0E"/>
+      <stop offset="100%" stop-color="#070709"/>
+    </radialGradient>
+
+    <!-- Accent atmosphere -->
+    <radialGradient id="glow" cx="50%" cy="48%" r="28%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#6B7AED" stop-opacity="0.22"/>
+      <stop offset="50%" stop-color="#6B7AED" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#6B7AED" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Core inner glow -->
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#8B9AFF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#6B7AED" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Soft blur for glow effects -->
+    <filter id="softGlow">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+    </filter>
+    <filter id="nodeGlow">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="512" cy="512" r="512" fill="url(#bg)"/>
+
+  <!-- Ambient accent atmosphere -->
+  <circle cx="512" cy="490" r="320" fill="url(#glow)"/>
+
+  <!-- Orbit ring — barely visible full circle for structure -->
+  <circle cx="512" cy="512" r="220" stroke="#6B7AED" stroke-width="1.5" fill="none" opacity="0.1"/>
+
+  <!-- Three orbit arc segments — glow layer -->
+  <path d="M512 292 A220 220 0 0 1 702 402" stroke="#6B7AED" stroke-width="22" stroke-linecap="round" fill="none" opacity="0.15" filter="url(#softGlow)"/>
+  <path d="M724 618 A220 220 0 0 1 530 732" stroke="#6B7AED" stroke-width="22" stroke-linecap="round" fill="none" opacity="0.12" filter="url(#softGlow)"/>
+  <path d="M310 625 A220 220 0 0 1 330 395" stroke="#6B7AED" stroke-width="22" stroke-linecap="round" fill="none" opacity="0.1" filter="url(#softGlow)"/>
+
+  <!-- Three orbit arc segments — crisp layer -->
+  <path d="M512 292 A220 220 0 0 1 702 402" stroke="#7B8BF6" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"/>
+  <path d="M724 618 A220 220 0 0 1 530 732" stroke="#7384EE" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.45"/>
+  <path d="M310 625 A220 220 0 0 1 330 395" stroke="#6E7DE7" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.38"/>
+
+  <!-- Inward routing ticks — data flowing to core -->
+  <line x1="665" y1="380" x2="590" y2="445" stroke="#8B9AFF" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <line x1="658" y1="645" x2="585" y2="585" stroke="#8492FF" stroke-width="3" stroke-linecap="round" opacity="0.35"/>
+  <line x1="350" y1="620" x2="430" y2="565" stroke="#7D8CFA" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- Core glow (behind) -->
+  <circle cx="512" cy="512" r="90" fill="url(#coreGlow)" filter="url(#nodeGlow)"/>
+
+  <!-- Core outer ring -->
+  <circle cx="512" cy="512" r="72" fill="#6B7AED" opacity="0.1"/>
+
+  <!-- Core solid -->
+  <circle cx="512" cy="512" r="56" fill="#6B7AED"/>
+
+  <!-- Core highlight — top-left light catch -->
+  <ellipse cx="498" cy="500" rx="22" ry="16" fill="white" opacity="0.1"/>
+
+  <!-- Satellite nodes with glow -->
+  <!-- Top node (largest — training) -->
+  <circle cx="512" cy="292" r="26" fill="#6B7AED" opacity="0.2" filter="url(#nodeGlow)"/>
+  <circle cx="512" cy="292" r="18" fill="#8B9AFF"/>
+
+  <!-- Right node (nutrition) -->
+  <circle cx="724" cy="632" r="20" fill="#6B7AED" opacity="0.15" filter="url(#nodeGlow)"/>
+  <circle cx="724" cy="632" r="14" fill="#7B8BF6" opacity="0.85"/>
+
+  <!-- Left node (recovery) -->
+  <circle cx="310" cy="612" r="16" fill="#6B7AED" opacity="0.12" filter="url(#nodeGlow)"/>
+  <circle cx="310" cy="612" r="11" fill="#7384EE" opacity="0.7"/>
+</svg>

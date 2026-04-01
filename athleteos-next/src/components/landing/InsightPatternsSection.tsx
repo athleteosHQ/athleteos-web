@@ -69,10 +69,11 @@ export function InsightPatternsSection() {
         >
           <a
             href="#sample-outcome"
-            className="font-mono-label text-accent hover:text-accent-light transition"
+            className="inline-flex items-center gap-2 font-mono-label text-accent hover:text-accent-light transition"
             onClick={() => trackEvent('cta_clicked', { cta_source: 'insight_patterns', cta_text: 'See it in action', has_rank_result: false })}
           >
-            See it in action ↓
+            See it in action
+            <span className="animate-bounce">↓</span>
           </a>
         </motion.div>
       </div>

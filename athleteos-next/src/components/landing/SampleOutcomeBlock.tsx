@@ -74,72 +74,67 @@ export function SampleOutcomeBlock() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]"
         >
-          <div className="surface-card p-6 sm:p-8">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="surface-card p-4 sm:p-6 md:p-8">
+            <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="font-mono-label text-muted-foreground mb-2">Athlete profile</p>
-                <h3 className="text-2xl font-display font-bold text-foreground">85kg lifter · 3 years training</h3>
-                <p className="mt-2 text-sm text-muted-foreground">Intermediate-advanced strength athlete stuck outside elite tier.</p>
+                <p className="font-mono-label text-muted-foreground mb-1.5">Athlete profile</p>
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-foreground">85kg lifter · 3 yrs training</h3>
               </div>
-              <div className="status-pill">
+              <div className="status-pill shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-glow" />
-                <span className="font-mono-label text-muted-foreground">Live simulation</span>
+                <span className="font-mono-label text-muted-foreground">Live</span>
               </div>
             </div>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl p-5" style={{ background: 'rgba(0,217,255,0.04)', border: '1px solid rgba(0,217,255,0.10)' }}>
-                <p className="font-mono-label text-accent-light/70 mb-2">Current rank</p>
-                <p className="font-mono text-4xl font-bold text-foreground">TOP 23%</p>
-                <p className="mt-2 text-sm text-muted-foreground">within our competitive Indian strength-athlete benchmark</p>
-                <p className="mt-2 text-sm text-muted-foreground">Squat top 31% · Bench top 22% · Deadlift top 14%</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(0,217,255,0.04)', border: '1px solid rgba(0,217,255,0.10)' }}>
+                <p className="font-mono-label text-accent-light/70 mb-1.5">Current rank</p>
+                <p className="font-mono text-2xl sm:text-3xl font-bold text-foreground">TOP 23%</p>
+                <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">Squat 31% · Bench 22% · Deadlift 14%</p>
               </div>
-              <div className="rounded-2xl p-5" style={{ background: 'rgba(245,158,11,0.04)', border: '1px solid rgba(245,158,11,0.10)' }}>
-                <p className="font-mono-label text-warning mb-2">Primary limiter</p>
-                <p className="text-xl font-bold text-foreground">Nutrition timing inverted</p>
-                <p className="mt-2 text-sm text-muted-foreground">89% confidence · protein surplus during deload, deficit during accumulation — 3 consecutive blocks</p>
+              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(245,158,11,0.04)', border: '1px solid rgba(245,158,11,0.10)' }}>
+                <p className="font-mono-label text-warning mb-1.5">Primary limiter</p>
+                <p className="text-base sm:text-lg font-bold text-foreground">Nutrition timing inverted</p>
+                <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">89% confidence · protein surplus during deload, deficit during accumulation</p>
               </div>
             </div>
 
-            <div className="mt-5 rounded-2xl p-5" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
-              <p className="font-mono-label text-muted-foreground mb-2">What athleteOS would tell you</p>
-              <p className="text-base font-semibold text-foreground leading-relaxed">
-                Shift 40g protein from rest days to heavy squat days. Your deadlift:squat ratio (1.08) shows posterior chain is compensating — redistribute volume after the nutrition fix lands.
+            <div className="mt-3 rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
+              <p className="font-mono-label text-muted-foreground mb-1.5">What athleteOS would tell you</p>
+              <p className="text-sm sm:text-base font-semibold text-foreground leading-relaxed">
+                Shift 40g protein from rest days to heavy squat days. DL:squat ratio (1.08) shows posterior chain compensating — redistribute volume after nutrition fix.
               </p>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Projected upside: +8.2kg squat 1RM in 6 weeks. That becomes the next progress marker to track.
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
+                Projected: +8.2kg squat 1RM in 6 weeks.
               </p>
             </div>
           </div>
 
-          <div className="surface-card-muted p-6 sm:p-8">
-            <p className="font-mono-label text-accent mb-4">Outcome chain</p>
-            <div className="space-y-3">
+          <div className="surface-card-muted p-4 sm:p-6 md:p-8">
+            <p className="font-mono-label text-accent mb-3">Outcome chain</p>
+            <div className="space-y-2.5">
               {OUTCOME_ROWS.map(({ key, label, value, sub, color, bg, border, Icon }, i) => (
                 <motion.div
                   key={key}
-                  className="rounded-2xl p-4"
+                  className="rounded-xl p-3 sm:p-4"
                   style={{ background: bg, border: `1px solid ${border}` }}
                   initial={{ opacity: 0, x: -8 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.35, delay: 0.08 + i * 0.06 }}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-2.5">
-                      <div
-                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
-                        style={{ background: `${color}15`, border: `1px solid ${color}30` }}
-                      >
-                        <Icon size={14} style={{ color }} />
-                      </div>
-                      <div>
-                        <p className="font-mono-label text-muted-foreground/70">{label}</p>
-                      </div>
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-lg"
+                      style={{ background: `${color}15`, border: `1px solid ${color}30` }}
+                    >
+                      <Icon size={12} className="sm:hidden" style={{ color }} />
+                      <Icon size={14} className="hidden sm:block" style={{ color }} />
                     </div>
+                    <p className="font-mono-label text-muted-foreground/70">{label}</p>
                   </div>
-                  <p className="mt-2.5 text-base font-bold text-foreground">{value}</p>
-                  <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{sub}</p>
+                  <p className="mt-2 text-sm sm:text-base font-bold text-foreground">{value}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-muted-foreground leading-relaxed">{sub}</p>
                 </motion.div>
               ))}
             </div>

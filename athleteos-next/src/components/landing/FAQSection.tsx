@@ -36,8 +36,8 @@ const FAQS: FAQ[] = [
     q: 'What does founding membership cost?',
     a: (
       <>
-        <span>Founding members lock in the lowest price athleteOS will ever offer. No payment is required to reserve your spot — you pay only when the product activates.</span>
-        <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>Join now, pay later. Your founding rate is locked forever.</span>
+        <span>Founding members lock in ₹2,999/year (₹250/month) — 58% off the regular ₹599/month. Only 50 spots. No payment is required now — you pay only when the product activates.</span>
+        <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>Your founding rate is locked forever. When pricing goes up, yours stays.</span>
       </>
     ),
   },
@@ -71,7 +71,7 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
       >
         <span className="text-base font-semibold text-foreground leading-snug">{faq.q}</span>
         <span
-          className="flex-shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+          className="flex-shrink-0 mt-0.5 w-9 h-9 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors"
           style={{ background: isOpen ? 'rgba(94,106,210,0.14)' : 'rgba(255,255,255,0.06)' }}
         >
           {isOpen

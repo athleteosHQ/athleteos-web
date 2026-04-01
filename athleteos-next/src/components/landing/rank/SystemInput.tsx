@@ -51,9 +51,9 @@ export function LiftRow({ label, weightVal, repsVal, onWeight, onReps, onWeightF
   onWeightFocus?: () => void; onRepsFocus?: () => void
 }) {
   return (
-    <div className="grid grid-cols-[80px_1fr_72px] items-center gap-2">
+    <div className="grid grid-cols-[56px_1fr_56px] sm:grid-cols-[80px_1fr_72px] items-center gap-2">
       <p className="font-mono-label text-muted-foreground">{label}</p>
-      <GlassInput placeholder="kg (1 set)" value={weightVal} onChange={onWeight} min={0} step={0.5} label={`${label} weight for one set`} onFocus={onWeightFocus} />
+      <GlassInput placeholder="kg" value={weightVal} onChange={onWeight} min={0} step={0.5} label={`${label} weight for one set`} onFocus={onWeightFocus} />
       <GlassInput placeholder="reps" value={repsVal} onChange={onReps} min={1} max={30} label={`${label} reps in one set`} onFocus={onRepsFocus} />
     </div>
   )

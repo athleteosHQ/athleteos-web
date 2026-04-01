@@ -37,7 +37,11 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: radial-gradient(ellipse 50% 40% at 50% 0%, rgba(107,122,237,0.04), transparent), #0C0C0E;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(107,122,237,0.07), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 60%, rgba(45,220,143,0.025), transparent 70%),
+    radial-gradient(ellipse 35% 25% at 15% 80%, rgba(107,122,237,0.03), transparent 70%),
+    #0C0C0E;
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -92,16 +96,16 @@ body {
 
 /* ── Gate panel (signup gate, accent-tinted) ─────────────────── */
 .gate-panel {
-  background: #131315;
+  background: linear-gradient(180deg, #141418, #131315);
   border: 1px solid rgba(107,122,237,0.18);
   border-top: 1px solid rgba(107,122,237,0.25);
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 0 60px rgba(107,122,237,0.04);
 }
 
 /* ── Hero gradient word ──────────────────────────────────────── */
 .hero-gradient-word {
-  background: linear-gradient(135deg, #5E6AD2 0%, #8B93E0 50%, #2DDC8F 100%);
+  background: linear-gradient(135deg, #6B7AED 0%, #A78BFA 35%, #8B93E0 55%, #2DDC8F 85%, #34D399 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -193,6 +197,11 @@ body {
 .bg-secondary          { background: var(--secondary); }
 .bg-accent             { background: var(--accent); }
 .bg-accent-light       { background: var(--accent-light); }
+
+/* ── Accent glow for primary CTAs ──────────────────────────── */
+.bg-accent:hover {
+  box-shadow: 0 4px 20px rgba(107,122,237,0.3), 0 0 40px rgba(107,122,237,0.1);
+}
 .bg-success            { background: var(--success); }
 .bg-warning            { background: var(--warning); }
 .bg-destructive        { background: var(--destructive); }

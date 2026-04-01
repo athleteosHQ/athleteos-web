@@ -20,11 +20,11 @@ interface RankFormProps {
 
 export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error, onFieldFocus }: RankFormProps) {
   return (
-    <div className="surface-card p-6 sm:p-8">
+    <div className="surface-card p-4 sm:p-6 md:p-8">
       <div className="space-y-4">
-        <div className="grid grid-cols-[80px_1fr_72px] items-center gap-2">
+        <div className="grid grid-cols-[56px_1fr_56px] sm:grid-cols-[80px_1fr_72px] items-center gap-2">
           <p className="font-mono-label text-muted-foreground">BW</p>
-          <div className="col-span-2 w-36">
+          <div className="col-span-2 w-28 sm:w-36">
             <GlassInput
               id="rank-bw-input"
               placeholder="kg"
@@ -44,7 +44,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
         ) : null}
         <LiftRow label="Deadlift" weightVal={f.dlW} repsVal={f.dlR} onWeight={upd('dlW')} onReps={upd('dlR')} onWeightFocus={() => onFieldFocus?.('dlW')} onRepsFocus={() => onFieldFocus?.('dlR')} />
         {mode === 'hybrid' && (
-          <div className="grid grid-cols-[80px_1fr_72px] items-center gap-2">
+          <div className="grid grid-cols-[56px_1fr_56px] sm:grid-cols-[80px_1fr_72px] items-center gap-2">
             <p className="font-mono-label text-muted-foreground">5K Run</p>
             <GlassInput placeholder="min" value={f.runMin} onChange={upd('runMin')} min={12} max={60} label="5K minutes" onFocus={() => onFieldFocus?.('runMin')} />
             <GlassInput placeholder="sec" value={f.runSec} onChange={upd('runSec')} min={0} max={59} label="5K seconds" onFocus={() => onFieldFocus?.('runSec')} />
@@ -65,7 +65,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
         See My Rank
         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </button>
-      <p className="mt-2 text-center font-mono text-[11px] text-muted-foreground/60">vs. 3,200+ competitive strength athletes</p>
+      <p className="mt-2 text-center font-mono text-xs text-muted-foreground/60">vs. 3,200+ competitive strength athletes</p>
     </div>
   )
 }

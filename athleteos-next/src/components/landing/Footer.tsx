@@ -15,8 +15,13 @@ export function Footer() {
           </a>
         </div>
         <nav className="flex flex-wrap gap-4 text-xs text-muted-foreground">
-          {['Problem', 'System', 'Rank', 'Waitlist'].map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} className="py-2 px-1 transition hover:text-foreground">{l}</a>
+          {[
+            { label: 'Problem', href: '#problem' },
+            { label: 'System', href: '#system' },
+            { label: 'Rank', href: '#rank' },
+            { label: 'Join', href: '#inline-signup-gate' },
+          ].map(({ label, href }) => (
+            <a key={label} href={href} className="py-2 px-1 transition hover:text-foreground">{label}</a>
           ))}
           <a href="/privacy" className="py-2 px-1 transition hover:text-foreground">Privacy</a>
           <a href="/terms" className="py-2 px-1 transition hover:text-foreground">Terms</a>

@@ -22,8 +22,8 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'athleteOS — Performance Intelligence for Serious Athletes',
-  description: 'athleteOS diagnoses why your progress stalled. Strength percentile, endurance score, recovery status — one system, one answer.',
+  title: 'athleteOS — Performance Diagnosis System',
+  description: 'AthleteOS finds the one variable holding your performance back. Training, nutrition, and recovery read as one system. Free rank check against 3,200+ competitive athletes.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

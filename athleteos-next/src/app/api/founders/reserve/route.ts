@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { sendFounderWelcomeEmail } from '@/lib/email'
 
 interface ReserveBody {
   name?: string
@@ -94,6 +95,12 @@ export async function POST(req: NextRequest) {
     const { data, error } = await insertFounderRow(currentInsertData)
 
     if (data) {
+      // Send welcome email (non-blocking — don't delay the response)
+      sendFounderWelcomeEmail({
+        to: email.trim(),
+        founderNumber: data.founder_number,
+      }).catch((err) => console.error('[reserve] email send failed:', err))
+
       return NextResponse.json({ id: data.id, founder_number: data.founder_number })
     }
 
