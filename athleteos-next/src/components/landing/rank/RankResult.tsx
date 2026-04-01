@@ -78,7 +78,7 @@ export function DiagnosticBars({ result }: { result: RankResultType }) {
               <span className="font-mono tabular-nums text-xs font-bold" style={{ color: bar.color }}>{bar.value}</span>
             </div>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
+          <div className="h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
             <SpringBar pct={bar.pct} color={bar.color} delay={0.3 + i * 0.1} />
           </div>
         </div>

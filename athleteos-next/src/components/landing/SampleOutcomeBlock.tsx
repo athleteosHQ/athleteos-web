@@ -1,44 +1,49 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { BarChart3, AlertTriangle, Wrench, TrendingUp } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics'
 
 const OUTCOME_ROWS = [
   {
     key: 'RANK_OUTPUT',
     label: 'Where you stand',
-    value: 'Top 23% of competitive Indian strength athletes',
+    value: 'Top 23% of competitive strength athletes',
     sub: 'Squat · Top 31%   Bench · Top 22%   Deadlift · Top 14%',
     color: 'var(--data-cyan, #00D9FF)',
-    bg: 'rgba(0,217,255,0.05)',
-    border: 'rgba(0,217,255,0.18)',
+    bg: 'rgba(0,217,255,0.03)',
+    border: 'rgba(0,217,255,0.10)',
+    Icon: BarChart3,
   },
   {
     key: 'BOTTLENECK_ID',
     label: 'Primary limiter',
-    value: 'Sleep-limited recovery',
-    sub: '91% confidence · avg 6.1h on training days vs 8h optimal',
+    value: 'Protein timing inverted across training phases',
+    sub: '89% confidence · surplus during deload, deficit during accumulation',
     color: '#F59E0B',
-    bg: 'rgba(245,158,11,0.05)',
-    border: 'rgba(245,158,11,0.18)',
+    bg: 'rgba(245,158,11,0.03)',
+    border: 'rgba(245,158,11,0.10)',
+    Icon: AlertTriangle,
   },
   {
     key: 'CORRECTION',
     label: 'What to fix',
-    value: '+45 min sleep on training days',
-    sub: 'Reduce AMRAP volume by 20% until recovery marker improves',
+    value: '+40g protein on heavy squat days, reduce on rest days',
+    sub: 'DL:squat ratio 1.08 → redistribute volume after nutrition fix',
     color: 'rgba(255,255,255,0.7)',
     bg: 'rgba(255,255,255,0.02)',
-    border: 'rgba(255,255,255,0.09)',
+    border: 'rgba(255,255,255,0.05)',
+    Icon: Wrench,
   },
   {
     key: 'PROJECTED_GAIN',
     label: 'Expected outcome',
-    value: '+8.2 kg squat 1RM',
-    sub: '6-week projection · based on current training frequency',
+    value: '+8.2 kg squat 1RM in 6 weeks',
+    sub: 'Based on current training frequency and corrected intake',
     color: '#2DDC8F',
-    bg: 'rgba(45,220,143,0.05)',
-    border: 'rgba(45,220,143,0.18)',
+    bg: 'rgba(45,220,143,0.03)',
+    border: 'rgba(45,220,143,0.10)',
+    Icon: TrendingUp,
   },
 ]
 
@@ -83,26 +88,26 @@ export function SampleOutcomeBlock() {
             </div>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl p-5" style={{ background: 'rgba(0,217,255,0.05)', border: '1px solid rgba(0,217,255,0.18)' }}>
+              <div className="rounded-2xl p-5" style={{ background: 'rgba(0,217,255,0.04)', border: '1px solid rgba(0,217,255,0.10)' }}>
                 <p className="font-mono-label text-accent-light/70 mb-2">Current rank</p>
                 <p className="font-mono text-4xl font-bold text-foreground">TOP 23%</p>
                 <p className="mt-2 text-sm text-muted-foreground">within our competitive Indian strength-athlete benchmark</p>
                 <p className="mt-2 text-sm text-muted-foreground">Squat top 31% · Bench top 22% · Deadlift top 14%</p>
               </div>
-              <div className="rounded-2xl p-5" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)' }}>
+              <div className="rounded-2xl p-5" style={{ background: 'rgba(245,158,11,0.04)', border: '1px solid rgba(245,158,11,0.10)' }}>
                 <p className="font-mono-label text-warning mb-2">Primary limiter</p>
-                <p className="text-xl font-bold text-foreground">Sleep-limited recovery</p>
-                <p className="mt-2 text-sm text-muted-foreground">91% confidence · avg 6.1h on training days vs 8h optimal</p>
+                <p className="text-xl font-bold text-foreground">Nutrition timing inverted</p>
+                <p className="mt-2 text-sm text-muted-foreground">89% confidence · protein surplus during deload, deficit during accumulation — 3 consecutive blocks</p>
               </div>
             </div>
 
-            <div className="mt-5 rounded-2xl p-5" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="mt-5 rounded-2xl p-5" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
               <p className="font-mono-label text-muted-foreground mb-2">What athleteOS would tell you</p>
               <p className="text-base font-semibold text-foreground leading-relaxed">
-                Add 45 minutes of sleep on training days and reduce AMRAP volume by 20% until recovery markers stabilise.
+                Shift 40g protein from rest days to heavy squat days. Your deadlift:squat ratio (1.08) shows posterior chain is compensating — redistribute volume after the nutrition fix lands.
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
-                Projected upside: +8.2kg squat 1RM in 6 weeks if recovery debt closes. That becomes the next progress marker to track.
+                Projected upside: +8.2kg squat 1RM in 6 weeks. That becomes the next progress marker to track.
               </p>
             </div>
           </div>
@@ -110,7 +115,7 @@ export function SampleOutcomeBlock() {
           <div className="surface-card-muted p-6 sm:p-8">
             <p className="font-mono-label text-accent mb-4">Outcome chain</p>
             <div className="space-y-3">
-              {OUTCOME_ROWS.map(({ key, label, value, sub, color, bg, border }, i) => (
+              {OUTCOME_ROWS.map(({ key, label, value, sub, color, bg, border, Icon }, i) => (
                 <motion.div
                   key={key}
                   className="rounded-2xl p-4"
@@ -121,14 +126,20 @@ export function SampleOutcomeBlock() {
                   transition={{ duration: 0.35, delay: 0.08 + i * 0.06 }}
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="font-mono text-[10px] font-bold" style={{ color, opacity: 0.9 }}>{key}</p>
-                      <p className="font-mono-label text-muted-foreground/70 mt-1">{label}</p>
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+                        style={{ background: `${color}15`, border: `1px solid ${color}30` }}
+                      >
+                        <Icon size={14} style={{ color }} />
+                      </div>
+                      <div>
+                        <p className="font-mono-label text-muted-foreground/70">{label}</p>
+                      </div>
                     </div>
-                    <span className="h-2 w-2 rounded-full mt-1" style={{ background: color }} />
                   </div>
-                  <p className="mt-3 text-base font-bold text-foreground">{value}</p>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{sub}</p>
+                  <p className="mt-2.5 text-base font-bold text-foreground">{value}</p>
+                  <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{sub}</p>
                 </motion.div>
               ))}
             </div>

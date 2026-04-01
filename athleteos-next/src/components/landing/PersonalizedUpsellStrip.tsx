@@ -38,22 +38,22 @@ const LOCKED_ROWS = [
     key: 'LIMITER',
     label: 'Primary limiter',
     color: '#F59E0B',
-    bg: 'rgba(245,158,11,0.05)',
-    border: 'rgba(245,158,11,0.18)',
+    bg: 'rgba(245,158,11,0.03)',
+    border: 'rgba(245,158,11,0.10)',
   },
   {
     key: 'CORRECTION',
     label: 'What to fix',
     color: 'rgba(255,255,255,0.7)',
     bg: 'rgba(255,255,255,0.02)',
-    border: 'rgba(255,255,255,0.09)',
+    border: 'rgba(255,255,255,0.05)',
   },
   {
     key: 'PROJECTED_GAIN',
     label: 'Expected outcome',
     color: '#2DDC8F',
-    bg: 'rgba(45,220,143,0.05)',
-    border: 'rgba(45,220,143,0.18)',
+    bg: 'rgba(45,220,143,0.03)',
+    border: 'rgba(45,220,143,0.10)',
   },
 ] as const
 
@@ -100,8 +100,8 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
           {...fadeUp(0.1)}
           className="rounded-2xl p-4 mb-3"
           style={{
-            background: 'rgba(0,217,255,0.05)',
-            border: '1px solid rgba(0,217,255,0.18)',
+            background: 'rgba(0,217,255,0.03)',
+            border: '1px solid rgba(0,217,255,0.10)',
           }}
         >
           <div className="flex items-start justify-between gap-3">
