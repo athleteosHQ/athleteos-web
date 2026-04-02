@@ -198,6 +198,56 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       <p className="mt-3 text-xs text-muted-foreground">
         Your rank is the first signal. Scroll down to see what the full system read would reveal.
       </p>
+
+      {/* ── Inline signup — capture at peak intent ── */}
+      <div className="mt-8 pt-6 border-t border-white/[0.06]">
+        <p className="text-sm text-foreground font-medium mb-1">
+          Unlock your full diagnosis
+        </p>
+        <p className="text-xs text-muted-foreground mb-4">
+          Training limiters, nutrition gaps, recovery patterns. ₹250/mo founding rate. No payment until launch.
+        </p>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault()
+            const form = e.currentTarget
+            const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement
+            if (!emailInput?.value) return
+            // Scroll to full signup gate with email pre-filled
+            const gate = document.getElementById('inline-signup-gate')
+            if (gate) {
+              gate.scrollIntoView({ behavior: 'smooth' })
+              // Try to pre-fill the email field in the gate
+              setTimeout(() => {
+                const gateEmail = gate.querySelector('input[type="email"]') as HTMLInputElement
+                if (gateEmail) {
+                  gateEmail.value = emailInput.value
+                  gateEmail.dispatchEvent(new Event('input', { bubbles: true }))
+                  gateEmail.focus()
+                }
+              }, 600)
+            }
+          }}
+          className="flex gap-2"
+        >
+          <input
+            type="email"
+            placeholder="your@email.com"
+            required
+            className="flex-1 rounded-lg bg-white/[0.04] border border-white/[0.08] px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-white/20 transition-colors min-h-[44px]"
+          />
+          <button
+            type="submit"
+            className="shrink-0 rounded-lg px-4 py-2.5 text-sm font-bold text-white uppercase tracking-[0.02em] transition-all duration-200 hover:bg-[#fafafa] hover:text-[#09090b] min-h-[44px]"
+            style={{ background: 'linear-gradient(104deg, rgba(253,253,253,0.05) 5%, rgba(240,240,228,0.1) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}
+          >
+            Lock My Spot →
+          </button>
+        </form>
+        <p className="mt-2 text-[10px] text-muted-foreground/40">
+          No payment required. Founding rate locked forever.
+        </p>
+      </div>
     </motion.div>
   )
 }
