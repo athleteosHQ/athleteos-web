@@ -2,20 +2,20 @@
 
 /* ── Design tokens ─────────────────────────────────────────── */
 :root {
-  --background:        #0C0C0E;
-  --foreground:        #EDEDEF;
-  --muted-foreground:  #6B7280;
-  --card:              rgba(255,255,255,0.03);
+  --background:        #09090B;
+  --foreground:        #FAFAFA;
+  --muted-foreground:  #71717A;
+  --card:              #131315;
   --border:            rgba(255,255,255,0.06);
-  --secondary:         #141416;
-  --accent:            #6B7AED;
-  --accent-light:      #8DA0FF;
+  --secondary:         #1C1C1F;
   --success:           #2DDC8F;
   --warning:           #F3B24E;
   --destructive:       #EF4444;
   --font-display:      var(--font-jakarta);
   --font-mono-label:   var(--font-mono);
-  --data-cyan:         #7FCFFF;
+
+  /* Surface elevated (replaces accent for raised elements) */
+  --surface-elevated:  #1C1C1F;
 
   /* Spacing scale (8dp grid) */
   --space-xs:  4px;
@@ -38,10 +38,8 @@ html { scroll-behavior: smooth; }
 
 body {
   background:
-    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(107,122,237,0.07), transparent 70%),
-    radial-gradient(ellipse 40% 30% at 80% 60%, rgba(45,220,143,0.025), transparent 70%),
-    radial-gradient(ellipse 35% 25% at 15% 80%, rgba(107,122,237,0.03), transparent 70%),
-    #0C0C0E;
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(161,161,170,0.04), transparent 70%),
+    #09090B;
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -84,28 +82,28 @@ body {
   border-radius: 16px;
 }
 .surface-inset {
-  background: #0e0e10;
+  background: #0C0C0E;
   border: 1px solid rgba(255,255,255,0.03);
   border-radius: 12px;
 }
 .surface-control {
-  background: #141416;
+  background: #1C1C1F;
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 8px;
 }
 
 /* ── Gate panel (signup gate, accent-tinted) ─────────────────── */
 .gate-panel {
-  background: linear-gradient(180deg, #141418, #131315);
-  border: 1px solid rgba(107,122,237,0.18);
-  border-top: 1px solid rgba(107,122,237,0.25);
+  background: linear-gradient(180deg, #141418, #111113);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(255,255,255,0.12);
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 0 60px rgba(107,122,237,0.04);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
 }
 
 /* ── Hero gradient word ──────────────────────────────────────── */
 .hero-gradient-word {
-  background: linear-gradient(135deg, #6B7AED 0%, #A78BFA 35%, #8B93E0 55%, #2DDC8F 85%, #34D399 100%);
+  background: linear-gradient(180deg, #fff 20%, #a1a1aa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -118,7 +116,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(105deg, transparent 35%, rgba(94,106,210,0.1) 50%, transparent 65%);
+  background: linear-gradient(105deg, transparent 35%, rgba(161,161,170,0.06) 50%, transparent 65%);
   transform: translateX(-120%) skewX(-12deg);
   animation: peekSweep 4s ease-in-out infinite;
   pointer-events: none;
@@ -141,7 +139,7 @@ body {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent) 30%, var(--accent) 70%, transparent);
+  background: linear-gradient(90deg, transparent, rgba(161,161,170,0.5) 30%, rgba(161,161,170,0.5) 70%, transparent);
   opacity: 0.25;
   transform: scaleX(0);
   transform-origin: left;
@@ -156,6 +154,22 @@ body {
     transform: scaleX(1);
     transition: none;
   }
+}
+
+/* ── Section divider (Resend-style gradient line) ────────── */
+.section-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  position: relative;
+}
+.section-divider::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(161,161,170,0.4), transparent);
 }
 
 /* ── System input ────────────────────────────────────────────── */
@@ -177,8 +191,8 @@ body {
 }
 .system-input:focus-visible {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(107,122,237,0.2), 0 0 12px rgba(107,122,237,0.08);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.08), 0 0 12px rgba(255,255,255,0.04);
 }
 .system-input[aria-invalid="true"],
 .system-input.input-error {
@@ -203,26 +217,45 @@ body {
 /* ── Semantic color utilities ────────────────────────────────── */
 .text-foreground       { color: var(--foreground); }
 .text-muted-foreground { color: var(--muted-foreground); }
-.text-accent           { color: var(--accent); }
-.text-accent-light     { color: var(--accent-light); }
+
+/* Monochrome action utilities (replace accent) */
+.text-accent           { color: #FAFAFA; }
+.text-accent-light     { color: #a1a1aa; }
+.bg-accent             { background: linear-gradient(104deg, rgba(253,253,253,0.05) 5%, rgba(240,240,228,0.1) 100%); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(12px); }
+.bg-accent:hover       { background: #fafafa; color: #09090b; box-shadow: none; }
+.bg-accent-light       { background: rgba(255,255,255,0.08); }
+.hover\:bg-accent-light:hover { background: #fafafa; color: #09090b; }
+
 .text-success          { color: var(--success); }
 .text-warning          { color: var(--warning); }
 .text-destructive      { color: var(--destructive); }
 .bg-background         { background: var(--background); }
 .bg-card               { background: var(--card); }
 .bg-secondary          { background: var(--secondary); }
-.bg-accent             { background: var(--accent); }
-.bg-accent-light       { background: var(--accent-light); }
-
-/* ── Accent glow for primary CTAs ──────────────────────────── */
-.bg-accent:hover {
-  box-shadow: 0 4px 20px rgba(107,122,237,0.3), 0 0 40px rgba(107,122,237,0.1);
-}
 .bg-success            { background: var(--success); }
 .bg-warning            { background: var(--warning); }
 .bg-destructive        { background: var(--destructive); }
 .border-border         { border-color: var(--border); }
-.hover\:bg-accent-light:hover { background: var(--accent-light); }
+
+/* ── Button variants ─────────────────────────────────────── */
+.btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #a1a1aa;
+  border-radius: 10px;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: #fafafa;
+}
+.btn-ghost {
+  background: none;
+  border: none;
+  color: #a1a1aa;
+  transition: color 200ms ease;
+}
+.btn-ghost:hover { color: #fafafa; }
 
 /* ── Inputs — no spin buttons ───────────────────────────────── */
 input[type=number]::-webkit-outer-spin-button,
@@ -232,17 +265,16 @@ input[type=number] { -moz-appearance: textfield; }
 /* ── Scrollbar ───────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--background); }
-::-webkit-scrollbar-thumb { background: rgba(94,106,210,0.18); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
 /* ── Focus states ──────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid rgba(255,255,255,0.3);
   outline-offset: 2px;
 }
-
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid rgba(255,255,255,0.3);
   outline-offset: 2px;
   border-radius: 4px;
 }
