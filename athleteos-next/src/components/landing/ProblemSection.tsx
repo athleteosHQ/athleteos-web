@@ -104,11 +104,11 @@ export function ProblemSection() {
 
           {/* 2. The Bridge/Transition */}
           <div className="flex flex-col items-center gap-4 py-4">
-            <div className="h-12 w-px bg-gradient-to-b from-transparent via-accent/50 to-accent" />
-            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center shadow-[0_0_20px_rgba(107,122,237,0.5)]">
+            <div className="h-12 w-px bg-gradient-to-b from-transparent via-white/20 to-white/40" />
+            <div className="w-8 h-8 rounded-full bg-white/[0.15] flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.1)]">
               <Zap size={14} className="text-white fill-white" />
             </div>
-            <div className="h-12 w-px bg-gradient-to-t from-transparent via-accent/50 to-accent" />
+            <div className="h-12 w-px bg-gradient-to-t from-transparent via-white/20 to-white/40" />
           </div>
 
           {/* 3. Unified Side */}
@@ -118,7 +118,7 @@ export function ProblemSection() {
               initial={{ scale: 0.95, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              className="surface-card p-8 border-accent/30 bg-accent/[0.02] shadow-[0_0_40px_rgba(107,122,237,0.05)] relative overflow-hidden"
+              className="surface-card p-8 border-white/10 bg-white/[0.02] shadow-[0_0_40px_rgba(255,255,255,0.03)] relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-4 opacity-5">
                 <Activity size={80} className="text-accent" />

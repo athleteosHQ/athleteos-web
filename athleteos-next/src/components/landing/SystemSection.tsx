@@ -99,7 +99,7 @@ export function SystemSection() {
             </div>
 
             {/* Step 2: The Core */}
-            <div className="flex-shrink-0 w-32 h-32 rounded-full bg-accent/10 border border-accent/20 flex flex-col items-center justify-center relative shadow-[0_0_30px_rgba(107,122,237,0.05)] group">
+            <div className="flex-shrink-0 w-32 h-32 rounded-full bg-white/[0.04] border border-white/10 flex flex-col items-center justify-center relative shadow-[0_0_30px_rgba(255,255,255,0.03)] group">
               <Zap size={32} className="text-white fill-white mb-1" />
               <p className="font-mono-label text-[10px] text-accent font-bold">Signal Fusion</p>
             </div>
