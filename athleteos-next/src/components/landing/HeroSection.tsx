@@ -120,22 +120,22 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
         >
           <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 backdrop-blur-none" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
-            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-4">Sample diagnosis</p>
+            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-4">What the system reads</p>
             <div className="space-y-3">
-              <div>
-                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/40 mb-1">Limiter detected</p>
-                <p className="text-sm text-foreground font-medium">Protein timing misaligned with training window</p>
+              <div className="flex items-start gap-3">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/30 shrink-0" />
+                <p className="text-[13px] text-foreground/80">Your nutrition, training, and recovery — connected</p>
               </div>
-              <div className="h-px bg-white/[0.06]" />
-              <div>
-                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/40 mb-1">Correction</p>
-                <p className="text-sm text-foreground font-medium">Shift 40g post-training intake to within 90 min</p>
+              <div className="flex items-start gap-3">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/30 shrink-0" />
+                <p className="text-[13px] text-foreground/80">The one thing actually stalling your progress</p>
               </div>
-              <div className="h-px bg-white/[0.06]" />
-              <div>
-                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/40 mb-1">Projected outcome</p>
-                <p className="text-sm text-foreground font-medium">+2.5kg bench in 4 weeks</p>
+              <div className="flex items-start gap-3">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/30 shrink-0" />
+                <p className="text-[13px] text-foreground/80">A specific correction — and whether it worked</p>
               </div>
+              <div className="h-px bg-white/[0.06] my-1" />
+              <p className="text-[11px] text-muted-foreground/50 text-center">Built to make you competition-ready. Not just tracked.</p>
             </div>
           </div>
         </motion.div>
