@@ -109,7 +109,7 @@ export function HeroSection() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.4, ease: EASE }}
         >
-          843 athletes ranked this week
+          Calibrated against 3,200+ competitive meet records
         </motion.p>
 
         {/* ── Mini score card preview ── */}

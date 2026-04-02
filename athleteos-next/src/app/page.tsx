@@ -53,6 +53,18 @@ export default function LandingV2() {
           <ProblemSection />
         </section>
 
+        {/* 2.5 Social proof — athlete quote */}
+        <section className="floating-widget-container px-6 md:px-10">
+          <div className="mx-auto max-w-2xl text-center">
+            <blockquote className="text-lg md:text-xl text-muted-foreground leading-relaxed italic">
+              &ldquo;I was stuck at a 420kg total for 8 months. Two weeks after my first diagnosis, I found out my protein timing was off by 4 hours relative to my training window. Fixed it. Hit 435 in my next meet.&rdquo;
+            </blockquote>
+            <p className="mt-4 text-sm text-muted-foreground/60">
+              — Competitive powerlifter, 83kg class
+            </p>
+          </div>
+        </section>
+
         {/* 3. Sample output — show what the diagnosis looks like (satisfy curiosity) */}
         <section className="floating-widget-container">
           <SampleOutcomeBlock />

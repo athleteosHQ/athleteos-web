@@ -7,6 +7,8 @@ import type { RankResult as RankResultType } from '@/lib/rankCalc'
 import { getFirstReadDiagnosis } from '../firstReadDiagnosis'
 import { getRankResultMessaging } from '../rankResultMessaging'
 import { EASE_OUT, DURATION } from '@/lib/motion'
+import { insertFounder } from '@/lib/supabase'
+import { trackEvent, identifyUser } from '@/lib/analytics'
 
 // ── Spring-driven bar ─────────────────────────────────────────────────────
 function SpringBar({ pct, color, delay }: { pct: number; color: string; delay: number }) {
@@ -212,20 +214,24 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
             e.preventDefault()
             const form = e.currentTarget
             const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement
-            if (!emailInput?.value) return
-            // Scroll to full signup gate with email pre-filled
-            const gate = document.getElementById('inline-signup-gate')
-            if (gate) {
-              gate.scrollIntoView({ behavior: 'smooth' })
-              // Try to pre-fill the email field in the gate
-              setTimeout(() => {
-                const gateEmail = gate.querySelector('input[type="email"]') as HTMLInputElement
-                if (gateEmail) {
-                  gateEmail.value = emailInput.value
-                  gateEmail.dispatchEvent(new Event('input', { bubbles: true }))
-                  gateEmail.focus()
-                }
-              }, 600)
+            const email = emailInput?.value?.trim()
+            if (!email) return
+
+            const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement
+            if (btn) { btn.disabled = true; btn.textContent = 'Locking...' }
+
+            try {
+              const { error } = await insertFounder({ email, whatsapp: '', source: 'inline_rank_result' })
+              if (error) {
+                if (btn) { btn.disabled = false; btn.textContent = 'Lock My Spot \u2192' }
+                return
+              }
+              trackEvent('signup_conversion', { source: 'inline_rank_result', email })
+              identifyUser(email)
+              if (btn) { btn.textContent = '\u2713 Locked' }
+              localStorage.setItem('aos_founder_data', JSON.stringify({ email, ts: Date.now() }))
+            } catch {
+              if (btn) { btn.disabled = false; btn.textContent = 'Lock My Spot \u2192' }
             }
           }}
           className="flex gap-2"
@@ -241,7 +247,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
             className="shrink-0 rounded-lg px-4 py-2.5 text-sm font-bold text-white uppercase tracking-[0.02em] transition-all duration-200 hover:bg-[#fafafa] hover:text-[#09090b] min-h-[44px]"
             style={{ background: 'linear-gradient(104deg, rgba(253,253,253,0.05) 5%, rgba(240,240,228,0.1) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}
           >
-            Lock My Spot →
+            Lock My Spot &rarr;
           </button>
         </form>
         <p className="mt-2 text-[10px] text-muted-foreground/40">
