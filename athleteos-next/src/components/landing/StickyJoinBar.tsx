@@ -42,15 +42,15 @@ export function StickyJoinBar() {
           }}
         >
           <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <p className="hidden text-sm text-muted-foreground sm:block">Join founding members — reserve your full diagnosis</p>
+            <p className="hidden text-sm text-muted-foreground sm:block">₹250/mo founding rate — limited to 50 athletes</p>
             <a
               href="#inline-signup-gate"
               className="ml-auto cursor-pointer rounded-md bg-accent px-4 py-2.5 min-h-[44px] text-sm font-bold text-white transition-all hover:bg-accent-light"
               style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
-              onClick={() => trackEvent('cta_clicked', { cta_source: 'sticky_bar', cta_text: 'Reserve My Diagnosis', has_rank_result: false })}
+              onClick={() => trackEvent('cta_clicked', { cta_source: 'sticky_bar', cta_text: 'LOCK IN CORRECTION PATH', has_rank_result: false })}
             >
-              <span className="sm:hidden">Reserve →</span>
-              <span className="hidden sm:inline">Reserve My Diagnosis</span>
+              <span className="sm:hidden">LOCK IN →</span>
+              <span className="hidden sm:inline">LOCK IN CORRECTION PATH</span>
             </a>
           </div>
         </motion.div>
