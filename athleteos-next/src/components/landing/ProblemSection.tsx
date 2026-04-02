@@ -48,12 +48,14 @@ export function ProblemSection() {
         </div>
 
         <div className="mb-12 text-center relative z-10">
-          <p className="font-mono-label text-accent mb-3">The Diagnostic Gap</p>
+          <p className="font-mono-label text-[#a1a1aa] mb-3">The Diagnostic Gap</p>
           <motion.h2
             {...clipReveal()}
-            className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4"
+            className="text-3xl md:text-5xl font-display font-semibold tracking-[-0.02em] leading-[1.2] text-foreground mb-4"
           >
-            Your apps see numbers.<br className="hidden md:block" /> They don&apos;t see the stall.
+            <span style={{ background: 'linear-gradient(180deg, #ededed 0%, #a1a1a1 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Your apps see numbers.<br className="hidden md:block" /> They don&apos;t see the stall.
+            </span>
           </motion.h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             You see the numbers, but you miss the correlations that actually cause the stall. Most athletes fail because their inputs are fragmented across three different apps.
@@ -111,7 +113,7 @@ export function ProblemSection() {
 
           {/* 3. Unified Side */}
           <div className="flex-1 w-full">
-            <p className="font-mono-label text-accent text-center mb-4">Unified Diagnosis</p>
+            <p className="font-mono-label text-[#a1a1aa] text-center mb-4">Unified Diagnosis</p>
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}

@@ -54,15 +54,17 @@ export function SystemSection() {
           viewport={{ once: true }}
           className="mb-16 text-center max-w-3xl mx-auto"
         >
-          <motion.p variants={staggerItem} className="font-mono-label text-accent mb-4">How athleteOS diagnoses the stall</motion.p>
+          <motion.p variants={staggerItem} className="font-mono-label text-[#a1a1aa] mb-4">How athleteOS diagnoses the stall</motion.p>
           <motion.h2
             variants={{
               hidden: { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
               visible: { clipPath: 'inset(0 0% 0 0)', opacity: 1, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
             }}
-            className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6"
+            className="text-4xl md:text-5xl font-display font-semibold tracking-[-0.02em] leading-[1.2] text-foreground mb-6"
           >
-            Baseline. Limiter. Correction. Outcome.
+            <span style={{ background: 'linear-gradient(180deg, #ededed 0%, #a1a1a1 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Baseline. Limiter. Correction. Outcome.
+            </span>
           </motion.h2>
           <motion.p variants={staggerItem} className="text-lg text-muted-foreground leading-relaxed">
             Most apps track one thing well. AthleteOS reads training, nutrition, and recovery as connected inputs — then identifies what is actually limiting progress across all three.

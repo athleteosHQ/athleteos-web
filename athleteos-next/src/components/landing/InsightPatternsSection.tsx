@@ -23,12 +23,12 @@ const INSIGHT_PATTERNS = [
     key: 'volume-ratio',
     diagnostic: 'Your squat volume went up 18% this block but your deadlift ratio dropped. Programming drift or fatigue?',
     explanation: 'Cross-lift ratio analysis within a training block.',
-    color: 'var(--data-cyan, #00D9FF)',
+    color: 'rgba(255,255,255,0.5)',
     // Visualization: Two diverging line segments
     viz: (
       <div className="relative h-12 mt-4 opacity-50 flex items-center justify-center">
         <svg width="100%" height="100%" viewBox="0 0 100 40">
-          <path d="M10 30 L90 10" stroke="var(--data-cyan)" strokeWidth="2" fill="none" />
+          <path d="M10 30 L90 10" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
           <path d="M10 20 L90 35" stroke="rgba(255,255,255,0.2)" strokeWidth="2" strokeDasharray="4 2" fill="none" />
         </svg>
       </div>
@@ -56,12 +56,14 @@ export function InsightPatternsSection() {
     <section id="insight-patterns" className="px-6 py-20 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <div className="mb-10">
-          <p className="font-mono-label text-accent mb-3">What the system actually reads</p>
+          <p className="font-mono-label text-[#a1a1aa] mb-3">What the system actually reads</p>
           <motion.h2
             {...clipReveal()}
-            className="text-3xl md:text-4xl font-display font-bold text-foreground"
+            className="text-3xl md:text-4xl font-display font-semibold tracking-[-0.02em] leading-[1.2] text-foreground"
           >
-            Your apps track numbers. This connects them.
+            <span style={{ background: 'linear-gradient(180deg, #ededed 0%, #a1a1a1 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Your apps track numbers. This connects them.
+            </span>
           </motion.h2>
         </div>
 
@@ -95,7 +97,7 @@ export function InsightPatternsSection() {
         >
           <a
             href="#sample-outcome"
-            className="inline-flex items-center gap-2 font-mono-label text-accent hover:text-accent-light transition"
+            className="inline-flex items-center gap-2 font-mono-label text-[#fafafa] hover:text-white transition"
             onClick={() => trackEvent('cta_clicked', { cta_source: 'insight_patterns', cta_text: 'See it in action', has_rank_result: false })}
           >
             See it in action
