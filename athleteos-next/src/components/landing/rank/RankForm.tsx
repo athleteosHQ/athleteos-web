@@ -49,7 +49,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
             <div
               className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-300"
               style={{
-                background: stage === s ? 'var(--accent)' : ((['profile', 'lifts', 'ready'].indexOf(stage) > i) ? 'rgba(45,220,143,0.15)' : 'rgba(255,255,255,0.05)'),
+                background: stage === s ? 'rgba(255,255,255,0.15)' : ((['profile', 'lifts', 'ready'].indexOf(stage) > i) ? 'rgba(45,220,143,0.15)' : 'rgba(255,255,255,0.05)'),
                 color: stage === s ? '#fff' : ((['profile', 'lifts', 'ready'].indexOf(stage) > i) ? 'var(--success)' : 'var(--muted-foreground)'),
                 border: stage === s ? 'none' : '1px solid rgba(255,255,255,0.06)',
               }}
@@ -196,7 +196,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
                 type="button"
                 onClick={onSubmit}
                 className="flex-1 cursor-pointer bg-accent text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 group transition-all hover:bg-accent-light"
-                style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
+                style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)' }}
               >
                 Run First Read
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

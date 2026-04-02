@@ -103,7 +103,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
           viewport={{ once: true }}
           className="mb-8"
         >
-          <motion.span variants={staggerItem} className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 border border-accent/20 px-3 py-1 font-mono-label text-accent mb-3">Step 1</motion.span>
+          <motion.span variants={staggerItem} className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.04] border border-white/10 px-3 py-1 font-mono-label text-accent mb-3">Step 1</motion.span>
           <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">Generate your baseline signal</motion.h2>
           <motion.p variants={staggerItem} className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
             Your rank is not the answer — it&apos;s the first data point. AthleteOS uses it to build a system read:
@@ -123,7 +123,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
                 <span className="rounded-full bg-white/[0.05] px-2.5 py-1 font-mono-label text-muted-foreground">
                   {step}
                 </span>
-                {index < 3 && <span className="text-accent/70">→</span>}
+                {index < 3 && <span className="text-white/40">→</span>}
               </div>
             ))}
           </motion.div>

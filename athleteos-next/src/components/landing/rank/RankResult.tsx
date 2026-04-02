@@ -46,7 +46,7 @@ const cascadeChild = {
 // ── Diagnostic bars ───────────────────────────────────────────────────────
 export function DiagnosticBars({ result }: { result: RankResultType }) {
   const bars = [
-    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: '#5E6AD2', est: result.squat.estimated1RM },
+    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: 'rgba(255,255,255,0.3)', est: result.squat.estimated1RM },
     { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: '#F59E0B', est: result.bench.estimated1RM },
     { label: 'Deadlift', pct: result.deadlift.percentile, value: result.deadlift.estimated1RM > 0 ? `Top ${100 - result.deadlift.percentile}%` : '—', color: '#EF4444', est: result.deadlift.estimated1RM },
     ...(result.run5k ? [{ label: '5K Run', pct: result.run5k.percentile, value: `Top ${100 - result.run5k.percentile}%`, color: '#2DDC8F', est: 1 }] : []),
@@ -102,7 +102,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       initial="hidden"
       animate="visible"
       className="surface-card-muted rounded-2xl px-4 py-4"
-      style={{ borderColor: 'rgba(94,106,210,0.14)' }}
+      style={{ borderColor: 'rgba(255,255,255,0.06)' }}
     >
       {/* ── Primary: always visible ── */}
       <motion.div variants={cascadeChild}>
@@ -124,7 +124,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
         <motion.div
           variants={cascadeChild}
           className="surface-card-muted mt-3 rounded-xl px-3.5 py-3"
-          style={{ borderColor: 'rgba(94,106,210,0.18)' }}
+          style={{ borderColor: 'rgba(255,255,255,0.08)' }}
         >
           <p className="font-mono-label text-accent mb-1.5">Next Threshold</p>
           <p className="text-sm leading-relaxed text-foreground">
@@ -164,7 +164,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
                 <div className="grid grid-cols-2 gap-2">
                   <div
                     className="surface-card-muted rounded-xl px-3.5 py-3"
-                    style={{ borderColor: 'rgba(94,106,210,0.14)' }}
+                    style={{ borderColor: 'rgba(255,255,255,0.06)' }}
                   >
                     <p className="font-mono-label text-accent mb-1">System Efficiency</p>
                     <p className="text-xl font-display font-bold text-accent">{result.efficiencyScore.pct}%</p>
