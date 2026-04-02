@@ -9,12 +9,12 @@ const INSIGHT_PATTERNS = [
     key: 'nutrition-timing',
     diagnostic: 'Your protein is on target but timed wrong relative to your training phase — surplus during deload, maintenance during accumulation.',
     explanation: 'Nutrient timing relative to periodization phase.',
-    color: '#F59E0B',
+    color: 'rgba(255,255,255,0.5)',
     // Visualization: A small bar chart showing surplus vs deficit
     viz: (
       <div className="flex items-end gap-1 h-12 mt-4 opacity-50">
         {[20, 45, 15, 30].map((h, i) => (
-          <div key={i} className="flex-1 rounded-sm" style={{ height: `${h}px`, background: i === 1 ? '#F59E0B' : 'rgba(255,255,255,0.1)' }} />
+          <div key={i} className="flex-1 rounded-sm" style={{ height: `${h}px`, background: i === 1 ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)' }} />
         ))}
       </div>
     )

@@ -47,7 +47,7 @@ const cascadeChild = {
 export function DiagnosticBars({ result }: { result: RankResultType }) {
   const bars = [
     { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: 'rgba(255,255,255,0.3)', est: result.squat.estimated1RM },
-    { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: '#F59E0B', est: result.bench.estimated1RM },
+    { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: 'rgba(255,255,255,0.5)', est: result.bench.estimated1RM },
     { label: 'Deadlift', pct: result.deadlift.percentile, value: result.deadlift.estimated1RM > 0 ? `Top ${100 - result.deadlift.percentile}%` : '—', color: '#EF4444', est: result.deadlift.estimated1RM },
     ...(result.run5k ? [{ label: '5K Run', pct: result.run5k.percentile, value: `Top ${100 - result.run5k.percentile}%`, color: '#2DDC8F', est: 1 }] : []),
   ]
