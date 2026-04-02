@@ -112,7 +112,7 @@ export function HeroSection() {
           {[
             { num: '3,200+', label: 'meet records' },
             { num: '12', label: 'weight classes' },
-            { num: 'IFCT 2017', label: 'nutrition data' },
+            { num: 'IFCT', label: 'verified nutrition' },
             { num: 'IPF', label: 'federation standard' },
           ].map(({ num, label }, i) => (
             <div key={label} className="flex items-center gap-1.5">
