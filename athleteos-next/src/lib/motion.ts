@@ -29,9 +29,9 @@ export const DURATION = {
 
 /** Reusable fade-up variant set for section entrances. */
 export const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 12 } as const,
+  initial: { opacity: 0.1, y: 12 } as const,
   whileInView: { opacity: 1, y: 0 } as const,
-  viewport: { once: true } as const,
+  viewport: { once: true, amount: 0.05 } as const,
   transition: { duration: DURATION.enter, delay, ease: EASE_OUT },
 })
 
@@ -45,7 +45,7 @@ export const staggerContainer = {
 
 /** Stagger child variant. Pair with staggerContainer. */
 export const staggerItem = {
-  hidden: { opacity: 0, y: 8 },
+  hidden: { opacity: 0.1, y: 8 },
   visible: {
     opacity: 1,
     y: 0,

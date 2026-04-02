@@ -40,9 +40,9 @@ export function PillarStrip() {
         <motion.div
           className="grid gap-3 border-t pt-4 sm:grid-cols-2 lg:grid-cols-3"
           style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0.1, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5 }}
         >
           {STATS.map(({ kicker, label, sub, stat, statNote, accent, statColor }) => (

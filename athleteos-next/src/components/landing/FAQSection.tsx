@@ -128,7 +128,7 @@ export function FAQSection() {
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           className="mb-10"
         >
           <motion.p variants={staggerItem} className="font-mono-label text-accent mb-3">FAQ</motion.p>
@@ -141,7 +141,7 @@ export function FAQSection() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="space-y-2"
         >
@@ -158,7 +158,7 @@ export function FAQSection() {
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-8 text-base text-muted-foreground"
         >

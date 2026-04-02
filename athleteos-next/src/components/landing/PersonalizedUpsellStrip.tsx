@@ -83,9 +83,9 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
     <section id="personalized-upsell" className="px-6 py-16 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.1, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5 }}
           className="mb-6"
         >

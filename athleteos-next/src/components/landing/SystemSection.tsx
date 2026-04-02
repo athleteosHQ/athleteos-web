@@ -38,7 +38,7 @@ export function SystemSection() {
   ] as const
 
   return (
-    <section id="system" className="relative px-6 py-24 md:px-10 md:py-32 overflow-hidden">
+    <section id="system" className="relative px-6 py-16 md:px-10 md:py-20 overflow-hidden">
       {/* Background Atmosphere */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl aspect-square rounded-full border border-accent/20 blur-3xl" />
@@ -51,8 +51,8 @@ export function SystemSection() {
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          className="mb-16 text-center max-w-3xl mx-auto"
+          viewport={{ once: true, amount: 0.05 }}
+          className="mb-10 text-center max-w-3xl mx-auto"
         >
           <motion.p variants={staggerItem} className="font-mono-label text-accent mb-4">How athleteOS diagnoses the stall</motion.p>
           <motion.h2 variants={staggerItem} className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6">

@@ -28,9 +28,9 @@ export function ProblemSection() {
       <div className="mx-auto max-w-6xl">
         <div className="space-y-4 md:hidden mb-8">
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0.1, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45 }}
             className="surface-card p-5"
           >
@@ -44,9 +44,9 @@ export function ProblemSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0.1, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, delay: 0.06 }}
             className="grid gap-3 sm:grid-cols-2"
           >
@@ -63,9 +63,9 @@ export function ProblemSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0.1, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, delay: 0.12 }}
             className="rounded-2xl p-5 surface-dim-panel"
           >
@@ -86,9 +86,9 @@ export function ProblemSection() {
 
         <div className="hidden md:grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-start mb-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0.1, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5 }}
             className="surface-card p-6 md:p-8"
           >
@@ -136,9 +136,9 @@ export function ProblemSection() {
 
           <motion.div
             className="surface-card-muted overflow-hidden relative h-full"
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0.1, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, delay: 0.08 }}
           >
             {/* Clinical Food Background */}
@@ -192,9 +192,9 @@ export function ProblemSection() {
         {/* Data table */}
         <motion.div
           className="hidden md:block surface-card overflow-hidden"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0.1, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <div className="hidden md:block">
@@ -241,9 +241,9 @@ export function ProblemSection() {
         {/* Formula line */}
         <motion.div
           className="mt-6 px-4 py-3 text-center text-sm font-medium text-muted-foreground"
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0.1, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.4, delay: 0.2 }}
           style={{
             background: 'rgba(255,255,255,0.02)',

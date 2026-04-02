@@ -30,9 +30,9 @@ export function CredibilitySection() {
     <section className="px-6 py-16 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0.1, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.45 }}
           className="mb-8 max-w-3xl"
         >
@@ -49,9 +49,9 @@ export function CredibilitySection() {
           {CREDIBILITY_POINTS.map(({ label, title, copy }, i) => (
             <motion.div
               key={label}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0.1, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.05 }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
               className="surface-card-muted rounded-2xl p-5"
             >

@@ -90,7 +90,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
   }
 
   return (
-    <section id="rank" className="section-fade-top py-24 px-6 md:px-10">
+    <section id="rank" className="section-fade-top py-16 px-6 md:px-10">
       <div className="container mx-auto max-w-6xl">
 
         {/* Section header */}
@@ -100,7 +100,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           className="mb-8"
         >
           <motion.span variants={staggerItem} className="eyebrow mb-3">

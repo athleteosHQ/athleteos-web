@@ -49,7 +49,7 @@ const OUTCOME_ROWS = [
 
 export function SampleOutcomeBlock() {
   return (
-    <section id="sample-outcome" className="px-4 py-20 sm:px-6 md:px-10">
+    <section id="sample-outcome" className="px-4 py-14 sm:px-6 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

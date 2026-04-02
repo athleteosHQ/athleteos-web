@@ -42,9 +42,9 @@ export function ComparisonSection() {
       <div className="mx-auto max-w-6xl">
         
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.1, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           className="mb-16 text-center"
         >
           <p className="font-mono-label text-accent mb-4">THE_LANDSCAPE</p>

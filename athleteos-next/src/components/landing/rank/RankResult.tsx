@@ -149,7 +149,10 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       <motion.div
         variants={cascadeChild}
         className="mt-4 rounded-xl px-3.5 py-3"
-        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
+        style={{
+          background: 'linear-gradient(#0C0C0E, #0C0C0E) padding-box, linear-gradient(135deg, rgba(255,80,120,0.4), rgba(80,120,255,0.4)) border-box',
+          border: '1px solid transparent',
+        }}
       >
         <p className="font-mono-label text-muted-foreground mb-1.5">{diagnosis.label}</p>
         <p className="text-sm font-semibold text-foreground">{diagnosis.headline}</p>
@@ -160,7 +163,10 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
         <motion.div
           variants={cascadeChild}
           className="mt-3 rounded-xl px-3.5 py-3"
-          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,107,53,0.12)' }}
+          style={{
+            background: 'linear-gradient(#0C0C0E, #0C0C0E) padding-box, linear-gradient(135deg, rgba(255,107,53,0.45), rgba(255,0,128,0.35)) border-box',
+            border: '1px solid transparent',
+          }}
         >
           <p className="font-mono-label mb-1.5" style={gradStyle}>Next Threshold</p>
           <p className="text-sm leading-relaxed text-foreground">
@@ -199,7 +205,10 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
                 <div className="grid grid-cols-2 gap-2">
                   <div
                     className="rounded-xl px-3.5 py-3"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,107,53,0.1)' }}
+                    style={{
+                      background: 'linear-gradient(#0C0C0E, #0C0C0E) padding-box, linear-gradient(135deg, rgba(255,80,120,0.4), rgba(80,120,255,0.4)) border-box',
+                      border: '1px solid transparent',
+                    }}
                   >
                     <p className="font-mono-label mb-1" style={gradStyle}>System Efficiency</p>
                     <p className="text-xl font-bold" style={{ fontFamily: "'Syne', sans-serif", ...gradStyle }}>

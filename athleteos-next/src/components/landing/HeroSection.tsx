@@ -189,7 +189,7 @@ export function HeroSection() {
         {/* ── Sub-headline ── */}
         <motion.p
           className="mt-7 text-lg leading-relaxed sm:text-xl max-w-2xl mx-auto"
-          style={{ color: 'rgba(107,114,128,1)' }}
+          style={{ color: 'rgba(156,163,175,1)' }}
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.65, delay: 0.3, ease: EASE_CUBIC }}
@@ -235,10 +235,10 @@ export function HeroSection() {
           <a
             href="#inline-signup-gate"
             className="group inline-flex items-center gap-2 text-sm font-medium transition-all duration-200"
-            style={{ color: 'rgba(107,114,128,0.9)' }}
+            style={{ color: 'rgba(156,163,175,0.9)' }}
             onClick={() => trackEvent('cta_clicked', { cta_source: 'hero_secondary', cta_text: 'Join Waitlist', has_rank_result: false })}
             onMouseEnter={e => (e.currentTarget.style.color = 'rgba(237,237,239,0.9)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(107,114,128,0.9)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(156,163,175,0.9)')}
           >
             <motion.span
               className="w-1.5 h-1.5 rounded-full flex-shrink-0"
@@ -271,7 +271,7 @@ export function HeroSection() {
           animate={{ opacity: 0.3 }}
           transition={{ delay: 1.4, duration: 0.8 }}
         >
-          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(107,114,128,0.7)' }}>scroll</span>
+          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(156,163,175,0.7)' }}>scroll</span>
           <motion.div
             className="w-px h-8 origin-top"
             style={{ background: 'linear-gradient(to bottom, rgba(255,107,53,0.6), transparent)' }}
@@ -297,7 +297,7 @@ function StatItem({
   reduced: boolean
 }) {
   const numVal = parseInt(stat.value, 10)
-  const motionVal = useMotionValue(0)
+  const motionVal = useMotionValue(Math.round(numVal * 0.75))
   const spring = useSpring(motionVal, { stiffness: 50, damping: 18 })
   const [started, setStarted] = useState(false)
 
@@ -336,7 +336,7 @@ function StatItem({
           <span style={{ color: 'var(--foreground)' }}>{stat.display}</span>
         )}
       </span>
-      <span className="text-xs uppercase" style={{ letterSpacing: '0.14em', color: 'rgba(107,114,128,0.8)' }}>
+      <span className="text-xs uppercase" style={{ letterSpacing: '0.14em', color: 'rgba(156,163,175,0.8)' }}>
         {stat.label}
       </span>
     </div>
