@@ -30,11 +30,11 @@ export function HeroSection() {
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none opacity-10" aria-hidden="true">
           <svg width="100%" height="100%" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            <circle cx="200" cy="150" r="2" fill="var(--accent)" />
-            <circle cx="800" cy="450" r="2" fill="#F59E0B" />
+            <circle cx="200" cy="150" r="2" fill="rgba(255,255,255,0.4)" />
+            <circle cx="800" cy="450" r="2" fill="rgba(255,255,255,0.25)" />
             <circle cx="300" cy="500" r="2" fill="#2DDC8F" />
-            <path d="M200 150 Q500 300 800 450" stroke="var(--accent)" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_40s_linear_infinite]" />
-            <path d="M800 450 Q500 300 300 500" stroke="#F59E0B" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_35s_linear_infinite]" />
+            <path d="M200 150 Q500 300 800 450" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_40s_linear_infinite]" />
+            <path d="M800 450 Q500 300 300 500" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_35s_linear_infinite]" />
             <path d="M300 500 Q500 300 200 150" stroke="#2DDC8F" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_45s_linear_infinite]" />
           </svg>
         </div>
@@ -48,7 +48,7 @@ export function HeroSection() {
             style={{
               width: '800px',
               height: '500px',
-              background: 'radial-gradient(ellipse 70% 55%, rgba(107,122,237,0.1) 0%, rgba(45,220,143,0.03) 50%, transparent 70%)',
+              background: 'radial-gradient(ellipse 70% 55%, rgba(161,161,170,0.08) 0%, rgba(161,161,170,0.03) 50%, transparent 70%)',
               filter: 'blur(2px)',
             }}
           />
@@ -62,8 +62,8 @@ export function HeroSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: EASE }}
         >
-          <h1 className="text-4xl font-display font-bold text-foreground leading-tight sm:text-5xl md:text-6xl">
-            <span>You train. You track.</span>
+          <h1 className="text-4xl font-display font-bold text-foreground leading-tight sm:text-5xl md:text-6xl uppercase tracking-[-0.03em] leading-[1.0] font-[800]">
+            <span style={{ background: 'linear-gradient(180deg, #fff 20%, #a1a1aa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>You train. You track.</span>
           </h1>
         </motion.div>
 
@@ -73,7 +73,7 @@ export function HeroSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.12, ease: EASE }}
         >
-          <h1 className="text-4xl font-display font-bold leading-tight sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl font-display font-bold leading-tight sm:text-5xl md:text-6xl uppercase tracking-[-0.03em] leading-[1.0] font-[800]">
             <span className="hero-gradient-word relative inline-block">
               Your total hasn&apos;t moved in months.
             </span>
@@ -110,8 +110,8 @@ export function HeroSection() {
           <button
             type="button"
             onClick={handleCTA}
-            className="group relative inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-light overflow-hidden"
-            style={{ boxShadow: '0 2px 12px rgba(107,122,237,0.3), 0 1px 2px rgba(0,0,0,0.4)' }}
+            className="group relative inline-flex cursor-pointer items-center gap-2 rounded-[10px] px-8 py-4 text-base font-bold text-white uppercase tracking-[0.02em] transition-all duration-200 hover:bg-[#fafafa] hover:text-[#09090b] overflow-hidden"
+            style={{ background: 'linear-gradient(104deg, rgba(253,253,253,0.05) 5%, rgba(240,240,228,0.1) 100%)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(12px)' }}
           >
             {/* Hover shimmer */}
             <span
@@ -138,7 +138,7 @@ export function HeroSection() {
         >
           <motion.div
             className="w-px h-8"
-            style={{ background: 'linear-gradient(to bottom, var(--accent), transparent)' }}
+            style={{ background: 'linear-gradient(to bottom, rgba(161,161,170,0.08), transparent)' }}
             animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           />
