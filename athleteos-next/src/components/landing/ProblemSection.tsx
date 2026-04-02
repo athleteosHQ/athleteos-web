@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { blurUp, clipReveal } from '@/lib/motion'
+import { RevealText } from '@/components/landing/RevealText'
 import { Smartphone, Zap, Activity } from 'lucide-react'
 
 const BLIND_SPOTS = [
@@ -49,14 +50,11 @@ export function ProblemSection() {
 
         <div className="mb-12 text-center relative z-10">
           <p className="font-mono-label text-[#a1a1aa] mb-3">The Diagnostic Gap</p>
-          <motion.h2
-            {...clipReveal()}
-            className="text-3xl md:text-5xl font-display font-semibold tracking-[-0.02em] leading-[1.2] text-foreground mb-4"
-          >
+          <RevealText as="h2" className="text-3xl md:text-5xl font-display font-semibold tracking-[-0.02em] leading-[1.2] text-foreground mb-4">
             <span style={{ background: 'linear-gradient(180deg, #ededed 0%, #a1a1a1 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Your apps see numbers.<br className="hidden md:block" /> They don&apos;t see the stall.
             </span>
-          </motion.h2>
+          </RevealText>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             You see the numbers, but you miss the correlations that actually cause the stall. Most athletes fail because their inputs are fragmented across three different apps.
           </p>

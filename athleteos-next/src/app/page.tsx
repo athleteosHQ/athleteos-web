@@ -45,13 +45,16 @@ export default function LandingV2() {
       <main className="relative z-10 flex flex-col">
         {/* 1. Hero — tension + promise */}
         <HeroSection />
+        <div className="section-blend" style={{ '--blend-from': '#09090B', '--blend-to': '#0C0C0E' } as React.CSSProperties} />
 
         {/* 2. Problem proof — why tracking fails (compact) */}
         <ProblemSection />
+        <div className="section-blend" style={{ '--blend-from': '#0C0C0E', '--blend-to': '#09090B' } as React.CSSProperties} />
 
         {/* 3. System proof — how AthleteOS reads inputs together */}
         <InsightPatternsSection />
         <SystemSection />
+        <div className="section-blend" style={{ '--blend-from': '#09090B', '--blend-to': '#0C0C0E' } as React.CSSProperties} />
 
         {/* 4. Sample diagnosis — what the output looks like */}
         <SampleOutcomeBlock />
