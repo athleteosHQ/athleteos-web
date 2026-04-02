@@ -54,7 +54,7 @@ export function PillarStrip() {
                 background: accent ? 'rgba(255,122,47,0.05)' : 'rgba(255,255,255,0.02)',
               }}
             >
-              <p className={`font-mono-label mb-1 ${accent ? 'text-accent/70' : 'text-muted-foreground/40'}`} style={{ fontSize: '9px' }}>
+              <p className={`font-mono-label mb-1 ${accent ? 'text-[#a1a1aa]' : 'text-muted-foreground/40'}`} style={{ fontSize: '9px' }}>
                 {kicker}
               </p>
               <p className={`mb-0.5 text-sm font-bold ${accent ? 'text-foreground' : 'text-foreground/80'}`}>
@@ -64,7 +64,7 @@ export function PillarStrip() {
 
               <div className="flex items-end justify-between gap-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 12 }}>
                 {stat !== null ? (
-                  <p className={`font-mono text-2xl font-bold mb-0.5 ${statColor ?? (accent ? 'text-accent' : 'text-foreground')}`}>
+                  <p className={`font-mono text-2xl font-bold mb-0.5 ${statColor ?? (accent ? 'text-[#fafafa]' : 'text-foreground')}`}>
                     {stat}
                   </p>
                 ) : (

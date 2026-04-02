@@ -62,7 +62,7 @@ export function NavBar() {
                 cx="14"
                 cy="14"
                 r="6.1"
-                fill="var(--accent)"
+                fill="rgba(255,255,255,0.4)"
                 opacity="0.12"
                 animate={reduced ? undefined : { opacity: [0.09, 0.18, 0.09], scale: [1, 1.08, 1] }}
                 transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
@@ -72,25 +72,25 @@ export function NavBar() {
                 cx="14"
                 cy="14"
                 r="4.5"
-                fill="var(--accent)"
+                fill="rgba(255,255,255,0.4)"
                 animate={reduced ? undefined : { scale: [1, 1.045, 1] }}
                 transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
                 style={{ transformOrigin: '14px 14px' }}
               />
               {/* Three linked input streams */}
-              <path d="M14 4 A10 10 0 0 1 22.1 8.2" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" opacity="0.28" />
-              <path d="M23 18.5 A10 10 0 0 1 14.8 24" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" opacity="0.24" />
-              <path d="M5.7 18.8 A10 10 0 0 1 7.8 8.5" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" opacity="0.2" />
+              <path d="M14 4 A10 10 0 0 1 22.1 8.2" stroke="rgba(255,255,255,0.4)" strokeWidth="1.3" strokeLinecap="round" opacity="0.28" />
+              <path d="M23 18.5 A10 10 0 0 1 14.8 24" stroke="rgba(255,255,255,0.4)" strokeWidth="1.3" strokeLinecap="round" opacity="0.24" />
+              <path d="M5.7 18.8 A10 10 0 0 1 7.8 8.5" stroke="rgba(255,255,255,0.4)" strokeWidth="1.3" strokeLinecap="round" opacity="0.2" />
               {/* Inward routing ticks */}
-              <path d="M19.1 9.3 L16.55 11.6" stroke="var(--accent)" strokeWidth="1.35" strokeLinecap="round" opacity="0.34" />
-              <path d="M18.55 19.2 L16.15 17.2" stroke="var(--accent)" strokeWidth="1.35" strokeLinecap="round" opacity="0.3" />
-              <path d="M9.1 19 L11.45 17.05" stroke="var(--accent)" strokeWidth="1.35" strokeLinecap="round" opacity="0.26" />
+              <path d="M19.1 9.3 L16.55 11.6" stroke="rgba(255,255,255,0.4)" strokeWidth="1.35" strokeLinecap="round" opacity="0.34" />
+              <path d="M18.55 19.2 L16.15 17.2" stroke="rgba(255,255,255,0.4)" strokeWidth="1.35" strokeLinecap="round" opacity="0.3" />
+              <path d="M9.1 19 L11.45 17.05" stroke="rgba(255,255,255,0.4)" strokeWidth="1.35" strokeLinecap="round" opacity="0.26" />
               {/* Input nodes */}
               <motion.circle
                 cx="14"
                 cy="4"
                 r="1.8"
-                fill="var(--accent)"
+                fill="rgba(255,255,255,0.4)"
                 opacity="0.6"
                 animate={reduced ? undefined : { y: [0, -0.45, 0], opacity: [0.56, 0.72, 0.56] }}
                 transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
@@ -99,7 +99,7 @@ export function NavBar() {
                 cx="22"
                 cy="19"
                 r="1.4"
-                fill="var(--accent)"
+                fill="rgba(255,255,255,0.4)"
                 opacity="0.4"
                 animate={reduced ? undefined : { x: [0, 0.3, 0], y: [0, 0.22, 0], opacity: [0.36, 0.5, 0.36] }}
                 transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }}
@@ -108,7 +108,7 @@ export function NavBar() {
                 cx="6"
                 cy="19"
                 r="1.1"
-                fill="var(--accent)"
+                fill="rgba(255,255,255,0.4)"
                 opacity="0.3"
                 animate={reduced ? undefined : { x: [0, -0.24, 0], y: [0, 0.18, 0], opacity: [0.28, 0.4, 0.28] }}
                 transition={{ duration: 3.7, repeat: Infinity, ease: 'easeInOut', delay: 0.45 }}
@@ -120,7 +120,7 @@ export function NavBar() {
             style={{ fontFamily: 'var(--font-jakarta)', letterSpacing: '-0.03em' }}
           >
             <span className="text-foreground">athlete</span>
-            <span className="text-accent">OS</span>
+            <span className="text-[#fafafa]">OS</span>
           </span>
 
           {/* Subtle divider + badge — Linear-style */}
@@ -180,7 +180,7 @@ export function NavBar() {
           <span
             className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/cta:opacity-100"
             style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(107,122,237,0.12), transparent 70%)',
+              background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 70%)',
             }}
           />
         </a>

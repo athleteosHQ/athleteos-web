@@ -47,7 +47,7 @@ export function ComparisonSection() {
           viewport={{ once: true }}
           className="mb-16 text-center"
         >
-          <p className="font-mono-label text-accent mb-4">THE_LANDSCAPE</p>
+          <p className="font-mono-label text-[#fafafa] mb-4">THE_LANDSCAPE</p>
           <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-6">
             Standard apps track data.<br/>AthleteOS solves plateaus.
           </h2>
@@ -72,13 +72,13 @@ export function ComparisonSection() {
                   <span className="text-[10px] font-mono-label text-muted-foreground/40">Wearable focus</span>
                 </th>
                 <th className="p-6 md:p-8 text-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-accent/10 -z-10" />
-                  <div className="absolute top-0 left-0 w-full h-1 bg-accent" style={{ boxShadow: '0 2px 20px rgba(94,106,210,0.4)' }} />
+                  <div className="absolute inset-0 bg-white/[0.04] -z-10" />
+                  <div className="absolute top-0 left-0 w-full h-1 bg-white/20" style={{ boxShadow: '0 2px 20px rgba(255,255,255,0.1)' }} />
                   <div className="flex items-center justify-center gap-2 mb-1">
-                    <Zap size={16} className="text-accent fill-accent" />
+                    <Zap size={16} className="text-[#fafafa] fill-current" />
                     <p className="text-lg font-bold text-foreground">athleteOS</p>
                   </div>
-                  <span className="text-[10px] font-mono-label text-accent/80 tracking-widest">Diagnostic Engine</span>
+                  <span className="text-[10px] font-mono-label text-[#a1a1aa] tracking-widest">Diagnostic Engine</span>
                 </th>
               </tr>
             </thead>
@@ -111,13 +111,13 @@ export function ComparisonSection() {
 
                   {/* athleteOS column */}
                   <td className="p-6 md:p-8 text-center relative">
-                    <div className="absolute inset-0 bg-accent/[0.03] -z-10" />
+                    <div className="absolute inset-0 bg-white/[0.02] -z-10" />
                     {typeof row.athleteos === 'string' ? (
-                      <span className={`text-sm font-bold ${idx === COMPARISON_DATA.length - 1 ? 'text-accent' : 'text-foreground'}`}>
+                      <span className={`text-sm font-bold ${idx === COMPARISON_DATA.length - 1 ? 'text-[#fafafa]' : 'text-foreground'}`}>
                         {row.athleteos}
                       </span>
                     ) : (
-                      <Check className="mx-auto text-accent shadow-[0_0_15px_rgba(255,122,47,0.4)]" size={24} strokeWidth={3} />
+                      <Check className="mx-auto text-[#fafafa]" size={24} strokeWidth={3} />
                     )}
                   </td>
                 </tr>

@@ -243,7 +243,7 @@ export function ProductShowcase() {
 
       {/* ── Background atmosphere ────────────────────────────────── */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-x-8 top-12 h-40 rounded-full bg-accent/6 blur-[80px]" />
+        <div className="absolute inset-x-8 top-12 h-40 rounded-full bg-white/[0.04] blur-[80px]" />
         <div className="absolute bottom-8 right-0 h-28 w-28 rounded-full bg-destructive/5 blur-[60px]" />
       </div>
     </div>

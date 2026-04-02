@@ -4,7 +4,7 @@ export function Footer() {
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-6">
         <div>
           <p className="font-bold text-foreground">
-            athlete<span className="text-accent">OS</span>
+            athlete<span className="text-[#fafafa]">OS</span>
           </p>
           <p className="mt-1 text-sm text-muted-foreground">Performance diagnosis + progress tracking for serious strength athletes.</p>
           <a

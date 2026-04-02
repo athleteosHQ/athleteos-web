@@ -11,9 +11,9 @@ const OUTCOME_ROWS = [
     label: 'Where you stand',
     value: 'Top 23% of competitive strength athletes',
     sub: 'Squat · Top 31%   Bench · Top 22%   Deadlift · Top 14%',
-    color: 'var(--data-cyan, #00D9FF)',
-    bg: 'rgba(0,217,255,0.03)',
-    border: 'rgba(0,217,255,0.10)',
+    color: 'rgba(255,255,255,0.5)',
+    bg: 'rgba(255,255,255,0.02)',
+    border: 'rgba(255,255,255,0.08)',
     Icon: BarChart3,
   },
   {
@@ -21,9 +21,9 @@ const OUTCOME_ROWS = [
     label: 'Primary limiter',
     value: 'Protein timing inverted across training phases',
     sub: '89% confidence · surplus during deload, deficit during accumulation',
-    color: '#F59E0B',
-    bg: 'rgba(245,158,11,0.03)',
-    border: 'rgba(245,158,11,0.10)',
+    color: 'rgba(255,255,255,0.25)',
+    bg: 'rgba(255,255,255,0.02)',
+    border: 'rgba(255,255,255,0.08)',
     Icon: AlertTriangle,
   },
   {
@@ -53,7 +53,7 @@ export function SampleOutcomeBlock() {
     <section id="sample-outcome" className="px-4 py-20 sm:px-6 md:px-10">
       <div className="mx-auto max-w-screen-xl">
         <div className="mb-8">
-          <p className="font-mono-label text-accent mb-3">Sample athlete outcome</p>
+          <p className="font-mono-label text-[#fafafa] mb-3">Sample athlete outcome</p>
           <motion.h2
             {...clipReveal()}
             className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2"
@@ -79,12 +79,12 @@ export function SampleOutcomeBlock() {
             </div>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(0,217,255,0.04)', border: '1px solid rgba(0,217,255,0.10)' }}>
-                <p className="font-mono-label text-accent-light/70 mb-1.5">Current rank</p>
+              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <p className="font-mono-label text-[#a1a1aa] mb-1.5">Current rank</p>
                 <p className="font-mono text-2xl sm:text-3xl font-bold text-foreground">TOP 23%</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">Squat 31% · Bench 22% · Deadlift 14%</p>
               </div>
-              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(245,158,11,0.04)', border: '1px solid rgba(245,158,11,0.10)' }}>
+              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <p className="font-mono-label text-warning mb-1.5">Primary limiter</p>
                 <p className="text-base sm:text-lg font-bold text-foreground">Nutrition timing inverted</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">89% confidence · protein surplus during deload, deficit during accumulation</p>
@@ -103,7 +103,7 @@ export function SampleOutcomeBlock() {
           </motion.div>
 
           <motion.div {...slideFromRight(0.15)} className="surface-card-muted p-4 sm:p-6 md:p-8">
-            <p className="font-mono-label text-accent mb-3">Outcome chain</p>
+            <p className="font-mono-label text-[#fafafa] mb-3">Outcome chain</p>
             <div className="space-y-2.5">
               {OUTCOME_ROWS.map(({ key, label, value, sub, color, bg, border, Icon }, i) => (
                 <motion.div
@@ -132,7 +132,7 @@ export function SampleOutcomeBlock() {
             </div>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-muted-foreground">Sample output only. Your exact rank and diagnosis will differ.</p>
-              <a href="#rank" className="font-mono-label text-accent hover:text-accent-light transition" onClick={() => trackEvent('sample_outcome_cta_clicked', { time_on_page_seconds: Math.round((Date.now() - performance.timeOrigin) / 1000) })}>Start yours →</a>
+              <a href="#rank" className="font-mono-label text-[#fafafa] hover:text-white transition" onClick={() => trackEvent('sample_outcome_cta_clicked', { time_on_page_seconds: Math.round((Date.now() - performance.timeOrigin) / 1000) })}>Start yours →</a>
             </div>
           </motion.div>
         </div>
