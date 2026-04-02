@@ -53,12 +53,13 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.05;
+  opacity: 0.04;
   background-image:
     linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, black 0%, transparent 72%);
+  will-change: transform;
+  contain: strict;
 }
 
 /* ── Surface hierarchy (tonal layering from Stitch "Kinetic Cockpit") ── */
@@ -73,8 +74,7 @@ body {
   transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 .surface-card:hover {
-  border-color: rgba(255,255,255,0.08);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border-color: rgba(255,255,255,0.1);
 }
 .surface-card-muted {
   background: #111113;
@@ -284,10 +284,10 @@ body {
 .section-blend::before {
   content: "";
   position: absolute;
-  top: -80px;
+  top: -160px;
   left: 0;
   right: 0;
-  height: 80px;
+  height: 160px;
   pointer-events: none;
   background: linear-gradient(to bottom, var(--blend-from, transparent), var(--blend-to, transparent));
 }

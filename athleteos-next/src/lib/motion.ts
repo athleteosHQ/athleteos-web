@@ -1,7 +1,7 @@
 /** Shared Framer Motion constants — single source of truth for all landing animations. */
 
 import { useRef } from 'react'
-import { useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { useReducedMotion } from 'framer-motion'
 
 /**
  * Hook that respects prefers-reduced-motion for Framer Motion components.
@@ -98,11 +98,6 @@ export const scalePop = (delay = 0) => ({
 /** Subtle scroll parallax for section headings. Heading moves 20px slower than content. */
 export function useHeadingParallax() {
   const ref = useRef<HTMLDivElement>(null)
-  const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  })
-  const y = useTransform(scrollYProgress, [0, 1], [0, -20])
-  return { ref, style: reduced ? undefined : { y } }
+  // Parallax disabled for scroll performance — 20px movement not worth per-frame cost
+  return { ref, style: undefined }
 }

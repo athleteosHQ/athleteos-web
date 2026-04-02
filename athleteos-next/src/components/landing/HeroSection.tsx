@@ -24,7 +24,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={ref}
-      className="relative flex min-h-[55vh] flex-col items-center justify-center px-6 py-20 text-center overflow-hidden"
+      className="relative flex min-h-[85vh] flex-col items-center justify-center px-6 py-32 text-center overflow-hidden"
     >
       {/* ── Background System Interconnect Visual ── */}
       {!reduced && (
@@ -33,9 +33,9 @@ export function HeroSection() {
             <circle cx="200" cy="150" r="2" fill="rgba(255,255,255,0.4)" />
             <circle cx="800" cy="450" r="2" fill="rgba(255,255,255,0.25)" />
             <circle cx="300" cy="500" r="2" fill="#2DDC8F" />
-            <path d="M200 150 Q500 300 800 450" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_40s_linear_infinite]" />
-            <path d="M800 450 Q500 300 300 500" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_35s_linear_infinite]" />
-            <path d="M300 500 Q500 300 200 150" stroke="#2DDC8F" strokeWidth="0.5" strokeDasharray="4 12" className="animate-[dash_45s_linear_infinite]" />
+            <path d="M200 150 Q500 300 800 450" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" strokeDasharray="4 12" />
+            <path d="M800 450 Q500 300 300 500" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" strokeDasharray="4 12" />
+            <path d="M300 500 Q500 300 200 150" stroke="#2DDC8F" strokeWidth="0.5" strokeDasharray="4 12" />
           </svg>
         </div>
       )}
@@ -49,7 +49,7 @@ export function HeroSection() {
               width: '800px',
               height: '500px',
               background: 'radial-gradient(ellipse 70% 55%, rgba(161,161,170,0.08) 0%, rgba(161,161,170,0.03) 50%, transparent 70%)',
-              filter: 'blur(2px)',
+              filter: 'none',
             }}
           />
         )}

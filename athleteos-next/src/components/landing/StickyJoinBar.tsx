@@ -38,9 +38,7 @@ export function StickyJoinBar() {
           transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 350, damping: 28 }}
           className="fixed inset-x-0 bottom-0 z-50 border-t border-white/8"
           style={{
-            background: 'rgba(12,12,14,0.95)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
+            background: 'rgba(9,9,11,0.95)',
           }}
         >
           <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-3 sm:px-6">

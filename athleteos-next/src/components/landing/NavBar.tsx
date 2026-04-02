@@ -28,9 +28,7 @@ export function NavBar() {
       aria-label="Main navigation"
       className="sticky top-0 z-50 transition-all duration-500"
       style={{
-        backdropFilter: scrolled ? 'blur(20px) saturate(1.4)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.4)' : 'none',
-        background: scrolled ? 'rgba(12,12,14,0.72)' : 'transparent',
+        background: scrolled ? 'rgba(9,9,11,0.95)' : 'transparent',
         borderBottom: scrolled
           ? '1px solid rgba(255,255,255,0.05)'
           : '1px solid transparent',
