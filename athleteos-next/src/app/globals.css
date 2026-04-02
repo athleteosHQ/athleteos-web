@@ -260,24 +260,24 @@ body {
 /* ── Double-text link hover (C4G-inspired) ────────────── */
 .link-slide {
   position: relative;
-  display: inline-flex;
+  display: inline-block;
   overflow: hidden;
   vertical-align: middle;
-  height: 1.4em;
+  height: 1em;
+  line-height: 1;
 }
 .link-slide-inner {
-  display: flex;
-  flex-direction: column;
+  display: block;
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .link-slide:hover .link-slide-inner {
-  transform: translateY(-50%);
+  transform: translateY(-1em);
 }
 .link-slide-text {
   display: block;
   white-space: nowrap;
-  height: 1.4em;
-  line-height: 1.4em;
+  height: 1em;
+  line-height: 1;
 }
 
 /* ── Section blend transitions (C4G-inspired) ──────────── */
