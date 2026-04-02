@@ -79,19 +79,19 @@ export function SampleOutcomeBlock() {
             </div>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="rounded-xl p-3.5 sm:p-4 surface-inset border border-white/5">
                 <p className="font-mono-label text-[#a1a1aa] mb-1.5">Current rank</p>
                 <p className="font-mono text-2xl sm:text-3xl font-bold text-foreground">TOP 23%</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">Squat 31% · Bench 22% · Deadlift 14%</p>
               </div>
-              <div className="rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="rounded-xl p-3.5 sm:p-4 surface-inset border border-warning/10">
                 <p className="font-mono-label text-warning mb-1.5">Primary limiter</p>
                 <p className="text-base sm:text-lg font-bold text-foreground">Nutrition timing inverted</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">89% confidence · protein surplus during deload, deficit during accumulation</p>
               </div>
             </div>
 
-            <div className="mt-3 rounded-xl p-3.5 sm:p-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
+            <div className="mt-3 rounded-xl p-3.5 sm:p-4 surface-inset border border-white/5">
               <p className="font-mono-label text-muted-foreground mb-1.5">What athleteOS would tell you</p>
               <p className="text-sm sm:text-base font-semibold text-foreground leading-relaxed">
                 Shift 40g protein from rest days to heavy squat days. DL:squat ratio (1.08) shows posterior chain compensating — redistribute volume after nutrition fix.
@@ -102,14 +102,14 @@ export function SampleOutcomeBlock() {
             </div>
           </motion.div>
 
-          <motion.div {...slideFromRight(0.15)} className="surface-card-muted p-4 sm:p-6 md:p-8">
+          <motion.div {...slideFromRight(0.15)} className="surface-card p-4 sm:p-6 md:p-8">
             <p className="font-mono-label text-[#fafafa] mb-3">Outcome chain</p>
             <div className="space-y-2.5">
-              {OUTCOME_ROWS.map(({ key, label, value, sub, color, bg, border, Icon }, i) => (
+              {OUTCOME_ROWS.map(({ key, label, value, sub, color, border, Icon }, i) => (
                 <motion.div
                   key={key}
-                  className="rounded-xl p-3 sm:p-4"
-                  style={{ background: bg, border: `1px solid ${border}` }}
+                  className="rounded-xl p-3 sm:p-4 surface-inset group hover:border-white/10 transition-colors"
+                  style={{ border: `1px solid ${i === 3 ? 'rgba(45,220,143,0.1)' : 'rgba(255,255,255,0.03)'}` }}
                   initial={{ opacity: 0, x: -8 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -118,7 +118,7 @@ export function SampleOutcomeBlock() {
                   <div className="flex items-center gap-2.5">
                     <div
                       className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-lg"
-                      style={{ background: `${color}15`, border: `1px solid ${color}30` }}
+                      style={{ background: `${color}10`, border: `1px solid ${color}25` }}
                     >
                       <Icon size={12} className="sm:hidden" style={{ color }} />
                       <Icon size={14} className="hidden sm:block" style={{ color }} />

@@ -166,7 +166,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
               className="space-y-5"
             >
               {/* Initial Audit header */}
-              <div className="rounded-xl px-4 py-3 mb-1" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div className="rounded-xl px-4 py-3 mb-1 surface-inset border border-white/5">
                 <p className="font-mono-label text-accent mb-1">Initial audit</p>
                 <p className="text-sm text-foreground font-medium">
                   Your baseline is set. This is the starting signal — not the answer.

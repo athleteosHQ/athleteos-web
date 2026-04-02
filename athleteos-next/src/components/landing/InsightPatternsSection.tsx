@@ -53,7 +53,7 @@ const INSIGHT_PATTERNS = [
 
 export function InsightPatternsSection() {
   return (
-    <section id="insight-patterns" className="px-6 py-20 md:px-10">
+    <section id="insight-patterns" className="px-6 py-32 md:px-10 min-h-[80vh] flex items-center justify-center">
       <div className="mx-auto max-w-screen-xl">
         <div className="mb-10">
           <p className="font-mono-label text-[#a1a1aa] mb-3">What the system actually reads</p>
