@@ -245,6 +245,30 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
               identifyUser(email)
               if (btn) { btn.textContent = '✓ You\u2019re in' }
               localStorage.setItem('aos_founder_data', JSON.stringify({ email, ts: Date.now() }))
+              // Replace the entire form container with confirmation
+              const container = form.closest('.surface-inset')
+              if (container) {
+                container.innerHTML = `
+                  <p class="font-mono-label text-[10px] tracking-[0.1em] text-success/70 mb-3">✓ YOU'RE IN</p>
+                  <p class="text-sm text-foreground font-medium mb-2">Your founding spot is locked.</p>
+                  <div class="space-y-2 mt-4">
+                    <div class="flex items-start gap-2">
+                      <span class="mt-1 h-1.5 w-1.5 rounded-full bg-success/50 shrink-0"></span>
+                      <p class="text-xs text-muted-foreground">We'll email you when the full diagnostic system is ready</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                      <span class="mt-1 h-1.5 w-1.5 rounded-full bg-success/50 shrink-0"></span>
+                      <p class="text-xs text-muted-foreground">No payment until launch — your ₹250/mo rate is locked forever</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                      <span class="mt-1 h-1.5 w-1.5 rounded-full bg-success/50 shrink-0"></span>
+                      <p class="text-xs text-muted-foreground">You'll get WhatsApp access to the founder in the first 90 days</p>
+                    </div>
+                  </div>
+                `
+              }
+              // Notify other components
+              window.dispatchEvent(new Event('aos-founder-data-changed'))
             } catch {
               if (btn) { btn.disabled = false; btn.textContent = 'Start My Diagnosis →' }
             }

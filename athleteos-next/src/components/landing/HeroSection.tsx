@@ -25,7 +25,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={ref}
-      className="relative flex min-h-screen flex-col items-center justify-center px-6 py-32 text-center overflow-hidden"
+      className="relative flex min-h-[85vh] flex-col items-center justify-center px-6 py-20 text-center overflow-hidden"
     >
       <LiveSignalFeed />
 
