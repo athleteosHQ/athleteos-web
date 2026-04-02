@@ -120,26 +120,22 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
         >
           <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 backdrop-blur-none" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
-            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-3">Sample performance read</p>
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-display font-[800] text-foreground tabular-nums">78</span>
-              <span className="text-sm text-muted-foreground">/ 100 performance score</span>
-            </div>
-            <p className="text-[10px] text-muted-foreground/40 mb-4">Limiter detected: bench press recovery gap</p>
-            <div className="space-y-2">
-              {[
-                { label: 'Squat', pct: 82 },
-                { label: 'Bench', pct: 64 },
-                { label: 'Dead', pct: 88 },
-              ].map(({ label, pct }) => (
-                <div key={label} className="flex items-center gap-3">
-                  <span className="text-[11px] text-muted-foreground w-10 shrink-0">{label}</span>
-                  <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
-                    <div className="h-full rounded-full bg-gradient-to-r from-white/30 to-white/10" style={{ width: `${pct}%` }} />
-                  </div>
-                  <span className="text-[11px] text-muted-foreground/60 tabular-nums w-8 text-right">{pct}%</span>
-                </div>
-              ))}
+            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-4">Sample diagnosis</p>
+            <div className="space-y-3">
+              <div>
+                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/40 mb-1">Limiter detected</p>
+                <p className="text-sm text-foreground font-medium">Protein timing misaligned with training window</p>
+              </div>
+              <div className="h-px bg-white/[0.06]" />
+              <div>
+                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/40 mb-1">Correction</p>
+                <p className="text-sm text-foreground font-medium">Shift 40g post-training intake to within 90 min</p>
+              </div>
+              <div className="h-px bg-white/[0.06]" />
+              <div>
+                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/40 mb-1">Projected outcome</p>
+                <p className="text-sm text-foreground font-medium">+2.5kg bench in 4 weeks</p>
+              </div>
             </div>
           </div>
         </motion.div>
