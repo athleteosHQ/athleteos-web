@@ -14,7 +14,7 @@ export function HeroSection() {
   const { reduced } = useMotionSafe()
 
   const handleCTA = () => {
-    trackEvent('cta_clicked', { cta_source: 'hero', cta_text: 'Check Your Rank', has_rank_result: false })
+    trackEvent('cta_clicked', { cta_source: 'hero', cta_text: 'Get Your Performance Read', has_rank_result: false })
     document.getElementById('rank')?.scrollIntoView({ behavior: 'smooth' })
     window.setTimeout(() => {
       document.getElementById('rank-bw-input')?.focus()
@@ -95,7 +95,7 @@ export function HeroSection() {
             style={{ background: 'linear-gradient(104deg, rgba(253,253,253,0.05) 5%, rgba(240,240,228,0.1) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}
           >
             <span className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" style={{ background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)' }} />
-            <span className="relative z-10">Check Your Rank</span>
+            <span className="relative z-10">Get Your Performance Read</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -120,11 +120,12 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
         >
           <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 backdrop-blur-none" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
-            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-3">Sample result</p>
-            <div className="flex items-baseline gap-2 mb-4">
+            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-3">Sample performance read</p>
+            <div className="flex items-baseline gap-2 mb-1">
               <span className="text-3xl font-display font-[800] text-foreground tabular-nums">78</span>
-              <span className="text-sm text-muted-foreground">/ 100 overall</span>
+              <span className="text-sm text-muted-foreground">/ 100 performance score</span>
             </div>
+            <p className="text-[10px] text-muted-foreground/40 mb-4">Limiter detected: bench press recovery gap</p>
             <div className="space-y-2">
               {[
                 { label: 'Squat', pct: 82 },
