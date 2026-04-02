@@ -29,27 +29,27 @@ export const DURATION = {
 
 /** Reusable fade-up variant set for section entrances. */
 export const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0.1, y: 12 } as const,
+  initial: { opacity: 0, y: 24 } as const,
   whileInView: { opacity: 1, y: 0 } as const,
-  viewport: { once: true, amount: 0.05 } as const,
-  transition: { duration: DURATION.enter, delay, ease: EASE_OUT },
+  viewport: { once: true, amount: 0.15 } as const,
+  transition: { duration: 0.6, delay, ease: EASE_OUT },
 })
 
 /** Stagger container variant for section intros. */
 export const staggerContainer = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.06 },
+    transition: { staggerChildren: 0.08 },
   },
 } as const
 
 /** Stagger child variant. Pair with staggerContainer. */
 export const staggerItem = {
-  hidden: { opacity: 0.1, y: 8 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: DURATION.normal, ease: EASE_OUT },
+    transition: { duration: 0.5, ease: EASE_OUT },
   },
 } as const
 

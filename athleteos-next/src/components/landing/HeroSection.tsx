@@ -142,124 +142,56 @@ export function HeroSection() {
         initial="hidden"
         animate={inView ? 'visible' : 'hidden'}
       >
-        {/* ── Eyebrow ── */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.5, ease: EASE_CUBIC }}
-          className="mb-7"
-        >
-          <div className="eyebrow inline-flex">
-            <motion.span
-              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #FF6B35, #FF0080)', boxShadow: '0 0 8px rgba(255,107,53,0.9)' }}
-              animate={{ boxShadow: ['0 0 8px rgba(255,107,53,0.6)', '0 0 16px rgba(255,107,53,1)', '0 0 8px rgba(255,107,53,0.6)'] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            Performance Diagnosis System · India
-          </div>
-        </motion.div>
-
-        {/* ── Headline — per-line clip-path reveal ── */}
+        {/* ── Headline ── */}
         <div
-          className="overflow-hidden text-[clamp(3rem,9vw,6.5rem)] leading-[0.93] tracking-tight"
+          className="overflow-hidden text-[clamp(2.75rem,8vw,5.5rem)] leading-[1.08] tracking-[-0.02em]"
           style={{ fontFamily: "'Syne', var(--font-jakarta), sans-serif", fontWeight: 800 }}
         >
           <motion.div variants={line1} initial="hidden" animate={inView ? 'visible' : 'hidden'}>
             <span style={{ color: 'rgba(237,237,239,0.95)' }}>One Variable</span>
           </motion.div>
           <motion.div variants={line2} initial="hidden" animate={inView ? 'visible' : 'hidden'}>
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #FF6B35 0%, #FF0080 50%, #7B2FFF 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                filter: 'drop-shadow(0 0 30px rgba(255,107,53,0.25))',
-              }}
-            >
-              Is Holding
-            </span>
+            <span className="hero-glow-word">Is Holding</span>
           </motion.div>
           <motion.div variants={line3} initial="hidden" animate={inView ? 'visible' : 'hidden'}>
             <span style={{ color: 'rgba(237,237,239,0.85)' }}>You Back.</span>
           </motion.div>
         </div>
 
-        {/* ── Sub-headline ── */}
+        {/* ── Sub-headline — one sentence ── */}
         <motion.p
-          className="mt-7 text-lg leading-relaxed sm:text-xl max-w-2xl mx-auto"
-          style={{ color: 'rgba(156,163,175,1)' }}
+          className="mt-6 text-lg sm:text-xl max-w-xl mx-auto leading-relaxed"
+          style={{ color: 'var(--muted-foreground)' }}
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.65, delay: 0.3, ease: EASE_CUBIC }}
+          transition={{ duration: 0.6, delay: 0.28, ease: EASE_CUBIC }}
         >
           AthleteOS reads your training, nutrition, and recovery as{' '}
-          <span style={{ color: 'rgba(237,237,239,0.9)', fontWeight: 500 }}>one system</span>
-          {' '}— then surfaces the{' '}
-          <span style={{ color: 'rgba(237,237,239,0.9)', fontWeight: 500 }}>exact bottleneck</span>{' '}
-          holding your performance back. Free rank check in 60 seconds.
+          <span className="text-foreground font-medium">one system</span> to find it.
         </motion.p>
 
-        {/* ── CTAs ── */}
+        {/* ── Single CTA ── */}
         <motion.div
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-          initial={{ opacity: 0, y: 24 }}
+          className="mt-10"
+          initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.65, delay: 0.42, ease: EASE_CUBIC }}
+          transition={{ duration: 0.6, delay: 0.4, ease: EASE_CUBIC }}
         >
           <MagneticButton
             onClick={handleCTA}
-            className="group relative inline-flex cursor-pointer items-center gap-3 rounded-2xl px-8 py-4 text-base font-bold text-white overflow-hidden"
+            className="group relative inline-flex cursor-pointer items-center gap-2.5 rounded-2xl px-8 py-4 text-base font-bold text-white overflow-hidden"
             style={{
               background: 'linear-gradient(135deg, #FF6B35 0%, #FF0080 100%)',
-              boxShadow: '0 4px 24px rgba(255,107,53,0.35), 0 2px 8px rgba(255,0,128,0.25), 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.14)',
+              boxShadow: '0 4px 24px rgba(255,107,53,0.3), 0 2px 8px rgba(255,0,128,0.2), 0 1px 3px rgba(0,0,0,0.4)',
             }}
           >
-            {/* Shimmer sweep */}
-            <motion.span
-              className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100"
-              style={{
-                background: 'linear-gradient(105deg, transparent 25%, rgba(255,255,255,0.15) 50%, transparent 75%)',
-              }}
-              transition={{ duration: 0.4 }}
-            />
             <span className="relative z-10 flex items-center gap-2.5">
-              Check Your Rank Free
+              See Where You Rank
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-200 group-hover:translate-x-1">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </span>
           </MagneticButton>
-
-          <a
-            href="#inline-signup-gate"
-            className="group inline-flex items-center gap-2 text-sm font-medium transition-all duration-200"
-            style={{ color: 'rgba(156,163,175,0.9)' }}
-            onClick={() => trackEvent('cta_clicked', { cta_source: 'hero_secondary', cta_text: 'Join Waitlist', has_rank_result: false })}
-            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(237,237,239,0.9)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(156,163,175,0.9)')}
-          >
-            <motion.span
-              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ background: '#2DDC8F' }}
-              animate={{ boxShadow: ['0 0 4px rgba(45,220,143,0.6)', '0 0 10px rgba(45,220,143,1)', '0 0 4px rgba(45,220,143,0.6)'] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            2,400+ athletes already on waitlist
-          </a>
-        </motion.div>
-
-        {/* ── Stats strip with animated counters ── */}
-        <motion.div
-          className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-14"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.65, delay: 0.55, ease: EASE_CUBIC }}
-        >
-          {STATS.map((stat, i) => (
-            <StatItem key={stat.label} stat={stat} index={i} inView={inView} reduced={reduced} />
-          ))}
         </motion.div>
       </motion.div>
 
