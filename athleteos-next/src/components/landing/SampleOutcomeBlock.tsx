@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { clipReveal, slideFromLeft, slideFromRight } from '@/lib/motion'
 import { BarChart3, AlertTriangle, Wrench, TrendingUp } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics'
 
@@ -51,30 +52,21 @@ export function SampleOutcomeBlock() {
   return (
     <section id="sample-outcome" className="px-4 py-20 sm:px-6 md:px-10">
       <div className="mx-auto max-w-screen-xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
+        <div className="mb-8">
           <p className="font-mono-label text-accent mb-3">Sample athlete outcome</p>
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2">
-            From rank to diagnosis to tracked progress.
-          </h2>
+          <motion.h2
+            {...clipReveal()}
+            className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2"
+          >
+            From baseline to diagnosis to tracked progress.
+          </motion.h2>
           <p className="text-sm text-muted-foreground max-w-2xl">
             One athlete. One bottleneck. One correction path. One measurable outcome to track in the next block.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]"
-        >
-          <div className="surface-card p-4 sm:p-6 md:p-8">
+        <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
+          <motion.div {...slideFromLeft(0.1)} className="surface-card p-4 sm:p-6 md:p-8">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-mono-label text-muted-foreground mb-1.5">Athlete profile</p>
@@ -108,9 +100,9 @@ export function SampleOutcomeBlock() {
                 Projected: +8.2kg squat 1RM in 6 weeks.
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="surface-card-muted p-4 sm:p-6 md:p-8">
+          <motion.div {...slideFromRight(0.15)} className="surface-card-muted p-4 sm:p-6 md:p-8">
             <p className="font-mono-label text-accent mb-3">Outcome chain</p>
             <div className="space-y-2.5">
               {OUTCOME_ROWS.map(({ key, label, value, sub, color, bg, border, Icon }, i) => (
@@ -140,10 +132,10 @@ export function SampleOutcomeBlock() {
             </div>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-muted-foreground">Sample output only. Your exact rank and diagnosis will differ.</p>
-              <a href="#rank" className="font-mono-label text-accent hover:text-accent-light transition" onClick={() => trackEvent('sample_outcome_cta_clicked', { time_on_page_seconds: Math.round((Date.now() - performance.timeOrigin) / 1000) })}>Check yours →</a>
+              <a href="#rank" className="font-mono-label text-accent hover:text-accent-light transition" onClick={() => trackEvent('sample_outcome_cta_clicked', { time_on_page_seconds: Math.round((Date.now() - performance.timeOrigin) / 1000) })}>Start yours →</a>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -196,7 +196,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       </motion.div>
 
       <p className="mt-3 text-xs text-muted-foreground">
-        This is your rank. Scroll down to see what the full diagnosis would reveal.
+        Your rank is the first signal. Scroll down to see what the full system read would reveal.
       </p>
     </motion.div>
   )

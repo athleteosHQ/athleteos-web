@@ -132,14 +132,30 @@ body {
   .locked-peek::after { animation: none; }
 }
 
-/* ── Section fade-top divider (softened — tonal approach) ────── */
+/* ── Section scan-line divider (animated on scroll) ────────── */
 .section-fade-top { position: relative; }
 .section-fade-top::before {
   content: "";
   position: absolute;
-  top: 0; left: 10%; right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04) 30%, rgba(255,255,255,0.04) 70%, transparent);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent) 30%, var(--accent) 70%, transparent);
+  opacity: 0.25;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.section-fade-top.revealed::before {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-fade-top::before {
+    transform: scaleX(1);
+    transition: none;
+  }
 }
 
 /* ── System input ────────────────────────────────────────────── */
@@ -245,6 +261,25 @@ a[role="button"]:active,
   .surface-card {
     transition: border-color 200ms ease, box-shadow 200ms ease;
   }
+}
+
+@keyframes scan {
+  0% { transform: skewX(-25deg) translateX(-150%); }
+  50%, 100% { transform: skewX(-25deg) translateX(150%); }
+}
+
+@keyframes dash {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 400; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; filter: blur(2px); }
+  50% { opacity: 1; filter: blur(4px); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 /* ── Reduced motion ──────────────────────────────────────────── */

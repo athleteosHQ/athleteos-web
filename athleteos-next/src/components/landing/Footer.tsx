@@ -18,7 +18,7 @@ export function Footer() {
           {[
             { label: 'Problem', href: '#problem' },
             { label: 'System', href: '#system' },
-            { label: 'Rank', href: '#rank' },
+            { label: 'Baseline', href: '#rank' },
             { label: 'Join', href: '#inline-signup-gate' },
           ].map(({ label, href }) => (
             <a key={label} href={href} className="py-2 px-1 transition hover:text-foreground">{label}</a>

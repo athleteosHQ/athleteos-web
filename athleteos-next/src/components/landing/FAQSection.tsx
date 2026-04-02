@@ -17,8 +17,8 @@ const FAQS: FAQ[] = [
     a: 'Self-coached lifters with 1–3 years of training who are strong enough to plateau, but not experienced enough to diagnose the plateau clearly.',
   },
   {
-    q: 'Is the rank calculator free?',
-    a: 'Yes. No account, no email, no card. Enter your lifts and get your benchmark rank instantly.',
+    q: 'Is the baseline read free?',
+    a: 'Yes. No account, no email, no card. Enter your lifts and get your first system read instantly.',
   },
   {
     q: 'How accurate are the percentiles?',
@@ -45,16 +45,16 @@ const FAQS: FAQ[] = [
     q: 'How is athleteOS different from HealthifyMe or Whoop?',
     a: (
       <>
-        <span className="block mb-3">athleteOS is not a fitness app. It is a performance diagnosis system.</span>
-        <span className="block mb-2"><span className="font-semibold text-foreground">HealthifyMe</span> — weight loss focus, crowdsourced food data with high error rates, generic workout log, no plateau analysis.</span>
-        <span className="block mb-2"><span className="font-semibold text-foreground">Whoop</span> — recovery/sleep focus, cardio strain bias, vague readiness scores, no strength context.</span>
-        <span className="block"><span className="font-semibold text-accent">athleteOS</span> — verified food composition data, strength-block-aware training context, specific variable isolation for plateaus, actionable diagnostic output.</span>
+        <span className="block mb-3">Those are tracking apps. AthleteOS is a diagnosis system. The difference: they show you data, we tell you what it means.</span>
+        <span className="block mb-2"><span className="font-semibold text-foreground">HealthifyMe</span> — tracks calories for weight loss. Crowdsourced food data. No training context. No plateau analysis.</span>
+        <span className="block mb-2"><span className="font-semibold text-foreground">Whoop</span> — tracks recovery and sleep. Cardio-biased strain score. No strength programming awareness.</span>
+        <span className="block"><span className="font-semibold text-accent">athleteOS</span> — reads training, nutrition, and recovery together. One platform, all input streams, one diagnosis. Tells you what&apos;s limiting progress and what to change next. Built for serious strength athletes, not weekend gym-goers.</span>
       </>
     ),
   },
   {
     q: 'Is my data safe?',
-    a: 'The rank check runs in your browser. We only store data if you join the waitlist. Waitlist data is in Supabase with row-level security. We do not sell it.',
+    a: 'The baseline read runs in your browser. We only store data if you join the waitlist. Waitlist data is in Supabase with row-level security. We do not sell it.',
   },
 ]
 

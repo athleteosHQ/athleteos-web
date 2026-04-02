@@ -131,7 +131,7 @@ export function AthleteScoreCard({
       <div className="mt-5 pt-5 border-t border-white/[0.06]">
         <p className="text-sm leading-relaxed text-muted-foreground">
           Compared against competitive strength-athlete records in your weight class.
-          The score is secondary. The rank tells you where you stand first.
+          This baseline is the first input to your diagnosis.
         </p>
       </div>
     </Wrapper>

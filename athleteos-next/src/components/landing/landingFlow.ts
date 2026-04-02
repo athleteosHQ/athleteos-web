@@ -40,7 +40,7 @@ export function getInlineSignupGateContent(overallPct: number | null): InlineSig
 }
 
 export function getShareMessage(overallPct: number): string {
-  return `I'm in the top ${100 - overallPct}% of competitive strength athletes. Check yours -> athleteos.io`
+  return `I'm in the top ${100 - overallPct}% of competitive strength athletes. Start yours -> athleteos.io`
 }
 
 export function getFounderLabel(serializedFounderData: string | null): string {

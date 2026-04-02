@@ -27,12 +27,12 @@ export const DURATION = {
   enter: 0.32,
 } as const
 
-/** Reusable fade-up variant set for section entrances. */
+/** Reusable fade-up variant set for section entrances — includes subtle scale. */
 export const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 12 } as const,
-  whileInView: { opacity: 1, y: 0 } as const,
-  viewport: { once: true } as const,
-  transition: { duration: DURATION.enter, delay, ease: EASE_OUT },
+  initial: { opacity: 0, y: 20, scale: 0.98 } as const,
+  whileInView: { opacity: 1, y: 0, scale: 1 } as const,
+  viewport: { once: true, amount: 0.1 } as const,
+  transition: { duration: 0.55, delay, ease: EASE_OUT },
 })
 
 /** Stagger container variant for section intros. */
@@ -52,6 +52,48 @@ export const staggerItem = {
     transition: { duration: DURATION.normal, ease: EASE_OUT },
   },
 } as const
+
+// ── Dramatic transition variants ──────────────────────────────────────────
+
+/** Heading clip-path wipe — text unmasks from left to right. */
+export const clipReveal = (delay = 0) => ({
+  initial: { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+  whileInView: { clipPath: 'inset(0 0% 0 0)', opacity: 1 },
+  viewport: { once: true, amount: 0.2 } as const,
+  transition: { duration: 0.7, delay, ease: EASE_OUT },
+})
+
+/** Card entrance — blur clear + fade up + scale. */
+export const blurUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24, scale: 0.97, filter: 'blur(4px)' },
+  whileInView: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.1 } as const,
+  transition: { duration: 0.6, delay, ease: EASE_OUT },
+})
+
+/** Slide from left — for split panels. */
+export const slideFromLeft = (delay = 0) => ({
+  initial: { opacity: 0, x: -40 },
+  whileInView: { opacity: 1, x: 0 },
+  viewport: { once: true, amount: 0.15 } as const,
+  transition: { duration: 0.65, delay, ease: EASE_OUT },
+})
+
+/** Slide from right — for split panels. */
+export const slideFromRight = (delay = 0) => ({
+  initial: { opacity: 0, x: 40 },
+  whileInView: { opacity: 1, x: 0 },
+  viewport: { once: true, amount: 0.15 } as const,
+  transition: { duration: 0.65, delay, ease: EASE_OUT },
+})
+
+/** Scale-up pop — spring physics for pricing/highlight elements. */
+export const scalePop = (delay = 0) => ({
+  initial: { opacity: 0, scale: 0.92, filter: 'blur(3px)' },
+  whileInView: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.2 } as const,
+  transition: { type: 'spring' as const, stiffness: 200, damping: 20, delay },
+})
 
 /** Subtle scroll parallax for section headings. Heading moves 20px slower than content. */
 export function useHeadingParallax() {

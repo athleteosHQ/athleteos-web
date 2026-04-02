@@ -7,7 +7,7 @@ const SOURCES = [
   { id: 'FOOD_DATA', label: 'Verified intake data', note: 'Built on verified food composition data for Indian and South Asian diets — whether you train in Mumbai, Dubai, or London', color: '#2DDC8F' },
   { id: 'COMPETITION_DATA', label: 'Competition data', note: 'Calibrated against real meet records', color: '#00D9FF' },
   { id: 'ATHLETE_DATABASE', label: 'Global athlete baseline', note: 'Percentile rankings calibrated against competitive lifters across IPF-affiliated federations', color: '#5E6AD2' },
-  { id: 'PRIVACY', label: 'No account required', note: 'Get your full rank instantly — no signup, no email, no tracking', color: '#2DDC8F' },
+  { id: 'PRIVACY', label: 'No account required', note: 'Get your first read instantly — no signup, no email, no tracking', color: '#2DDC8F' },
 ]
 
 export function TrustStrip() {

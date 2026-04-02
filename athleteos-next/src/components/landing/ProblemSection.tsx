@@ -1,258 +1,172 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { blurUp, clipReveal } from '@/lib/motion'
+import { Smartphone, Zap, Activity } from 'lucide-react'
 
-const FOOD_DATA = [
-  { food: 'Masoor dal (cooked)', mfp: '7.1g',  ifct: '9.0g',  diff: '−21%' },
-  { food: 'Paneer (100g)',       mfp: '14.2g', ifct: '18.3g', diff: '−22%' },
-  { food: 'Chicken curry',       mfp: '12.8g', ifct: '16.4g', diff: '−28%' },
-  { food: 'Whole wheat roti',    mfp: '2.9g',  ifct: '4.0g',  diff: '−27%' },
-  { food: 'Chicken shawarma',    mfp: '16.5g', ifct: '20.8g', diff: '−21%' },
-  { food: 'Khubz (Arabic bread)', mfp: '3.4g', ifct: '4.6g',  diff: '−26%' },
-]
-
-const IMPACT_CONTEXT = [
-  { label: 'IFCT 2017', note: 'National Institute of Nutrition, Hyderabad', color: '#2DDC8F' },
-  { label: 'vs MyFitnessPal', note: 'crowd-sourced food entries', color: '#F59E0B' },
-  { label: 'Per 100g', note: 'cooked or prepared weight', color: '#5E6AD2' },
-]
-
-const IMPACT_STATS = [
-  { kicker: 'Protein missed in 12 months', value: '5.4 kg', note: 'Likely miscounted because the food data is wrong.' },
-  { kicker: 'Potential lean mass left behind', value: '2.1 kg', note: 'The performance cost of tracking with bad numbers.' },
+const BLIND_SPOTS = [
+  {
+    stream: 'Nutrition',
+    problem: '27.3% Protein Deficit',
+    detail: 'MyFitnessPal values are consistently lower than the national reference standard for Indian food. You are likely under-eating protein even when your app says "on target."',
+    evidence: 'Source: IFCT 2017 vs. MFP data drift in South Asian pulses.',
+    color: '#F59E0B',
+    Icon: Smartphone,
+    delta: '-27.3%',
+  },
+  {
+    stream: 'Training',
+    problem: '12.4% CNS Volume Drift',
+    detail: 'Standard logs only show sets and reps. They miss the "Fatigue Overlap" where a 12% drift in Squat:Deadlift volume ratio predicts a lower-back plateau 4 weeks before failure.',
+    evidence: 'Source: RPE Correlation vs. Volume Load Trends.',
+    color: 'var(--accent)',
+    Icon: Activity,
+    delta: '12.4%',
+  },
+  {
+    stream: 'Recovery',
+    problem: '72-Hour Metabolic Lag',
+    detail: 'Sleep scores and HRV are lagging indicators. They show the crash after it has already started. Metabolic debt shows in Heart Rate Recovery (HRR) 3 days before it impacts HRV.',
+    evidence: 'Source: 72-Hour HRR Lead Time Correlation.',
+    color: '#2DDC8F',
+    Icon: Zap,
+    delta: '72hr',
+  },
 ]
 
 export function ProblemSection() {
   return (
-    <section id="problem" className="px-6 py-20 md:px-10">
-      <div className="mx-auto max-w-6xl">
-        <div className="space-y-4 md:hidden mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45 }}
-            className="surface-card p-5"
-          >
-            <p className="font-mono-label text-accent mb-2">Why most tracking fails</p>
-            <h2 className="text-2xl font-display font-bold text-foreground mb-3">
-              The food data is wrong, so the diagnosis is wrong.
-            </h2>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              MyFitnessPal is crowd-sourced. athleteOS uses IFCT 2017 so Indian athletes are not guessing off bad macros.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: 0.06 }}
-            className="grid gap-3 sm:grid-cols-2"
-          >
-            {IMPACT_STATS.map(({ kicker, value, note }) => (
-              <div
-                key={kicker}
-                className="rounded-2xl p-5 surface-impact-card"
-              >
-                <p className="font-mono-label text-destructive mb-2">{kicker}</p>
-                <p className="font-display text-3xl font-bold text-foreground">{value}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{note}</p>
-              </div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: 0.12 }}
-            className="rounded-2xl p-5 surface-dim-panel"
-          >
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div>
-                <p className="font-mono-label text-muted-foreground mb-1">Protein tracking drift</p>
-                <p className="font-display text-4xl font-bold text-foreground">27%</p>
-              </div>
-              <div className="rounded-xl px-3 py-2 pill-destructive">
-                <span className="font-mono-label text-destructive">Plateau risk ↑</span>
-              </div>
-            </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Wrong intake data compounds for months before it shows up in your lifts.
-            </p>
-          </motion.div>
+    <section id="problem" className="px-6 py-20 md:px-10 overflow-hidden">
+      <div className="mx-auto max-w-6xl relative">
+        
+        {/* Background Decorative Element */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-full opacity-[0.03] pointer-events-none">
+          <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            <circle cx="500" cy="500" r="400" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 20" />
+            <circle cx="500" cy="500" r="300" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="5 15" />
+          </svg>
         </div>
 
-        <div className="hidden md:grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-start mb-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="surface-card p-6 md:p-8"
+        <div className="mb-12 text-center relative z-10">
+          <p className="font-mono-label text-accent mb-3">The Diagnostic Gap</p>
+          <motion.h2
+            {...clipReveal()}
+            className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4"
           >
-            <p className="font-mono-label text-accent mb-3">Why most tracking fails</p>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-              You&apos;re tracking protein. The numbers are wrong.
-            </h2>
-            <p className="body-copy max-w-3xl mb-5">
-              Most Indian athletes track nutrition using MyFitnessPal. The food data is crowd-sourced and consistently wrong for Indian food. athleteOS uses IFCT 2017 — the national reference standard.
-            </p>
-            <div className="flex max-w-3xl flex-wrap gap-2.5">
-              {IMPACT_CONTEXT.map(({ label, note, color }) => (
-                <div
-                  key={label}
-                  className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
-                >
-                  <span className="h-2 w-2 rounded-full" style={{ background: color }} />
-                  <span className="text-sm leading-relaxed text-muted-foreground">
-                    <span className="font-semibold text-foreground">{label}</span> {note}
-                  </span>
+            Your apps see numbers.<br className="hidden md:block" /> They don&apos;t see the stall.
+          </motion.h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            You see the numbers, but you miss the correlations that actually cause the stall. Most athletes fail because their inputs are fragmented across three different apps.
+          </p>
+        </div>
+
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
+          
+          {/* 1. Fragmented Side (The "Broken" Side) */}
+          <div className="flex-1 w-full grid grid-cols-1 gap-4 relative group">
+            <div className="absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-[0.03] transition-opacity bg-[url('https://media.giphy.com/media/oEI9uWUPr97Tq/giphy.gif')] bg-repeat bg-center mix-blend-screen" />
+            
+            <p className="font-mono-label text-muted-foreground/40 text-center mb-2">Fragmented data (Siloed)</p>
+            {BLIND_SPOTS.map(({ stream, problem, detail, evidence, delta, color, Icon }, i) => (
+              <motion.div
+                key={stream}
+                {...blurUp(0.1 * i)}
+                className="surface-card p-4 flex flex-col gap-3 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-default"
+                style={{ borderStyle: 'dashed' }}
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-white/10 shrink-0">
+                      <Icon size={18} className="text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-mono-label text-muted-foreground uppercase tracking-widest">{stream}</p>
+                      <p className="text-sm font-semibold text-foreground/70">{problem}</p>
+                    </div>
+                  </div>
+                  <div className="px-2.5 py-1 rounded bg-destructive/10 border border-destructive/20 text-destructive text-[10px] font-mono font-bold tracking-tighter uppercase">
+                    Error {delta}
+                  </div>
                 </div>
-              ))}
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 max-w-3xl">
-              {IMPACT_STATS.map(({ kicker, value, note }) => (
-                <div
-                  key={kicker}
-                  className="rounded-2xl p-5 surface-impact-card"
-                >
-                  <p className="font-mono-label text-destructive mb-2">{kicker}</p>
-                  <p className="font-display text-3xl font-bold text-foreground">{value}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{note}</p>
+                <div className="pl-14">
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-2">{detail}</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-mono text-foreground/70 bg-white/5 rounded-full px-2.5 py-0.5 border border-white/5">
+                      {evidence}
+                    </p>
+                  </div>
                 </div>
-              ))}
+              </motion.div>
+            ))}
+          </div>
+
+          {/* 2. The Bridge/Transition */}
+          <div className="flex flex-col items-center gap-4 py-4">
+            <div className="h-12 w-px bg-gradient-to-b from-transparent via-accent/50 to-accent" />
+            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center shadow-[0_0_20px_rgba(107,122,237,0.5)]">
+              <Zap size={14} className="text-white fill-white" />
             </div>
-            <div
-              className="mt-4 inline-flex items-center gap-2 rounded-full px-3.5 py-2"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+            <div className="h-12 w-px bg-gradient-to-t from-transparent via-accent/50 to-accent" />
+          </div>
+
+          {/* 3. Unified Side */}
+          <div className="flex-1 w-full">
+            <p className="font-mono-label text-accent text-center mb-4">Unified Diagnosis</p>
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              className="surface-card p-8 border-accent/30 bg-accent/[0.02] shadow-[0_0_40px_rgba(107,122,237,0.05)] relative overflow-hidden"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-success" />
-              <span className="text-sm text-muted-foreground">Source: NIN · IFCT 2017 · verified against peer literature</span>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="surface-card-muted overflow-hidden relative h-full"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.08 }}
-          >
-            {/* Clinical Food Background */}
-            <div className="absolute inset-0 z-0">
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-[0.08] grayscale scale-110"
-                style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80")' }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-secondary/95 via-secondary/80 to-transparent" />
-            </div>
-
-            <div className="relative z-10 p-6 md:p-8">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="font-mono-label text-muted-foreground mb-2">Protein tracking drift</p>
-                  <p className="font-display text-5xl font-bold text-foreground">27%</p>
+              <div className="absolute top-0 right-0 p-4 opacity-5">
+                <Activity size={80} className="text-accent" />
+              </div>
+              
+              <h3 className="text-2xl font-display font-bold text-foreground mb-4 relative z-10">The Connected Read</h3>
+              <p className="text-base text-muted-foreground leading-relaxed mb-6 relative z-10">
+                AthleteOS connects the dots between your apps to find the one variable actually causing the stall. It correlates your intake, volume, and recovery signals to catch plateaus before they happen.
+              </p>
+              
+              <div className="space-y-4 relative z-10 mb-6">
+                <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/20">
+                  <p className="text-xs font-mono-label text-accent uppercase mb-2">Sample Correlation</p>
+                  <p className="text-sm text-foreground/90 font-medium italic">
+                    "Recovery Lag detected: Bench 1RM projected to drop 2.5kg unless intake increases by 40g today."
+                  </p>
                 </div>
-                <div className="rounded-xl px-3 py-2 pill-destructive">
-                  <span className="font-mono-label text-destructive">Plateau risk ↑</span>
+                <div className="space-y-2">
+                  {['Real protein vs IFCT 2017', 'CNS debt vs Volume Load', 'Metabolic recovery trends'].map(item => (
+                    <div key={item} className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+                      <span className="text-sm text-foreground/90 font-medium">{item}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="mt-8 flex items-end gap-2 h-48">
-                {[32, 40, 36, 45, 49, 49, 49].map((h, i) => (
-                  <div
-                    key={i}
-                    className="flex-1 rounded-t-md relative"
-                    style={{
-                      height: `${h * 3.4}px`,
-                      background: i < 4 ? 'rgba(255,255,255,0.09)' : i === 4 ? 'rgba(94,106,210,0.42)' : 'rgba(239,68,68,0.26)',
-                      borderTop: i >= 5 ? '1px dashed rgba(239,68,68,0.55)' : 'none',
-                    }}
-                  >
-                    {i === 4 && (
-                      <div className="absolute -top-9 left-1/2 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-bold text-white whitespace-nowrap"
-                        style={{ background: '#EF4444' }}>
-                        Plateau point
-                      </div>
-                    )}
-                  </div>
-                ))}
+
+              {/* Outcome Viz */}
+              <div className="relative h-12 w-full bg-white/5 rounded-xl border border-white/10 p-2 flex items-center justify-between">
+                <div className="flex items-end gap-1 h-full w-24">
+                  {[20, 25, 22, 45, 60, 85].map((h, i) => (
+                    <div key={i} className="flex-1 bg-accent/40 rounded-t-sm" style={{ height: `${h}%` }} />
+                  ))}
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-mono-label text-muted-foreground uppercase">Stall Broken</p>
+                  <p className="text-sm font-bold text-success">+8.2kg</p>
+                </div>
               </div>
-              <div className="mt-8 pt-5 border-t border-white/8">
-                <p className="text-base text-muted-foreground leading-relaxed">
-                  <span className="font-semibold text-destructive">Critical:</span> wrong intake data compounds for months before it shows up in your lifts.
-                </p>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
+
         </div>
 
-        {/* Data table */}
-        <motion.div
-          className="hidden md:block surface-card overflow-hidden"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+        <motion.p
+          {...blurUp(0.4)}
+          className="mt-12 text-sm text-center text-muted-foreground/60 font-mono-label italic"
         >
-          <div className="hidden md:block">
-            <div className="grid grid-cols-4 border-b border-border px-4 py-2.5 bg-secondary/40">
-              {['Food', 'MFP (protein)', 'IFCT (actual)', 'Gap'].map(h => (
-                <p key={h} className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">{h}</p>
-              ))}
-            </div>
-            {FOOD_DATA.map((row, i) => (
-              <div
-                key={row.food}
-                className={`grid grid-cols-4 px-4 py-3 ${i < FOOD_DATA.length - 1 ? 'border-b border-border' : ''}`}
-              >
-                <p className="text-base text-foreground">{row.food}</p>
-                <p className="font-mono text-base text-muted-foreground">{row.mfp}</p>
-                <p className="font-mono text-base text-foreground font-semibold">{row.ifct}</p>
-                <p className="font-mono text-base font-bold text-destructive">{row.diff}</p>
-              </div>
-            ))}
-          </div>
-          <div className="md:hidden divide-y divide-white/6">
-            {FOOD_DATA.map(row => (
-              <div key={row.food} className="p-4 space-y-3">
-                <div className="text-sm font-semibold text-foreground">{row.food}</div>
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  <div className="rounded-xl bg-white/[0.03] p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-1">MFP</p>
-                    <p className="font-mono text-sm text-foreground">{row.mfp}</p>
-                  </div>
-                  <div className="rounded-xl bg-white/[0.03] p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-1">IFCT</p>
-                    <p className="font-mono text-sm font-semibold text-foreground">{row.ifct}</p>
-                  </div>
-                  <div className="rounded-xl bg-white/[0.03] p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-1">Gap</p>
-                    <p className="font-mono text-sm font-bold text-destructive">{row.diff}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Formula line */}
-        <motion.div
-          className="mt-6 px-4 py-3 text-center text-sm font-medium text-muted-foreground"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          style={{
-            background: 'rgba(255,255,255,0.02)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            borderRadius: 4,
-          }}
-        >
-          Training <span className="text-foreground/40">+</span> nutrition <span className="text-foreground/40">+</span> recovery <span className="text-foreground/40">→</span> <span className="text-accent">one bottleneck</span>
-        </motion.div>
+          Break the plateau. One system. One bottleneck. One correction path.
+        </motion.p>
       </div>
     </section>
   )

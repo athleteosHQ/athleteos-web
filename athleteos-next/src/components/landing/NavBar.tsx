@@ -7,7 +7,7 @@ import { trackEvent } from '@/lib/analytics'
 import { useMotionSafe } from '@/lib/motion'
 
 const NAV_LINKS = [
-  { label: 'Rank', href: '#rank' },
+  { label: 'Baseline', href: '#rank' },
   { label: 'Join', href: '#inline-signup-gate' },
   { label: 'Contact', href: 'mailto:contact@athleteos.io' },
 ] as const
@@ -168,10 +168,10 @@ export function NavBar() {
             background: 'rgba(255,255,255,0.06)',
             border: '1px solid rgba(255,255,255,0.1)',
           }}
-          onClick={() => trackEvent('cta_clicked', { cta_source: 'nav_cta', cta_text: 'See Where You Rank', has_rank_result: false })}
+          onClick={() => trackEvent('cta_clicked', { cta_source: 'nav_cta', cta_text: 'Start Your First Read', has_rank_result: false })}
         >
           <span className="relative z-10 flex items-center gap-1.5">
-            See Where You Rank
+            Start Your First Read
             <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className="opacity-40 transition-all duration-200 group-hover/cta:opacity-80 group-hover/cta:translate-x-0.5">
               <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
