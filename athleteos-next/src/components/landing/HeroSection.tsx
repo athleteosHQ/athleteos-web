@@ -102,15 +102,26 @@ export function HeroSection() {
           </button>
         </motion.div>
 
-        {/* ── Social proof ── */}
-        <motion.p
-          className="mt-4 text-xs text-muted-foreground/50 font-mono"
+        {/* ── Data foundation strip ── */}
+        <motion.div
+          className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
           initial={reduced ? false : { opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.4, ease: EASE }}
         >
-          Calibrated against 3,200+ competitive meet records
-        </motion.p>
+          {[
+            { num: '3,200+', label: 'meet records' },
+            { num: '12', label: 'weight classes' },
+            { num: 'IFCT 2017', label: 'nutrition data' },
+            { num: 'IPF', label: 'federation standard' },
+          ].map(({ num, label }, i) => (
+            <div key={label} className="flex items-center gap-1.5">
+              {i > 0 && <span className="text-muted-foreground/20 hidden sm:inline">·</span>}
+              <span className="text-xs font-mono font-bold text-foreground/70">{num}</span>
+              <span className="text-[10px] text-muted-foreground/40">{label}</span>
+            </div>
+          ))}
+        </motion.div>
 
         {/* ── Mini score card preview ── */}
         <motion.div
@@ -120,22 +131,29 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
         >
           <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 backdrop-blur-none" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
-            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-4">What the system reads</p>
+            <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/50 mb-4">Sample performance read</p>
+            <div className="flex items-end justify-between gap-4 mb-4">
+              <div>
+                <p className="text-[11px] text-muted-foreground/60 uppercase tracking-[0.08em] mb-1">Baseline</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-display font-[800] text-foreground tabular-nums">78</span>
+                  <span className="text-xs text-muted-foreground">/ 100</span>
+                </div>
+              </div>
+              <div className="rounded-full border border-success/20 bg-success/10 px-2.5 py-1">
+                <span className="text-[10px] font-mono uppercase tracking-[0.08em] text-success">Top 22%</span>
+              </div>
+            </div>
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/30 shrink-0" />
-                <p className="text-[13px] text-foreground/80">Your nutrition, training, and recovery — connected</p>
+              <div className="rounded-xl border border-white/[0.05] bg-white/[0.025] px-3 py-3">
+                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/60 mb-1">Limiter</p>
+                <p className="text-[13px] text-foreground/85">Recovery debt is suppressing bench progress relative to squat and deadlift.</p>
               </div>
-              <div className="flex items-start gap-3">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/30 shrink-0" />
-                <p className="text-[13px] text-foreground/80">The one thing actually stalling your progress</p>
+              <div className="rounded-xl border border-white/[0.05] bg-white/[0.025] px-3 py-3">
+                <p className="text-[10px] font-mono uppercase tracking-[0.08em] text-muted-foreground/60 mb-1">Correction Preview</p>
+                <p className="text-[13px] text-foreground/85">Increase heavy-day intake and reduce fatigue overlap before the next block.</p>
               </div>
-              <div className="flex items-start gap-3">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/30 shrink-0" />
-                <p className="text-[13px] text-foreground/80">A specific correction — and whether it worked</p>
-              </div>
-              <div className="h-px bg-white/[0.06] my-1" />
-              <p className="text-[11px] text-muted-foreground/50 text-center">Built to make you competition-ready. Not just tracked.</p>
+              <p className="text-[11px] text-muted-foreground/50 text-center pt-1">One score. One limiter. One next move.</p>
             </div>
           </div>
         </motion.div>
