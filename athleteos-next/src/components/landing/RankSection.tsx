@@ -103,15 +103,19 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
           viewport={{ once: true }}
           className="mb-8"
         >
-          <motion.span variants={staggerItem} className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 border border-accent/20 px-3 py-1 font-mono-label text-accent mb-3">Step 1</motion.span>
-          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">See where you stand</motion.h2>
+          <motion.span variants={staggerItem} className="eyebrow mb-3">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#FF6B35', boxShadow: '0 0 5px rgba(255,107,53,0.8)' }} />
+            Step 1 · Free Rank Check
+          </motion.span>
+          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl" style={{ fontFamily: "'Syne', var(--font-jakarta), sans-serif" }}>See Where You Stand</motion.h2>
           <motion.p variants={staggerItem} className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
             Rank tells you where you stand. AthleteOS turns that into a system read:
             <span className="text-foreground"> what&apos;s limiting progress</span>, <span className="text-foreground">what to change</span>, and <span className="text-foreground">what outcome to track next</span>.
           </motion.p>
           <motion.div
             variants={staggerItem}
-            className="mt-5 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-3"
+            className="mt-5 inline-flex flex-wrap items-center gap-2 rounded-2xl border bg-white/[0.02] px-3 py-3"
+            style={{ borderColor: 'rgba(255,107,53,0.1)' }}
           >
             {[
               'Rank',
@@ -123,7 +127,7 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
                 <span className="rounded-full bg-white/[0.05] px-2.5 py-1 font-mono-label text-muted-foreground">
                   {step}
                 </span>
-                {index < 3 && <span className="text-accent/70">→</span>}
+                {index < 3 && <span style={{ color: 'rgba(255,107,53,0.6)' }}>→</span>}
               </div>
             ))}
           </motion.div>

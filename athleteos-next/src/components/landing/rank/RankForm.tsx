@@ -59,11 +59,16 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
 
       <button
         onClick={onSubmit}
-        className="mt-6 w-full cursor-pointer bg-accent text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 group transition-all hover:bg-accent-light"
-        style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
+        className="mt-6 w-full cursor-pointer text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 group transition-all relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #FF6B35 0%, #FF0080 100%)',
+          boxShadow: '0 4px 24px rgba(255,107,53,0.35), 0 2px 8px rgba(255,0,128,0.2), 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.14)',
+        }}
       >
-        See My Rank
-        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        <span className="relative z-10 flex items-center gap-2">
+          See My Rank
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </span>
       </button>
       <p className="mt-2 text-center font-mono text-xs text-muted-foreground/60">vs. 3,200+ competitive strength athletes</p>
     </div>

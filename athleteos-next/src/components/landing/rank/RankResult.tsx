@@ -8,10 +8,18 @@ import { getFirstReadDiagnosis } from '../firstReadDiagnosis'
 import { getRankResultMessaging } from '../rankResultMessaging'
 import { EASE_OUT, DURATION } from '@/lib/motion'
 
+// Gradient text helper
+const gradStyle = {
+  background: 'linear-gradient(135deg, #FF6B35, #FF0080)',
+  WebkitBackgroundClip: 'text' as const,
+  WebkitTextFillColor: 'transparent' as const,
+  backgroundClip: 'text' as const,
+}
+
 // ── Spring-driven bar ─────────────────────────────────────────────────────
 function SpringBar({ pct, color, delay }: { pct: number; color: string; delay: number }) {
   const motionValue = useMotionValue(0)
-  const spring = useSpring(motionValue, { stiffness: 60, damping: 18 })
+  const spring = useSpring(motionValue, { stiffness: 55, damping: 16 })
   const width = useTransform(spring, v => `${v}%`)
 
   useEffect(() => {
@@ -27,29 +35,52 @@ function SpringBar({ pct, color, delay }: { pct: number; color: string; delay: n
   )
 }
 
-// ── Cascade variants ──────────────────────────────────────────────────────
 const cascadeParent = {
   hidden: {},
-  visible: {
-    transition: { delayChildren: 0.6, staggerChildren: 0.06 },
-  },
+  visible: { transition: { delayChildren: 0.5, staggerChildren: 0.07 } },
 }
 const cascadeChild = {
-  hidden: { opacity: 0, y: 8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: DURATION.normal, ease: EASE_OUT },
-  },
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: DURATION.normal, ease: EASE_OUT } },
 }
 
 // ── Diagnostic bars ───────────────────────────────────────────────────────
 export function DiagnosticBars({ result }: { result: RankResultType }) {
   const bars = [
-    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: '#5E6AD2', est: result.squat.estimated1RM },
-    { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: '#F59E0B', est: result.bench.estimated1RM },
-    { label: 'Deadlift', pct: result.deadlift.percentile, value: result.deadlift.estimated1RM > 0 ? `Top ${100 - result.deadlift.percentile}%` : '—', color: '#EF4444', est: result.deadlift.estimated1RM },
-    ...(result.run5k ? [{ label: '5K Run', pct: result.run5k.percentile, value: `Top ${100 - result.run5k.percentile}%`, color: '#2DDC8F', est: 1 }] : []),
+    {
+      label: 'Squat',
+      pct: result.squat.percentile,
+      value: result.squat.estimated1RM > 0 ? `Top ${100 - result.squat.percentile}%` : '—',
+      color: 'linear-gradient(90deg, #FF6B35, #FF0080)',
+      colorFlat: '#FF6B35',
+      est: result.squat.estimated1RM,
+    },
+    {
+      label: 'Bench',
+      pct: result.bench.percentile,
+      value: result.bench.estimated1RM > 0 ? `Top ${100 - result.bench.percentile}%` : '—',
+      color: '#F59E0B',
+      colorFlat: '#F59E0B',
+      est: result.bench.estimated1RM,
+    },
+    {
+      label: 'Deadlift',
+      pct: result.deadlift.percentile,
+      value: result.deadlift.estimated1RM > 0 ? `Top ${100 - result.deadlift.percentile}%` : '—',
+      color: '#EF4444',
+      colorFlat: '#EF4444',
+      est: result.deadlift.estimated1RM,
+    },
+    ...(result.run5k
+      ? [{
+          label: '5K Run',
+          pct: result.run5k.percentile,
+          value: `Top ${100 - result.run5k.percentile}%`,
+          color: '#2DDC8F',
+          colorFlat: '#2DDC8F',
+          est: 1,
+        }]
+      : []),
   ]
 
   return (
@@ -61,7 +92,7 @@ export function DiagnosticBars({ result }: { result: RankResultType }) {
     >
       <div className="flex justify-between items-baseline">
         <div className="flex items-center gap-2">
-          <Activity className="w-3 h-3 text-accent" />
+          <Activity className="w-3 h-3" style={{ color: '#FF6B35' }} />
           <p className="font-mono-label text-muted-foreground">Strength Signal</p>
         </div>
         <p className="text-xs text-muted-foreground">vs. {result.weightClass} class</p>
@@ -75,7 +106,12 @@ export function DiagnosticBars({ result }: { result: RankResultType }) {
               {bar.est > 0 && (
                 <span className="font-mono text-xs text-muted-foreground">{bar.est.toFixed(1)}kg 1RM</span>
               )}
-              <span className="font-mono tabular-nums text-xs font-bold" style={{ color: bar.color }}>{bar.value}</span>
+              <span
+                className="font-mono tabular-nums text-xs font-bold"
+                style={i === 0 ? gradStyle : { color: bar.colorFlat }}
+              >
+                {bar.value}
+              </span>
             </div>
           </div>
           <div className="h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
@@ -90,10 +126,7 @@ export function DiagnosticBars({ result }: { result: RankResultType }) {
 // ── Result insight panel ──────────────────────────────────────────────────
 export function ResultInsightPanel({ result }: { result: RankResultType }) {
   const [expanded, setExpanded] = useState(false)
-  const messaging = getRankResultMessaging({
-    overallPct: result.overallPct,
-    weightClass: result.weightClass,
-  })
+  const messaging = getRankResultMessaging({ overallPct: result.overallPct, weightClass: result.weightClass })
   const diagnosis = getFirstReadDiagnosis(result)
 
   return (
@@ -101,19 +134,22 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       variants={cascadeParent}
       initial="hidden"
       animate="visible"
-      className="surface-card-muted rounded-2xl px-4 py-4"
-      style={{ borderColor: 'rgba(94,106,210,0.14)' }}
+      className="rounded-2xl px-4 py-4"
+      style={{
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid rgba(255,107,53,0.12)',
+      }}
     >
-      {/* ── Primary: always visible ── */}
       <motion.div variants={cascadeChild}>
-        <p className="font-mono-label text-accent mb-2">{messaging.status}</p>
+        <p className="font-mono-label mb-2" style={gradStyle}>{messaging.status}</p>
         <p className="text-lg font-semibold text-foreground">{messaging.identity}</p>
         <p className="mt-1 text-base font-medium text-foreground/90">{messaging.progression}</p>
       </motion.div>
 
       <motion.div
         variants={cascadeChild}
-        className="surface-card-muted mt-4 rounded-xl px-3.5 py-3"
+        className="mt-4 rounded-xl px-3.5 py-3"
+        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
       >
         <p className="font-mono-label text-muted-foreground mb-1.5">{diagnosis.label}</p>
         <p className="text-sm font-semibold text-foreground">{diagnosis.headline}</p>
@@ -123,20 +159,19 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       {result.nextThreshold && (
         <motion.div
           variants={cascadeChild}
-          className="surface-card-muted mt-3 rounded-xl px-3.5 py-3"
-          style={{ borderColor: 'rgba(94,106,210,0.18)' }}
+          className="mt-3 rounded-xl px-3.5 py-3"
+          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,107,53,0.12)' }}
         >
-          <p className="font-mono-label text-accent mb-1.5">Next Threshold</p>
+          <p className="font-mono-label mb-1.5" style={gradStyle}>Next Threshold</p>
           <p className="text-sm leading-relaxed text-foreground">
             Your <span className="font-bold">{result.nextThreshold.lift}</span> needs{' '}
-            <span className="font-mono font-bold text-accent">+{result.nextThreshold.kgNeeded}kg</span>{' '}
+            <span className="font-mono font-bold" style={gradStyle}>+{result.nextThreshold.kgNeeded}kg</span>{' '}
             to move from Top {100 - result.nextThreshold.currentPct}% to{' '}
             <span className="font-bold text-foreground">Top {100 - result.nextThreshold.nextPct}%</span>.
           </p>
         </motion.div>
       )}
 
-      {/* ── Secondary: collapsible ── */}
       <motion.div variants={cascadeChild} className="mt-3">
         <button
           type="button"
@@ -163,21 +198,32 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
               <div className="space-y-3 pt-2">
                 <div className="grid grid-cols-2 gap-2">
                   <div
-                    className="surface-card-muted rounded-xl px-3.5 py-3"
-                    style={{ borderColor: 'rgba(94,106,210,0.14)' }}
+                    className="rounded-xl px-3.5 py-3"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,107,53,0.1)' }}
                   >
-                    <p className="font-mono-label text-accent mb-1">System Efficiency</p>
-                    <p className="text-xl font-display font-bold text-accent">{result.efficiencyScore.pct}%</p>
+                    <p className="font-mono-label mb-1" style={gradStyle}>System Efficiency</p>
+                    <p className="text-xl font-bold" style={{ fontFamily: "'Syne', sans-serif", ...gradStyle }}>
+                      {result.efficiencyScore.pct}%
+                    </p>
                     <p className="text-xs text-muted-foreground mt-0.5">of theoretical ceiling</p>
                   </div>
-                  <div className="surface-card-muted rounded-xl px-3.5 py-3">
+                  <div
+                    className="rounded-xl px-3.5 py-3"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
+                  >
                     <p className="font-mono-label text-muted-foreground mb-1">Strength Age</p>
-                    <p className="text-xl font-display font-bold text-foreground">{result.strengthAge.years} <span className="text-sm font-normal text-muted-foreground">years</span></p>
+                    <p className="text-xl font-bold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
+                      {result.strengthAge.years}{' '}
+                      <span className="text-sm font-normal text-muted-foreground">years</span>
+                    </p>
                     <p className="text-xs text-muted-foreground mt-0.5">estimated training time</p>
                   </div>
                 </div>
 
-                <div className="surface-card-muted rounded-xl px-3.5 py-3">
+                <div
+                  className="rounded-xl px-3.5 py-3"
+                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
+                >
                   <p className="font-mono-label text-muted-foreground mb-1.5">System Read</p>
                   <p className="text-sm leading-relaxed text-muted-foreground">{messaging.preview}</p>
                 </div>
