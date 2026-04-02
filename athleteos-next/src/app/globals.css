@@ -263,6 +263,7 @@ body {
   display: inline-flex;
   overflow: hidden;
   vertical-align: middle;
+  height: 1.4em;
 }
 .link-slide-inner {
   display: flex;
@@ -275,6 +276,8 @@ body {
 .link-slide-text {
   display: block;
   white-space: nowrap;
+  height: 1.4em;
+  line-height: 1.4em;
 }
 
 /* ── Section blend transitions (C4G-inspired) ──────────── */
