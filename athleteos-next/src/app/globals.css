@@ -389,6 +389,60 @@ a[role="button"]:active,
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* ── Visual thread — narrative continuity ──────────────── */
+.visual-thread {
+  position: relative;
+}
+.visual-thread::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255,255,255,0.06) 10%,
+    rgba(255,255,255,0.06) 90%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+.visual-thread > section {
+  position: relative;
+}
+/* Thread node markers */
+.visual-thread > section::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: 48px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  z-index: 2;
+}
+@media (min-width: 768px) {
+  .visual-thread::before {
+    left: 40px;
+  }
+  .visual-thread > section::before {
+    left: 36px;
+  }
+}
+@media (max-width: 640px) {
+  .visual-thread::before {
+    display: none;
+  }
+  .visual-thread > section::before {
+    display: none;
+  }
+}
+
 /* ── Reduced motion ──────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .reveal-line > span {

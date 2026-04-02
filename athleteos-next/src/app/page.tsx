@@ -48,20 +48,20 @@ export default function LandingV2() {
           <HeroSection />
         </section>
 
-        {/* 2. Problem — why tracking fails (builds urgency) */}
-        <section className="floating-widget-container">
-          <ProblemSection />
-        </section>
+        {/* 2-4. Connected narrative: Problem → Sample → Calculator */}
+        <div className="visual-thread">
+          <section className="floating-widget-container">
+            <ProblemSection />
+          </section>
 
-        {/* 3. Sample output — show what the diagnosis looks like (satisfy curiosity) */}
-        <section className="floating-widget-container">
-          <SampleOutcomeBlock />
-        </section>
+          <section className="floating-widget-container">
+            <SampleOutcomeBlock />
+          </section>
 
-        {/* 4. Calculator — generate your baseline (fast path to value) */}
-        <section className="floating-widget-container">
-          <RankSection mode={mode} onModeChange={setMode} onRankResult={setRankResult} />
-        </section>
+          <section className="floating-widget-container">
+            <RankSection mode={mode} onModeChange={setMode} onRankResult={setRankResult} />
+          </section>
+        </div>
 
         {/* 5. Personalized upsell — locked diagnosis using their data */}
         {rankResult && (
