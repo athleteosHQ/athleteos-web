@@ -14,7 +14,7 @@ export async function sendFounderWelcomeEmail({ to, founderNumber }: FounderWelc
     const { error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to,
-      subject: `You're Founding Member #${founderNumber} — AthleteOS`,
+      subject: `🏋️ You're Founding Member #${founderNumber} — Welcome to AthleteOS`,
       html: buildFounderEmailHtml(founderNumber),
     })
 
@@ -37,79 +37,102 @@ function buildFounderEmailHtml(founderNumber: number): string {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
-  <body
-    style="margin:0;padding:0;background:#0C0C0E;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;"
-  >
-    <div style="max-width:560px;margin:0 auto;padding:40px 24px;">
+  <body style="margin:0;padding:0;background:#09090B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+    <div style="max-width:520px;margin:0 auto;padding:48px 24px;">
+
       <!-- Logo -->
+      <div style="margin-bottom:40px;text-align:center;">
+        <span style="font-size:20px;font-weight:800;color:#FAFAFA;letter-spacing:-0.03em;">athlete</span><span style="font-size:20px;font-weight:800;color:#a1a1aa;letter-spacing:-0.03em;">OS</span>
+      </div>
+
+      <!-- Founder badge — hero moment -->
+      <div style="background:linear-gradient(180deg,#111113,#0C0C0E);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;margin-bottom:32px;text-align:center;">
+        <p style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:#71717A;">🎖️ Founding Member</p>
+        <p style="margin:0;font-size:48px;font-weight:800;color:#FAFAFA;letter-spacing:-0.03em;">#${founderNumber}</p>
+        <p style="margin:8px 0 0;font-size:13px;color:#71717A;">of 50 founding spots</p>
+      </div>
+
+      <!-- What you just locked -->
       <div style="margin-bottom:32px;">
-        <span style="font-size:18px;font-weight:800;color:#EDEDEF;letter-spacing:-0.03em;">athlete</span
-        ><span style="font-size:18px;font-weight:800;color:#6B7AED;letter-spacing:-0.03em;">OS</span>
+        <p style="font-size:14px;font-weight:700;color:#FAFAFA;margin:0 0 16px;text-transform:uppercase;letter-spacing:0.05em;">🔒 What you just locked in</p>
+
+        <div style="padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;">
+          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ Full diagnostic system at launch</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">Training, nutrition, and recovery — read as one system</p>
+        </div>
+
+        <div style="padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;">
+          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ ₹250/mo founding rate — locked forever</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">Regular price will be ₹599/mo. Yours never changes.</p>
+        </div>
+
+        <div style="padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;">
+          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ Direct WhatsApp access to the founder</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">First 90 days. Not a support bot — the actual founder.</p>
+        </div>
+
+        <div style="padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
+          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ You shape what gets built</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">Your feedback directly influences the product roadmap.</p>
+        </div>
       </div>
 
-      <!-- Founder badge -->
-      <div
-        style="background:#131315;border:1px solid rgba(107,122,237,0.18);border-radius:12px;padding:24px;margin-bottom:28px;"
-      >
-        <p
-          style="margin:0 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:#6B7AED;"
-        >
-          Founding Member
+      <!-- What happens next -->
+      <div style="margin-bottom:32px;">
+        <p style="font-size:14px;font-weight:700;color:#FAFAFA;margin:0 0 16px;text-transform:uppercase;letter-spacing:0.05em;">📋 What happens next</p>
+
+        <table style="width:100%;border-collapse:collapse;">
+          <tr>
+            <td style="padding:8px 0;vertical-align:top;width:80px;">
+              <span style="font-size:11px;font-weight:700;color:#2DDC8F;text-transform:uppercase;letter-spacing:0.08em;">Now</span>
+            </td>
+            <td style="padding:8px 0;font-size:13px;color:#a1a1aa;">Your spot is reserved. No payment needed yet.</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0;vertical-align:top;">
+              <span style="font-size:11px;font-weight:700;color:#2DDC8F;text-transform:uppercase;letter-spacing:0.08em;">This week</span>
+            </td>
+            <td style="padding:8px 0;font-size:13px;color:#a1a1aa;">I'll reach out on WhatsApp to understand your training and where you've hit walls.</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0;vertical-align:top;">
+              <span style="font-size:11px;font-weight:700;color:#2DDC8F;text-transform:uppercase;letter-spacing:0.08em;">At launch</span>
+            </td>
+            <td style="padding:8px 0;font-size:13px;color:#a1a1aa;">You're first in. Full system access, founding rate active.</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- The thesis -->
+      <div style="background:rgba(255,255,255,0.02);border-left:2px solid rgba(255,255,255,0.1);padding:16px 20px;margin-bottom:32px;border-radius:0 8px 8px 0;">
+        <p style="font-size:15px;line-height:1.7;color:#FAFAFA;margin:0 0 8px;font-weight:600;">
+          Most athletes have the data. The insight is missing.
         </p>
-        <p style="margin:0;font-size:36px;font-weight:800;color:#EDEDEF;">#${founderNumber}</p>
+        <p style="font-size:13px;line-height:1.6;color:#71717A;margin:0;">
+          AthleteOS reads your training, nutrition, and recovery as one system — finds the one thing limiting progress — and tells you exactly what to change. Not more numbers. One decision.
+        </p>
       </div>
 
-      <!-- Letter -->
-      <p style="font-size:15px;line-height:1.7;color:#9CA3AF;margin:0 0 16px;">
-        You just became a founding member. Not because you clicked a button but because you're the kind of athlete who
-        wants to understand, not just track.
-      </p>
-
-      <p style="font-size:15px;line-height:1.7;color:#9CA3AF;margin:0 0 16px;">
-        Most athletes have the data. Training logs. Macro counts. Sleep scores. Spread across three apps that never talk
-        to each other. The data exists. The insight doesn't.
-      </p>
-
-      <p style="font-size:15px;line-height:1.7;color:#9CA3AF;margin:0 0 16px;">
-        AthleteOS takes what you already track training load, nutrition timing, recovery patterns and reads them
-        together as one system. Not more numbers. One read that surfaces a pattern you've been sitting on for months,
-        because no single app had enough context to flag it.
-      </p>
-
-      <p style="font-size:15px;line-height:1.7;color:#EDEDEF;margin:0 0 16px;">
-        Intelligence compounds. That's the thesis.
-      </p>
-
-      <p style="font-size:15px;line-height:1.7;color:#9CA3AF;margin:0 0 16px;">
-        The first read needs a week of your data. The second is sharper because it has context from the first. By the
-        fourth cycle, the system knows your patterns better than you do it doesn't forget, doesn't get biased by how a
-        session felt, doesn't confuse correlation with cause.
-      </p>
-
-      <p style="font-size:15px;line-height:1.7;color:#9CA3AF;margin:0 0 16px;">
-        You're here before the system is live. That's intentional on both sides. Your data, your feedback, your pushback
-        they shape what gets built. The first fifty members aren't beta testers. You're the calibration set.
-      </p>
-
-      <p style="font-size:15px;line-height:1.7;color:#9CA3AF;margin:0 0 16px;">
-        Before launch, I'll reach out directly. Not to sell you anything to understand how you think about your
-        training, where you've hit walls, and what a useful read would actually look like for your situation.
-      </p>
-
-      <p style="font-size:15px;line-height:1.7;color:#9CA3AF;margin:0 0 16px;">
-        Your rate is locked. Your spot is reserved. When the system goes live, you're first in.
-      </p>
-
-      <p style="font-size:16px;line-height:1.7;color:#EDEDEF;margin:0 0 32px;font-weight:600;">
-        Train hard. We'll handle the rest.
+      <!-- Sign off -->
+      <p style="font-size:16px;color:#FAFAFA;margin:0 0 32px;font-weight:700;">
+        Train hard. We'll handle the rest. 💪
       </p>
 
       <!-- Signature -->
-      <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;margin-top:32px;">
-        <p style="font-size:14px;color:#EDEDEF;margin:0 0 4px;font-weight:600;">Swetabh</p>
-        <p style="font-size:13px;color:#6B7280;margin:0;">Founder, AthleteOS</p>
-        <p style="font-size:12px;color:#6B7280;margin:8px 0 0;">
-          <a href="mailto:founder@athleteos.io" style="color:#6B7AED;text-decoration:none;">founder@athleteos.io</a>
+      <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;">
+        <p style="font-size:14px;color:#FAFAFA;margin:0 0 4px;font-weight:600;">Swetabh</p>
+        <p style="font-size:13px;color:#71717A;margin:0;">Founder, AthleteOS</p>
+        <p style="font-size:12px;margin:8px 0 0;">
+          <a href="mailto:founder@athleteos.io" style="color:#a1a1aa;text-decoration:none;">founder@athleteos.io</a>
+          <span style="color:#71717A;margin:0 8px;">·</span>
+          <a href="https://wa.me/916005109043" style="color:#a1a1aa;text-decoration:none;">WhatsApp</a>
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top:40px;text-align:center;">
+        <p style="font-size:11px;color:#3f3f46;margin:0;">
+          You're receiving this because you reserved a founding spot at athleteos.io
         </p>
       </div>
     </div>

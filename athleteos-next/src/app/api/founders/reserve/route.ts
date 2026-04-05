@@ -25,11 +25,15 @@ const VALID_EXPERIENCE = ['< 1 YR', '1–3 YR', '3–5 YR', '5+ YR']
 const OPTIONAL_COLUMNS = ['discipline', 'experience', 'referrer_id', 'country'] as const
 
 function isValidEmail(v: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)
+  // Requires: local part with allowed chars, @ symbol, domain with dot, TLD 2-6 chars from known patterns
+  return /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.(com|in|io|org|net|co|edu|gov|me|app|dev|xyz|info|biz|us|uk|ca|au|de|fr|jp|kr|ru|br|mx|za|ae|sg|hk|nz)$/i.test(v)
 }
 
 function isValidPhone(v: string) {
-  return /^\+?[0-9\s()-]{10,15}$/.test(v)
+  // Strip spaces, dashes, parens for digit count
+  const digits = v.replace(/[\s()\-+]/g, '')
+  // Must be 10-13 digits (Indian: 10, international: 10-13 with country code)
+  return /^\+?[0-9\s()\-]{10,16}$/.test(v) && digits.length >= 10 && digits.length <= 13
 }
 
 function getMissingOptionalColumns(message: string) {
