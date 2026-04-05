@@ -236,7 +236,8 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
             if (btn) { btn.disabled = true; btn.textContent = 'Joining...' }
 
             try {
-              const { error } = await insertFounder({ email, whatsapp: '', source: 'inline_rank_result' })
+              const honeypot = (form.querySelector('input[name="website"]') as HTMLInputElement)?.value ?? ''
+              const { error } = await insertFounder({ email, whatsapp: '', source: 'inline_rank_result', ...(honeypot ? { website: honeypot } : {}) } as Parameters<typeof insertFounder>[0])
               if (error) {
                 if (btn) { btn.disabled = false; btn.textContent = 'Start My Diagnosis →' }
                 return
@@ -275,6 +276,8 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
           }}
           className="flex gap-2"
         >
+          {/* Honeypot — hidden from real users, bots auto-fill it */}
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute opacity-0 h-0 w-0 overflow-hidden pointer-events-none" />
           <input
             type="email"
             placeholder="your@email.com"

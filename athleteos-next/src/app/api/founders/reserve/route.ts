@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendFounderWelcomeEmail } from '@/lib/email'
+import { checkRateLimit, getClientIp, isAllowedOrigin, ALLOWED_DOMAINS } from '@/lib/rate-limit'
 
 interface ReserveBody {
   name?: string
@@ -11,6 +12,7 @@ interface ReserveBody {
   discipline?: string
   experience?: string
   referrer_id?: string
+  website?: string  // honeypot — bots fill this, real users don't see it
 }
 
 const VALID_DISCIPLINES = ['POWERLIFTING', 'WEIGHTLIFTING', 'HYBRID', 'BODYBUILDING']
@@ -34,11 +36,32 @@ async function insertFounderRow(insertData: Record<string, string | null>) {
 }
 
 export async function POST(req: NextRequest) {
+  // ── Rate limiting (5 attempts per IP per minute) ──
+  const ip = getClientIp(req.headers)
+  const limit = checkRateLimit(ip, { maxRequests: 5, windowMs: 60_000 })
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(limit.resetIn / 1000)) } },
+    )
+  }
+
+  // ── Origin check ──
+  if (!isAllowedOrigin(req.headers, ALLOWED_DOMAINS)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   let body: ReserveBody
   try {
     body = await req.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  // ── Honeypot — if 'website' field is filled, it's a bot ──
+  if (body.website) {
+    // Silently accept to not tip off the bot, but don't insert
+    return NextResponse.json({ id: 'ok', founder_number: 0 })
   }
 
   const { name, email, whatsapp, country, source, discipline, experience, referrer_id } = body
