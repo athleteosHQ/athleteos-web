@@ -163,7 +163,7 @@ export function FAQSection() {
           className="mt-8 text-base text-muted-foreground"
         >
           Still have questions?{' '}
-          <a href="https://wa.me/916005109043" className="text-[#fafafa] hover:underline">
+          <a href="https://wa.me/919880418844" className="text-[#fafafa] hover:underline">
             Message us on WhatsApp
           </a>
           {' '}— we reply within a few hours.
