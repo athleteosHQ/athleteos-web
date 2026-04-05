@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
 import { GlassInput, LiftRow } from './SystemInput'
+import { getRankFormValidation, isValidBodyweight } from './rankValidation'
 import { type AthleteMode } from '../ModeSelector'
 import { EASE_OUT } from '@/lib/motion'
 
@@ -31,19 +32,22 @@ type Stage = 'profile' | 'lifts' | 'ready'
 
 export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error, onFieldFocus }: RankFormProps) {
   const [stage, setStage] = useState<Stage>('profile')
+  const trainingType = mode === 'gym' ? 'strength' : 'hybrid'
 
-  const bwValid = f.bw !== '' && !isNaN(parseFloat(f.bw)) && parseFloat(f.bw) >= 40
-
-  const hasLift = (parseFloat(f.sqW) || 0) > 20
-    || (parseFloat(f.bpW) || 0) > 20
-    || (parseFloat(f.dlW) || 0) > 20
+  const bwValid = isValidBodyweight(f.bw)
+  const liftValidation = getRankFormValidation({ fields: f, trainingType })
+  const canAdvanceToReady = liftValidation.error === null
+  const hasLiftAttempt = [
+    f.sqW, f.sqR, f.bpW, f.bpR, f.dlW, f.dlR,
+    ...(mode === 'hybrid' ? [f.runMin, f.runSec] : []),
+  ].some(v => v.trim() !== '')
 
   const advanceToLifts = () => {
     if (bwValid) setStage('lifts')
   }
 
   const advanceToReady = () => {
-    if (hasLift) setStage('ready')
+    if (canAdvanceToReady) setStage('ready')
   }
 
   return (
@@ -134,6 +138,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
                   step={0.5}
                   label="Bodyweight"
                   onFocus={() => onFieldFocus?.('bw')}
+                  error={f.bw.trim() !== '' && !bwValid ? 'Use 40–250 kg' : undefined}
                 />
               </div>
             </div>
@@ -159,22 +164,55 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
             transition={{ duration: 0.25, ease: EASE_OUT }}
           >
             <p className="text-sm text-muted-foreground mb-4">
-              Enter at least one lift above 20kg. The more data, the sharper the read.
+              Enter at least one complete lift. AthleteOS only scores inputs it can defend.
             </p>
             <div className="space-y-4">
-              <LiftRow label="Squat" weightVal={f.sqW} repsVal={f.sqR} onWeight={upd('sqW')} onReps={upd('sqR')} onWeightFocus={() => onFieldFocus?.('sqW')} onRepsFocus={() => onFieldFocus?.('sqR')} />
+              <LiftRow
+                label="Squat"
+                weightVal={f.sqW}
+                repsVal={f.sqR}
+                onWeight={upd('sqW')}
+                onReps={upd('sqR')}
+                onWeightFocus={() => onFieldFocus?.('sqW')}
+                onRepsFocus={() => onFieldFocus?.('sqR')}
+                weightError={liftValidation.fieldErrors.sqW}
+                repsError={liftValidation.fieldErrors.sqR}
+              />
               {mode === 'gym' && (
-                <LiftRow label="Bench" weightVal={f.bpW} repsVal={f.bpR} onWeight={upd('bpW')} onReps={upd('bpR')} onWeightFocus={() => onFieldFocus?.('bpW')} onRepsFocus={() => onFieldFocus?.('bpR')} />
+                <LiftRow
+                  label="Bench"
+                  weightVal={f.bpW}
+                  repsVal={f.bpR}
+                  onWeight={upd('bpW')}
+                  onReps={upd('bpR')}
+                  onWeightFocus={() => onFieldFocus?.('bpW')}
+                  onRepsFocus={() => onFieldFocus?.('bpR')}
+                  weightError={liftValidation.fieldErrors.bpW}
+                  repsError={liftValidation.fieldErrors.bpR}
+                />
               )}
-              <LiftRow label="Deadlift" weightVal={f.dlW} repsVal={f.dlR} onWeight={upd('dlW')} onReps={upd('dlR')} onWeightFocus={() => onFieldFocus?.('dlW')} onRepsFocus={() => onFieldFocus?.('dlR')} />
+              <LiftRow
+                label="Deadlift"
+                weightVal={f.dlW}
+                repsVal={f.dlR}
+                onWeight={upd('dlW')}
+                onReps={upd('dlR')}
+                onWeightFocus={() => onFieldFocus?.('dlW')}
+                onRepsFocus={() => onFieldFocus?.('dlR')}
+                weightError={liftValidation.fieldErrors.dlW}
+                repsError={liftValidation.fieldErrors.dlR}
+              />
               {mode === 'hybrid' && (
                 <div className="grid grid-cols-[56px_1fr_56px] sm:grid-cols-[80px_1fr_72px] items-center gap-2">
                   <p className="font-mono-label text-muted-foreground">5K Run</p>
-                  <GlassInput placeholder="min" value={f.runMin} onChange={upd('runMin')} min={12} max={60} label="5K minutes" onFocus={() => onFieldFocus?.('runMin')} />
-                  <GlassInput placeholder="sec" value={f.runSec} onChange={upd('runSec')} min={0} max={59} label="5K seconds" onFocus={() => onFieldFocus?.('runSec')} />
+                  <GlassInput placeholder="min" value={f.runMin} onChange={upd('runMin')} min={12} max={60} label="5K minutes" onFocus={() => onFieldFocus?.('runMin')} error={liftValidation.fieldErrors.runMin} />
+                  <GlassInput placeholder="sec" value={f.runSec} onChange={upd('runSec')} min={0} max={59} label="5K seconds" onFocus={() => onFieldFocus?.('runSec')} error={liftValidation.fieldErrors.runSec} />
                 </div>
               )}
             </div>
+            {hasLiftAttempt && liftValidation.error && Object.keys(liftValidation.fieldErrors).length === 0 && (
+              <p className="mt-4 font-mono text-xs text-destructive" role="alert">{liftValidation.error}</p>
+            )}
 
             <div className="mt-5 flex gap-3">
               <button
@@ -188,7 +226,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
               <button
                 type="button"
                 onClick={advanceToReady}
-                disabled={!hasLift}
+                disabled={!canAdvanceToReady}
                 className="flex-1 cursor-pointer bg-accent/90 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Next: Generate baseline
