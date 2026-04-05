@@ -13,7 +13,7 @@ describe('seo preview config', () => {
   })
 
   it('keeps the preview copy aligned with AthleteOS positioning', () => {
-    expect(OG_IMAGE_TITLE).toBe('AthleteOS — Performance Diagnosis System')
+    expect(OG_IMAGE_TITLE).toBe('AthleteOS | Performance Diagnosis System')
     expect(OG_IMAGE_DESCRIPTION).toContain('Training, nutrition, and recovery')
     expect(OG_IMAGE_ALT).toContain('AthleteOS')
   })
