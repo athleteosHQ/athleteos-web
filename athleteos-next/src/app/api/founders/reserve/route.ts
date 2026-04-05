@@ -3,6 +3,11 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendFounderWelcomeEmail } from '@/lib/email'
 import { checkRateLimit, getClientIp, isAllowedOrigin, ALLOWED_DOMAINS } from '@/lib/rate-limit'
 
+/** Strip HTML tags to prevent stored XSS */
+function stripHtml(v: string): string {
+  return v.replace(/<[^>]*>/g, '').trim()
+}
+
 interface ReserveBody {
   name?: string
   email: string
@@ -103,10 +108,10 @@ export async function POST(req: NextRequest) {
   }
 
   const insertData: Record<string, string | null> = {
-    name: name?.trim() || '',
+    name: name ? stripHtml(name) : '',
     email: email.trim().toLowerCase(),
     whatsapp: whatsapp?.trim() || null,  // null not '' — avoids unique constraint clash on empty strings
-    country: country?.trim() || '',
+    country: country ? stripHtml(country) : '',
     source: source.trim(),
   }
   if (discipline) insertData.discipline = discipline

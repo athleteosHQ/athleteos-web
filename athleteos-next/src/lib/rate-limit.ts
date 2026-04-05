@@ -58,8 +58,17 @@ export function isAllowedOrigin(headers: Headers, allowedDomains: readonly strin
   // Allow same-origin requests (no origin header = server-side or same-origin)
   if (!origin && !referer) return true
 
+  // Extract hostname from origin or referer
+  const checkUrl = origin || referer
+  let hostname: string
+  try {
+    hostname = new URL(checkUrl).hostname
+  } catch {
+    return false
+  }
+
   return allowedDomains.some(domain =>
-    origin.includes(domain) || referer.includes(domain),
+    hostname === domain || hostname.endsWith('.' + domain),
   )
 }
 

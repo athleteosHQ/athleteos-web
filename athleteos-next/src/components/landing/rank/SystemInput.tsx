@@ -18,8 +18,14 @@ export function GlassInput({ id, label, value, onChange, placeholder, min, max, 
       step={step}
       onChange={e => {
         const raw = e.target.value
+        if (raw === '') { onChange(''); return }
         // Block negatives + strip leading zeros
         const cleaned = raw.replace(/-/g, '').replace(/^0+(?=\d)/, '')
+        // Enforce max if set
+        if (max !== undefined) {
+          const num = parseFloat(cleaned)
+          if (!isNaN(num) && num > max) { onChange(String(max)); return }
+        }
         onChange(cleaned)
       }}
       onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault() }}
@@ -60,8 +66,8 @@ export function LiftRow({ label, weightVal, repsVal, onWeight, onReps, onWeightF
   return (
     <div className="grid grid-cols-[56px_1fr_56px] sm:grid-cols-[80px_1fr_72px] items-center gap-2">
       <p className="font-mono-label text-muted-foreground">{label}</p>
-      <GlassInput placeholder="kg (one set)" value={weightVal} onChange={onWeight} min={20} step={0.5} label={`${label} weight for one set`} onFocus={onWeightFocus} />
-      <GlassInput placeholder="reps (one set)" value={repsVal} onChange={onReps} min={1} max={30} label={`${label} reps in one set`} onFocus={onRepsFocus} />
+      <GlassInput placeholder="kg (one set)" value={weightVal} onChange={onWeight} min={20} max={500} step={0.5} label={`${label} weight for one set`} onFocus={onWeightFocus} />
+      <GlassInput placeholder="reps (one set)" value={repsVal} onChange={onReps} min={1} max={30} step={1} label={`${label} reps in one set`} onFocus={onRepsFocus} />
     </div>
   )
 }
