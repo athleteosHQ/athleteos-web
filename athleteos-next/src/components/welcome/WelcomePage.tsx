@@ -14,6 +14,8 @@ import { getFounderCount } from '@/lib/supabase'
 import type { RankResult } from '@/lib/rankCalc'
 
 import { getWelcomeState, type StoredFounderData } from './welcomeState'
+import { STORY_CARD_FILENAME } from './storyShareConfig'
+import { StoryShareCard } from './StoryShareCard'
 import { getWelcomeSharePayload } from './welcomeSharePayload'
 
 function parseFounderData(raw: string | null): StoredFounderData | null {
@@ -45,6 +47,7 @@ export function WelcomePage() {
   const [copied, setCopied] = useState(false)
   const [downloading, setDownloading] = useState(false)
   const shareCardRef = useRef<HTMLDivElement>(null)
+  const storyCardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setFounder(parseFounderData(localStorage.getItem('aos_founder_data')))
@@ -93,16 +96,16 @@ export function WelcomePage() {
     window.setTimeout(() => setCopied(false), 1800)
   }
 
-  async function generateCardImage(): Promise<File | null> {
-    if (!shareCardRef.current) return null
-    const canvas = await html2canvas(shareCardRef.current, {
+  async function generateCardImage(node: HTMLDivElement | null, filename: string): Promise<File | null> {
+    if (!node) return null
+    const canvas = await html2canvas(node, {
       backgroundColor: null,
       scale: 2,
     })
     return new Promise((resolve) => {
       canvas.toBlob((blob) => {
         if (!blob) { resolve(null); return }
-        resolve(new File([blob], 'athleteos-rank-card.png', { type: 'image/png' }))
+        resolve(new File([blob], filename, { type: 'image/png' }))
       }, 'image/png')
     })
   }
@@ -137,7 +140,7 @@ export function WelcomePage() {
     })
     setDownloading(true)
     try {
-      const file = await generateCardImage()
+      const file = await generateCardImage(storyCardRef.current, STORY_CARD_FILENAME)
       if (!file) { setDownloading(false); return }
 
       // Web Share API with file — opens native share sheet with Instagram Stories as an option on mobile
@@ -152,7 +155,7 @@ export function WelcomePage() {
         const url = URL.createObjectURL(file)
         const link = document.createElement('a')
         link.href = url
-        link.download = 'athleteos-rank-card.png'
+        link.download = STORY_CARD_FILENAME
         link.click()
         URL.revokeObjectURL(url)
       }
@@ -209,14 +212,24 @@ export function WelcomePage() {
   return (
     <main className="grid-bg relative min-h-screen overflow-hidden bg-background px-6 py-10 md:px-10 md:py-14">
       {rankResult && sharePayload && diagnosis && (
-        <RankShareCard
-          ref={shareCardRef}
-          result={rankResult}
-          founderLabel={sharePayload.foundingLabel}
-          badgeLabel={sharePayload.badgeLabel}
-          diagnosisLabel={sharePayload.diagnosisLabel}
-          diagnosisHeadline={diagnosis.headline}
-        />
+        <>
+          <RankShareCard
+            ref={shareCardRef}
+            result={rankResult}
+            founderLabel={sharePayload.foundingLabel}
+            badgeLabel={sharePayload.badgeLabel}
+            diagnosisLabel={sharePayload.diagnosisLabel}
+            diagnosisHeadline={diagnosis.headline}
+          />
+          <StoryShareCard
+            ref={storyCardRef}
+            result={rankResult}
+            founderLabel={sharePayload.badgeLabel}
+            cohortLabel={sharePayload.foundingLabel}
+            diagnosisLabel={sharePayload.diagnosisLabel}
+            diagnosisHeadline={diagnosis.headline}
+          />
+        </>
       )}
 
       <div className="pointer-events-none absolute inset-0">
