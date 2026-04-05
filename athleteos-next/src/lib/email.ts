@@ -14,7 +14,7 @@ export async function sendFounderWelcomeEmail({ to, founderNumber }: FounderWelc
     const { error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to,
-      subject: `You're in: Founding Member #${founderNumber}`,
+      subject: `You're in: Founding Member`,
       html: buildFounderEmailHtml(founderNumber),
     })
 
@@ -72,8 +72,8 @@ function buildFounderEmailHtml(founderNumber: number): string {
       <!-- Founder badge — hero moment -->
       <div style="background:linear-gradient(180deg,#111113,#0C0C0E);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;margin-bottom:32px;text-align:center;">
         <p style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:#71717A;">🎖️ Founding Member</p>
-        <p style="margin:0;font-size:48px;font-weight:800;color:#FAFAFA;letter-spacing:-0.03em;">#${founderNumber}</p>
-        <p style="margin:8px 0 0;font-size:13px;color:#71717A;">of 50 founding spots</p>
+        <p style="margin:0;font-size:40px;font-weight:800;color:#FAFAFA;letter-spacing:-0.03em;">First Cohort</p>
+        <p style="margin:8px 0 0;font-size:13px;color:#71717A;">Early access before public launch</p>
       </div>
 
       <!-- What you just locked -->

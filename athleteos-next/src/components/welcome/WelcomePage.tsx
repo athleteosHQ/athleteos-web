@@ -66,7 +66,6 @@ export function WelcomePage() {
   const sharePayload = useMemo(() => {
     if (!rankResult || !diagnosis || !founder) return null
     return getWelcomeSharePayload({
-      founderNumber: founder.num,
       diagnosisHeadline: diagnosis.headline,
     })
   }, [diagnosis, founder, rankResult])
@@ -235,7 +234,8 @@ export function WelcomePage() {
           <div className="max-w-4xl">
             <p className="font-mono-label text-[#fafafa] mb-4">Athletes are joining fast.</p>
             <h1 className="text-5xl font-display font-bold tracking-tight text-foreground md:text-7xl">You&apos;re early.</h1>
-            <p className="mt-3 font-display text-2xl font-bold text-foreground md:text-4xl">Founding Member #{welcomeState.founderNumber}</p>
+            <p className="mt-3 font-display text-2xl font-bold text-foreground md:text-4xl">Founding Member</p>
+            <p className="mt-2 font-mono-label text-muted-foreground">First Cohort</p>
             <p className="mt-3 text-lg text-muted-foreground md:text-xl">You train with intent.</p>
 
             <div className="mt-10 space-y-3">
@@ -316,7 +316,7 @@ export function WelcomePage() {
                   </div>
                   <div className="text-right">
                     <p className="font-mono-label text-muted-foreground mb-1">Founding Status</p>
-                    <p className="text-lg font-bold text-foreground">{sharePayload?.foundingLabel ?? `#${welcomeState.founderNumber}`}</p>
+                    <p className="text-lg font-bold text-foreground">{sharePayload?.foundingLabel ?? 'First Cohort'}</p>
                   </div>
                 </div>
 
@@ -355,13 +355,13 @@ export function WelcomePage() {
 
             <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
               <p className="font-mono-label text-[#fafafa] mb-2">{welcomeState.bridgeLine}</p>
-              <h2 className="text-3xl font-display font-bold text-foreground">Move up the founding list</h2>
+              <h2 className="text-3xl font-display font-bold text-foreground">Unlock Elite status</h2>
               <p className="mt-2 text-base text-muted-foreground">{welcomeState.momentumLine}</p>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
-                  <p className="font-mono-label text-muted-foreground mb-2">Position</p>
-                  <p className="text-3xl font-display font-bold text-foreground">#{Math.max(1, welcomeState.founderNumber - welcomeState.shareCount * 100)}</p>
+                  <p className="font-mono-label text-muted-foreground mb-2">Cohort</p>
+                  <p className="text-3xl font-display font-bold text-foreground">First Cohort</p>
                 </div>
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
                   <p className="font-mono-label text-muted-foreground mb-2">Tier</p>
@@ -434,13 +434,13 @@ export function WelcomePage() {
 
             <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
               <p className="font-mono-label text-[#fafafa] mb-2">{welcomeState.bridgeLine}</p>
-              <h2 className="text-3xl font-display font-bold text-foreground">Move up the founding list</h2>
+              <h2 className="text-3xl font-display font-bold text-foreground">Unlock Elite status</h2>
               <p className="mt-2 text-base text-muted-foreground">{welcomeState.momentumLine}</p>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
-                  <p className="font-mono-label text-muted-foreground mb-2">Position</p>
-                  <p className="text-3xl font-display font-bold text-foreground">#{welcomeState.founderNumber}</p>
+                  <p className="font-mono-label text-muted-foreground mb-2">Cohort</p>
+                  <p className="text-3xl font-display font-bold text-foreground">First Cohort</p>
                 </div>
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
                   <p className="font-mono-label text-muted-foreground mb-2">Tier</p>

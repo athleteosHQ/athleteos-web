@@ -65,7 +65,7 @@ export function getWelcomeState({
       progressPercent,
       referralHint: invitesRemaining > 0 ? `${invitesRemaining} more invite${invitesRemaining === 1 ? '' : 's'} to unlock Elite` : 'Elite tier unlocked',
       momentumLine: `${totalFounders} athletes already joined.`,
-      shareMessage: `Top ${topPercent}% of competitive strength athletes. Founding Member #${founder.num} — check where you stand: athleteos.io`,
+      shareMessage: `Top ${topPercent}% of competitive strength athletes. Founding Member · First Cohort — check where you stand: athleteos.io`,
     }
   }
 

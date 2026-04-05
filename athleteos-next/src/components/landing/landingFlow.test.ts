@@ -10,7 +10,7 @@ describe('getInlineSignupGateContent', () => {
   it('returns default gate content when overallPct is null', () => {
     const content = getInlineSignupGateContent(null)
     expect(content.headline).toBe(
-      "Your training data tells a story. The full system reads it.",
+      "The system is ready for your data. Stop tracking. Start correcting.",
     )
   })
 
@@ -43,8 +43,8 @@ describe('getShareMessage', () => {
 })
 
 describe('getFounderLabel', () => {
-  it('reads the founder number from local storage payloads', () => {
-    expect(getFounderLabel('{"id":"abc","num":23,"shareCount":0}')).toBe('Founding Member #23')
+  it('returns a stable founder identity label for joined athletes', () => {
+    expect(getFounderLabel('{"id":"abc","num":23,"shareCount":0}')).toBe('Founding Member')
   })
 
   it('falls back cleanly on invalid payloads', () => {

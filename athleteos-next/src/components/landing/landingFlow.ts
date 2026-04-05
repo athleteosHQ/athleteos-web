@@ -48,7 +48,7 @@ export function getFounderLabel(serializedFounderData: string | null): string {
 
   try {
     const parsed = JSON.parse(serializedFounderData) as { num?: number }
-    return parsed.num ? `Founding Member #${parsed.num}` : ''
+    return parsed.num ? 'Founding Member' : ''
   } catch {
     return ''
   }

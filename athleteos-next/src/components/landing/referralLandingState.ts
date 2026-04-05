@@ -11,10 +11,11 @@ interface ReferralLandingState {
 }
 
 export function getReferralLandingState({
-  founderNumber,
   firstName,
 }: ReferralLandingStateInput): ReferralLandingState {
-  const inviter = firstName?.trim() ? `${firstName.trim()} got in early as Founding Member #${founderNumber}.` : `Founding Member #${founderNumber} got in early.`
+  const inviter = firstName?.trim()
+    ? `${firstName.trim()} got in early as a Founding Member in the First Cohort.`
+    : 'A Founding Member in the First Cohort got in early.'
 
   return {
     eyebrow: 'Invited by a founding member',
