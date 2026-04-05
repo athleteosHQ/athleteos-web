@@ -45,12 +45,12 @@ export async function incrementShareCount(rowId: string): Promise<{ data: number
   }
 }
 
-export async function getFounderCount(): Promise<number> {
+export async function getFounderCount(): Promise<number | null> {
   try {
     const res = await fetch('/api/founders/count')
     const json = await res.json()
-    return json.count ?? 142
+    return json.count ?? null
   } catch {
-    return 142
+    return null
   }
 }

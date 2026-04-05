@@ -29,7 +29,7 @@ function getMissingOptionalColumns(message: string) {
   return OPTIONAL_COLUMNS.filter((column) => message.includes(`'${column}' column`))
 }
 
-async function insertFounderRow(insertData: Record<string, string>) {
+async function insertFounderRow(insertData: Record<string, string | null>) {
   return supabaseAdmin.from('founders_waitlist').insert(insertData).select('id, founder_number').single()
 }
 
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Valid WhatsApp number is required' }, { status: 400 })
   }
   // Validate source against allowlist
-  const VALID_SOURCES = ['rank-gate', 'hero', 'sticky-bar', 'direct']
+  const VALID_SOURCES = ['rank-gate', 'hero', 'sticky-bar', 'direct', 'inline_rank_result']
   if (!source?.trim() || !VALID_SOURCES.includes(source.trim())) {
     return NextResponse.json({ error: 'Invalid source' }, { status: 400 })
   }
@@ -79,10 +79,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid referrer' }, { status: 400 })
   }
 
-  const insertData: Record<string, string> = {
+  const insertData: Record<string, string | null> = {
     name: name?.trim() || '',
-    email: email.trim(),
-    whatsapp: whatsapp?.trim() || '',
+    email: email.trim().toLowerCase(),
+    whatsapp: whatsapp?.trim() || null,  // null not '' — avoids unique constraint clash on empty strings
     country: country?.trim() || '',
     source: source.trim(),
   }

@@ -7,7 +7,7 @@ export async function GET() {
     .select('*', { count: 'exact', head: true })
 
   if (error || count === null) {
-    return NextResponse.json({ count: 142 })
+    return NextResponse.json({ count: null })
   }
 
   return NextResponse.json({ count })
