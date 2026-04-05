@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, Users } from 'lucide-react'
+import { scalePop, clipReveal } from '@/lib/motion'
 import { trackEvent, identifyUser } from '@/lib/analytics'
 import { validateFounderForm } from './founderFormValidation'
 import { getFounderLabel, getInlineSignupGateContent } from './landingFlow'
@@ -18,7 +19,7 @@ const DIAGNOSTIC_LOOP = [
 ] as const
 
 const FOUNDING_DELIVERABLES = [
-  'Full diagnostic system at launch — rank, limiter, correction, projected gain',
+  'Full diagnostic system at launch — baseline, limiter, correction, outcome',
   'IFCT-verified nutrition tracking — Indian and South Asian food data',
   'Direct WhatsApp access to the founder — first 90 days',
   'You decide what gets built next',
@@ -199,35 +200,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
           </div>
         </motion.div>
 
-        {/* Zone 2 — Three clarity blocks (method, offer, process) */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-          className="mb-8 grid gap-4 sm:grid-cols-3"
-        >
-          <div className="surface-card-muted rounded-xl p-4">
-            <p className="font-mono-label text-accent mb-2">What the system reads</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Training load, food intake, and recovery signals — interpreted together to identify what is limiting progress.
-            </p>
-          </div>
-          <div className="surface-card-muted rounded-xl p-4">
-            <p className="font-mono-label text-accent mb-2">What founding members get</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Locked founding rate, beta access, direct access to the core team, and influence over what gets built first.
-            </p>
-          </div>
-          <div className="surface-card-muted rounded-xl p-4">
-            <p className="font-mono-label text-accent mb-2">What happens next</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Reserve your spot. Before launch, the team contacts you directly — and in some cases schedules a short conversation to understand your needs.
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Zone 3 — Gate panel (commitment block) */}
+        {/* Zone 2 — Gate panel (commitment block) */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -243,6 +216,11 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
             <p className="text-xl font-bold leading-snug text-foreground md:text-2xl">{gateContent.headline}</p>
           </div>
 
+          {/* What you get — 3 compact lines */}
+          <p className="mb-4 text-sm text-muted-foreground leading-relaxed">
+            Continue the diagnosis loop across <span className="text-foreground">training, nutrition, and recovery</span>. Founding rate locked. No payment until launch.
+          </p>
+
           {/* Founding member deliverables */}
           <div className="mb-5 space-y-2">
             {FOUNDING_DELIVERABLES.map(d => (
@@ -253,29 +231,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
             ))}
           </div>
 
-          {/* Pricing — founding price dominant, others as context */}
-          <div
-            className="mb-5 rounded-2xl px-5 py-5"
-            style={{ background: 'rgba(107,122,237,0.06)', border: '1px solid rgba(107,122,237,0.12)' }}
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-3xl font-display font-bold text-foreground">
-                  {'\u20B9'}2,999<span className="text-base font-normal text-muted-foreground">/year</span>
-                </p>
-                <p className="mt-1 text-base text-foreground/80">
-                  {'\u20B9'}250/month · locked forever
-                </p>
-              </div>
-              <span className="shrink-0 rounded-full bg-accent/10 border border-accent/20 px-3 py-1 font-mono-label text-accent text-[10px]">
-                {founderCount !== null && founderCount > 0 ? `${Math.max(0, 50 - founderCount)} of 50 left` : 'Limited spots'}
-              </span>
-            </div>
-            <p className="mt-3 text-xs text-muted-foreground/60">
-              Regular price will be {'\u20B9'}599/month after launch.
-            </p>
-          </div>
-
+          {/* No-payment trust signal — primary objection removal before form */}
           <div
             className="mb-5 flex items-center gap-2.5 rounded-xl px-4 py-3"
             style={{ background: 'rgba(45,220,143,0.06)', border: '1px solid rgba(45,220,143,0.12)' }}
@@ -324,7 +280,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
               type="submit"
               disabled={loading}
               className="w-full cursor-pointer rounded-xl bg-accent py-4 text-base font-bold text-white transition-all hover:bg-accent-light disabled:opacity-50 flex items-center justify-center gap-2 group"
-              style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
+              style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)' }}
             >
               {loading ? (
                 <>
@@ -336,14 +292,30 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
                 </>
               ) : (
                 <>
-                  Reserve My Diagnosis
+                  LOCK IN CORRECTION PATH
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-4">
+          {/* Pricing — supporting context below form, not leading */}
+          <div
+            className="mt-5 rounded-xl px-4 py-3"
+            style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
+          >
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-sm text-muted-foreground">
+                Founding rate: <span className="text-foreground font-semibold">{'\u20B9'}2,999/year</span> <span className="text-muted-foreground/60">({'\u20B9'}250/mo)</span>
+              </p>
+              <span className="shrink-0 text-xs text-muted-foreground/50">
+                {founderCount !== null && founderCount > 0 ? `${Math.max(0, 50 - founderCount)} of 50 left` : 'Limited spots'}
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground/50">Regular price will be {'\u20B9'}599/month after launch.</p>
+          </div>
+
+          <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-3">
             {TRUST_CHIPS.map(t => (
               <div key={t} className="flex items-center gap-1.5">
                 <Check className="w-3 h-3 text-success flex-shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(45,220,143,0.4))' }} />

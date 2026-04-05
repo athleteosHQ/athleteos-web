@@ -17,8 +17,8 @@ const FAQS: FAQ[] = [
     a: 'Self-coached lifters with 1–3 years of training who are strong enough to plateau, but not experienced enough to diagnose the plateau clearly.',
   },
   {
-    q: 'Is the rank calculator free?',
-    a: 'Yes. No account, no email, no card. Enter your lifts and get your benchmark rank instantly.',
+    q: 'Is the baseline read free?',
+    a: 'Yes. No account, no email, no card. Enter your lifts and get your first system read instantly.',
   },
   {
     q: 'How accurate are the percentiles?',
@@ -37,7 +37,7 @@ const FAQS: FAQ[] = [
     a: (
       <>
         <span>Founding members lock in ₹2,999/year (₹250/month) — 58% off the regular ₹599/month. Only 50 spots. No payment is required now — you pay only when the product activates.</span>
-        <span className="block mt-2 text-sm" style={{ color: 'var(--accent)' }}>Your founding rate is locked forever. When pricing goes up, yours stays.</span>
+        <span className="block mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.15)' }}>Your founding rate is locked forever. When pricing goes up, yours stays.</span>
       </>
     ),
   },
@@ -45,16 +45,16 @@ const FAQS: FAQ[] = [
     q: 'How is athleteOS different from HealthifyMe or Whoop?',
     a: (
       <>
-        <span className="block mb-3">athleteOS is not a fitness app. It is a performance diagnosis system.</span>
-        <span className="block mb-2"><span className="font-semibold text-foreground">HealthifyMe</span> — weight loss focus, crowdsourced food data with high error rates, generic workout log, no plateau analysis.</span>
-        <span className="block mb-2"><span className="font-semibold text-foreground">Whoop</span> — recovery/sleep focus, cardio strain bias, vague readiness scores, no strength context.</span>
-        <span className="block"><span className="font-semibold text-accent">athleteOS</span> — verified food composition data, strength-block-aware training context, specific variable isolation for plateaus, actionable diagnostic output.</span>
+        <span className="block mb-3">Those are tracking apps. AthleteOS is a diagnosis system. The difference: they show you data, we tell you what it means.</span>
+        <span className="block mb-2"><span className="font-semibold text-foreground">HealthifyMe</span> — tracks calories for weight loss. Crowdsourced food data. No training context. No plateau analysis.</span>
+        <span className="block mb-2"><span className="font-semibold text-foreground">Whoop</span> — tracks recovery and sleep. Cardio-biased strain score. No strength programming awareness.</span>
+        <span className="block"><span className="font-semibold text-[#fafafa]">athleteOS</span> — reads training, nutrition, and recovery together. One platform, all input streams, one diagnosis. Tells you what&apos;s limiting progress and what to change next. Built for serious strength athletes, not weekend gym-goers.</span>
       </>
     ),
   },
   {
     q: 'Is my data safe?',
-    a: 'The rank check runs in your browser. We only store data if you join the waitlist. Waitlist data is in Supabase with row-level security. We do not sell it.',
+    a: 'The baseline read runs in your browser. We only store data if you join the waitlist. Waitlist data is in Supabase with row-level security. We do not sell it.',
   },
 ]
 
@@ -62,7 +62,7 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
   return (
     <div
       className="surface-card-muted rounded-xl overflow-hidden transition-all"
-      style={{ borderColor: isOpen ? 'rgba(107,122,237,0.3)' : undefined }}
+      style={{ borderColor: isOpen ? 'rgba(255,255,255,0.1)' : undefined }}
     >
       <button
         onClick={onToggle}
@@ -72,10 +72,10 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FAQ; isOpen: boolean; o
         <span className="text-base font-semibold text-foreground leading-snug">{faq.q}</span>
         <span
           className="flex-shrink-0 mt-0.5 w-9 h-9 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors"
-          style={{ background: isOpen ? 'rgba(94,106,210,0.14)' : 'rgba(255,255,255,0.06)' }}
+          style={{ background: isOpen ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.06)' }}
         >
           {isOpen
-            ? <Minus size={13} className="text-accent" />
+            ? <Minus size={13} className="text-[#fafafa]" />
             : <Plus size={13} className="text-muted-foreground" />
           }
         </span>
@@ -131,7 +131,7 @@ export function FAQSection() {
           viewport={{ once: true }}
           className="mb-10"
         >
-          <motion.p variants={staggerItem} className="font-mono-label text-accent mb-3">FAQ</motion.p>
+          <motion.p variants={staggerItem} className="font-mono-label text-[#fafafa] mb-3">FAQ</motion.p>
           <motion.h2 variants={staggerItem} className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
             Questions answered.
           </motion.h2>
@@ -163,7 +163,7 @@ export function FAQSection() {
           className="mt-8 text-base text-muted-foreground"
         >
           Still have questions?{' '}
-          <a href="https://wa.me/916005109043" className="text-accent hover:underline">
+          <a href="https://wa.me/916005109043" className="text-[#fafafa] hover:underline">
             Message us on WhatsApp
           </a>
           {' '}— we reply within a few hours.

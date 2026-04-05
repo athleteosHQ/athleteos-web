@@ -36,7 +36,7 @@ export function CredibilitySection() {
           transition={{ duration: 0.45 }}
           className="mb-8 max-w-3xl"
         >
-          <p className="font-mono-label text-accent mb-3">What this is built on</p>
+          <p className="font-mono-label text-[#fafafa] mb-3">What this is built on</p>
           <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
             Why this is more than a rank calculator.
           </h2>
@@ -55,7 +55,7 @@ export function CredibilitySection() {
               transition={{ duration: 0.4, delay: i * 0.05 }}
               className="surface-card-muted rounded-2xl p-5"
             >
-              <p className="font-mono-label text-accent/80 mb-3">{label}</p>
+              <p className="font-mono-label text-[#a1a1aa] mb-3">{label}</p>
               <h3 className="text-lg font-semibold text-foreground leading-snug">{title}</h3>
               <p className="mt-3 text-base leading-relaxed text-muted-foreground">{copy}</p>
             </motion.div>

@@ -6,8 +6,8 @@ import { useHeadingParallax, staggerContainer, staggerItem } from '@/lib/motion'
 const SOURCES = [
   { id: 'FOOD_DATA', label: 'Verified intake data', note: 'Built on verified food composition data for Indian and South Asian diets — whether you train in Mumbai, Dubai, or London', color: '#2DDC8F' },
   { id: 'COMPETITION_DATA', label: 'Competition data', note: 'Calibrated against real meet records', color: '#00D9FF' },
-  { id: 'ATHLETE_DATABASE', label: 'Global athlete baseline', note: 'Percentile rankings calibrated against competitive lifters across IPF-affiliated federations', color: '#5E6AD2' },
-  { id: 'PRIVACY', label: 'No account required', note: 'Get your full rank instantly — no signup, no email, no tracking', color: '#2DDC8F' },
+  { id: 'ATHLETE_DATABASE', label: 'Global athlete baseline', note: 'Percentile rankings calibrated against competitive lifters across IPF-affiliated federations', color: 'rgba(255,255,255,0.3)' },
+  { id: 'PRIVACY', label: 'No account required', note: 'Get your first read instantly — no signup, no email, no tracking', color: '#2DDC8F' },
 ]
 
 export function TrustStrip() {
@@ -31,7 +31,7 @@ export function TrustStrip() {
           viewport={{ once: true }}
           className="mb-5 max-w-2xl"
         >
-          <motion.p variants={staggerItem} className="font-mono-label text-accent mb-2">Trust architecture</motion.p>
+          <motion.p variants={staggerItem} className="font-mono-label text-[#fafafa] mb-2">Trust architecture</motion.p>
           <motion.h2 variants={staggerItem} className="text-2xl md:text-3xl font-display font-bold text-foreground">
             Built on real athlete baselines, not generic fitness app guesses.
           </motion.h2>

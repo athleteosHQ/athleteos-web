@@ -15,6 +15,7 @@ import { RankSection } from '@/components/landing/RankSection'
 import { ReferralEntryBanner } from '@/components/landing/ReferralEntryBanner'
 import { SampleOutcomeBlock } from '@/components/landing/SampleOutcomeBlock'
 import { SignupGateSection } from '@/components/landing/SignupGateSection'
+import { ScanLineObserver } from '@/components/landing/ScanLineObserver'
 import { StickyJoinBar } from '@/components/landing/StickyJoinBar'
 import { SystemSection } from '@/components/landing/SystemSection'
 import { TrustStrip } from '@/components/landing/TrustStrip'
@@ -34,27 +35,85 @@ export default function LandingV2() {
   }, [])
 
   return (
-    <div className="grid-bg relative min-h-screen antialiased">
+    <div className="relative min-h-screen antialiased overflow-x-hidden">
       <NavBar />
       <StickyJoinBar />
       <Suspense fallback={null}>
         <ReferralEntryBanner />
       </Suspense>
-      <main className="relative z-10 flex flex-col">
-        <HeroSection />
-        <InsightPatternsSection />
-        <SampleOutcomeBlock />
-        <RankSection mode={mode} onModeChange={setMode} onRankResult={setRankResult} />
-        {rankResult && <PersonalizedUpsellStrip rankResult={rankResult} />}
-        <SignupGateSection overallPct={rankResult?.overallPct ?? null} />
-        <SystemSection />
-        <ProblemSection />
-        <div className="py-10 text-center px-6">
-          <p className="text-sm text-muted-foreground">Athletes are already joining. The founding cohort won&apos;t stay open.</p>
-          <a href="#inline-signup-gate" className="mt-2 inline-block font-mono-label text-accent hover:text-accent-light transition">Reserve My Diagnosis →</a>
+      <ScanLineObserver />
+      <main className="relative z-10 flex flex-col gap-24">
+        {/* 1. Hero — pain + CTA + score preview */}
+        <section className="floating-widget-container">
+          <HeroSection />
+        </section>
+
+        {/* 2-4. Connected narrative: Problem → Sample → Calculator */}
+        <div className="visual-thread">
+          <section className="floating-widget-container">
+            <ProblemSection />
+          </section>
+
+          <section className="floating-widget-container">
+            <SampleOutcomeBlock />
+          </section>
+
+          <section className="floating-widget-container">
+            <RankSection mode={mode} onModeChange={setMode} onRankResult={setRankResult} />
+          </section>
         </div>
-        <TrustStrip />
-        <FAQSection />
+
+        {/* 5. Personalized upsell — locked diagnosis using their data */}
+        {rankResult && (
+          <section className="floating-widget-container">
+            <PersonalizedUpsellStrip rankResult={rankResult} />
+          </section>
+        )}
+
+        {/* 6. How it works — for skeptics who scroll past the calculator */}
+        <section className="floating-widget-container flex flex-col gap-24">
+          <InsightPatternsSection />
+          <SystemSection />
+        </section>
+
+        {/* 7. Mechanism proof — what continues after the first read */}
+        {rankResult && (
+          <section className="floating-widget-container px-6 py-12 md:px-10">
+            <div className="mx-auto max-w-2xl p-8 surface-card relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                <ScanLineObserver />
+              </div>
+              <p className="font-mono-label text-success mb-6 tracking-widest">Post-Baseline Protocol</p>
+              <h3 className="text-2xl font-display font-bold text-foreground mb-8">What happens after your first read</h3>
+              
+              <div className="space-y-3">
+                {[
+                  { week: 'Week 1', text: 'You log training and nutrition. The system builds your baseline from real data — not estimates.' },
+                  { week: 'Week 2', text: 'First full diagnosis. One limiter identified across training, nutrition, and recovery. One correction to test.' },
+                  { week: 'Week 4', text: 'Re-read. Did the correction land? The system compares before and after — then identifies the next limiter.' },
+                  { week: 'Ongoing', text: 'Every block, a sharper read. The system learns your patterns — what works, what doesn\'t, what to try next.' }
+                ].map((step, i) => (
+                  <div key={step.week} className="flex gap-4 p-4 rounded-xl surface-inset border border-white/5 transition-colors hover:border-white/10 group">
+                    <span className="font-mono-label text-success shrink-0 w-16 pt-0.5 opacity-70 group-hover:opacity-100 transition-opacity">{step.week}</span>
+                    <p className="text-sm text-muted-foreground group-hover:text-foreground/90 transition-colors">{step.text}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-8 text-xs text-muted-foreground/40 font-mono-label italic text-center">This is the loop you&apos;re joining. Not a one-time report.</p>
+            </div>
+          </section>
+        )}
+
+        {/* 8. Signup gate */}
+        <section className="floating-widget-container">
+          <SignupGateSection overallPct={rankResult?.overallPct ?? null} />
+        </section>
+
+        {/* 9. Fallback trust for skeptics */}
+        <section className="floating-widget-container flex flex-col gap-24">
+          <TrustStrip />
+          <FAQSection />
+        </section>
       </main>
       <Footer />
     </div>

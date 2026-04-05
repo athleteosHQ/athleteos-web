@@ -7,6 +7,8 @@ import type { RankResult as RankResultType } from '@/lib/rankCalc'
 import { getFirstReadDiagnosis } from '../firstReadDiagnosis'
 import { getRankResultMessaging } from '../rankResultMessaging'
 import { EASE_OUT, DURATION } from '@/lib/motion'
+import { insertFounder } from '@/lib/supabase'
+import { trackEvent, identifyUser } from '@/lib/analytics'
 
 // ── Spring-driven bar ─────────────────────────────────────────────────────
 function SpringBar({ pct, color, delay }: { pct: number; color: string; delay: number }) {
@@ -46,8 +48,8 @@ const cascadeChild = {
 // ── Diagnostic bars ───────────────────────────────────────────────────────
 export function DiagnosticBars({ result }: { result: RankResultType }) {
   const bars = [
-    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: '#5E6AD2', est: result.squat.estimated1RM },
-    { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: '#F59E0B', est: result.bench.estimated1RM },
+    { label: 'Squat',    pct: result.squat.percentile,    value: result.squat.estimated1RM > 0    ? `Top ${100 - result.squat.percentile}%`    : '—', color: 'rgba(255,255,255,0.3)', est: result.squat.estimated1RM },
+    { label: 'Bench',    pct: result.bench.percentile,    value: result.bench.estimated1RM > 0    ? `Top ${100 - result.bench.percentile}%`    : '—', color: 'rgba(255,255,255,0.5)', est: result.bench.estimated1RM },
     { label: 'Deadlift', pct: result.deadlift.percentile, value: result.deadlift.estimated1RM > 0 ? `Top ${100 - result.deadlift.percentile}%` : '—', color: '#EF4444', est: result.deadlift.estimated1RM },
     ...(result.run5k ? [{ label: '5K Run', pct: result.run5k.percentile, value: `Top ${100 - result.run5k.percentile}%`, color: '#2DDC8F', est: 1 }] : []),
   ]
@@ -102,7 +104,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
       initial="hidden"
       animate="visible"
       className="surface-card-muted rounded-2xl px-4 py-4"
-      style={{ borderColor: 'rgba(94,106,210,0.14)' }}
+      style={{ borderColor: 'rgba(255,255,255,0.06)' }}
     >
       {/* ── Primary: always visible ── */}
       <motion.div variants={cascadeChild}>
@@ -124,7 +126,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
         <motion.div
           variants={cascadeChild}
           className="surface-card-muted mt-3 rounded-xl px-3.5 py-3"
-          style={{ borderColor: 'rgba(94,106,210,0.18)' }}
+          style={{ borderColor: 'rgba(255,255,255,0.08)' }}
         >
           <p className="font-mono-label text-accent mb-1.5">Next Threshold</p>
           <p className="text-sm leading-relaxed text-foreground">
@@ -164,7 +166,7 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
                 <div className="grid grid-cols-2 gap-2">
                   <div
                     className="surface-card-muted rounded-xl px-3.5 py-3"
-                    style={{ borderColor: 'rgba(94,106,210,0.14)' }}
+                    style={{ borderColor: 'rgba(255,255,255,0.06)' }}
                   >
                     <p className="font-mono-label text-accent mb-1">System Efficiency</p>
                     <p className="text-xl font-display font-bold text-accent">{result.efficiencyScore.pct}%</p>
@@ -195,9 +197,99 @@ export function ResultInsightPanel({ result }: { result: RankResultType }) {
         </AnimatePresence>
       </motion.div>
 
-      <p className="mt-3 text-xs text-muted-foreground">
-        This is your rank. Scroll down to see what the full diagnosis would reveal.
-      </p>
+      {/* ── Conversion bridge — momentum → commitment ── */}
+      <div className="mt-8 surface-inset rounded-xl p-5 border border-white/[0.04]">
+        <p className="font-mono-label text-[10px] tracking-[0.1em] text-muted-foreground/50 mb-3">THIS IS JUST THE SURFACE</p>
+        <p className="text-sm text-foreground font-medium leading-relaxed mb-2">
+          You now know where you stand. But you don&apos;t know <span className="text-foreground">why</span>.
+        </p>
+        <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+          The full system reads your training, nutrition, and recovery together — finds the one thing stalling progress — and gives you the exact correction. Every block, a sharper read.
+        </p>
+
+        <div className="flex items-center gap-3 mb-4 py-2 px-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+          <div className="flex flex-col">
+            <span className="text-xs text-muted-foreground">Founding rate</span>
+            <span className="text-sm text-foreground font-bold">₹250/mo</span>
+          </div>
+          <div className="h-8 w-px bg-white/[0.06]" />
+          <div className="flex flex-col">
+            <span className="text-xs text-muted-foreground">Payment</span>
+            <span className="text-sm text-foreground font-bold">Not until launch</span>
+          </div>
+          <div className="h-8 w-px bg-white/[0.06]" />
+          <div className="flex flex-col">
+            <span className="text-xs text-muted-foreground">Slots</span>
+            <span className="text-sm text-foreground font-bold">Limited</span>
+          </div>
+        </div>
+
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault()
+            const form = e.currentTarget
+            const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement
+            const email = emailInput?.value?.trim()
+            if (!email) return
+
+            const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement
+            if (btn) { btn.disabled = true; btn.textContent = 'Joining...' }
+
+            try {
+              const { error } = await insertFounder({ email, whatsapp: '', source: 'inline_rank_result' })
+              if (error) {
+                if (btn) { btn.disabled = false; btn.textContent = 'Start My Diagnosis →' }
+                return
+              }
+              trackEvent('signup_conversion', { source: 'inline_rank_result', email })
+              identifyUser(email)
+              if (btn) { btn.textContent = '✓ You\u2019re in' }
+              localStorage.setItem('aos_founder_data', JSON.stringify({ email, ts: Date.now() }))
+              // Replace the entire form container with confirmation
+              const container = form.closest('.surface-inset')
+              if (container) {
+                container.innerHTML = `
+                  <p class="font-mono-label text-[10px] tracking-[0.1em] text-success/70 mb-3">✓ YOU'RE IN</p>
+                  <p class="text-sm text-foreground font-medium mb-2">Your founding spot is locked.</p>
+                  <div class="space-y-2 mt-4">
+                    <div class="flex items-start gap-2">
+                      <span class="mt-1 h-1.5 w-1.5 rounded-full bg-success/50 shrink-0"></span>
+                      <p class="text-xs text-muted-foreground">We'll email you when the full diagnostic system is ready</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                      <span class="mt-1 h-1.5 w-1.5 rounded-full bg-success/50 shrink-0"></span>
+                      <p class="text-xs text-muted-foreground">No payment until launch — your ₹250/mo rate is locked forever</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                      <span class="mt-1 h-1.5 w-1.5 rounded-full bg-success/50 shrink-0"></span>
+                      <p class="text-xs text-muted-foreground">You'll get WhatsApp access to the founder in the first 90 days</p>
+                    </div>
+                  </div>
+                `
+              }
+              // Notify other components
+              window.dispatchEvent(new Event('aos-founder-data-changed'))
+            } catch {
+              if (btn) { btn.disabled = false; btn.textContent = 'Start My Diagnosis →' }
+            }
+          }}
+          className="flex gap-2"
+        >
+          <input
+            type="email"
+            placeholder="your@email.com"
+            required
+            className="flex-1 rounded-lg bg-white/[0.04] border border-white/[0.08] px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-white/20 transition-colors min-h-[44px]"
+          />
+          <button
+            type="submit"
+            className="shrink-0 rounded-lg px-5 py-2.5 text-sm font-bold text-white uppercase tracking-[0.02em] transition-all duration-200 hover:bg-[#fafafa] hover:text-[#09090b] min-h-[44px]"
+            style={{ background: 'linear-gradient(104deg, rgba(253,253,253,0.05) 5%, rgba(240,240,228,0.1) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}
+          >
+            Start My Diagnosis &rarr;
+          </button>
+        </form>
+      </div>
     </motion.div>
   )
 }

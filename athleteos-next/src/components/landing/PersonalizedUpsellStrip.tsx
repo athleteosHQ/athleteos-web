@@ -37,9 +37,9 @@ const LOCKED_ROWS = [
   {
     key: 'LIMITER',
     label: 'Primary limiter',
-    color: '#F59E0B',
-    bg: 'rgba(245,158,11,0.03)',
-    border: 'rgba(245,158,11,0.10)',
+    color: 'rgba(255,255,255,0.25)',
+    bg: 'rgba(255,255,255,0.02)',
+    border: 'rgba(255,255,255,0.08)',
   },
   {
     key: 'CORRECTION',
@@ -89,7 +89,7 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
           transition={{ duration: 0.5 }}
           className="mb-6"
         >
-          <p className="font-mono-label text-accent mb-2">Your diagnosis preview</p>
+          <p className="font-mono-label text-[#fafafa] mb-2">Your diagnosis preview</p>
           <h3 className="text-2xl font-display font-bold text-foreground md:text-3xl">
             You&apos;re Top {topPct}%. Here&apos;s what the full read would tell you.
           </h3>
@@ -100,16 +100,16 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
           {...fadeUp(0.1)}
           className="rounded-2xl p-4 mb-3"
           style={{
-            background: 'rgba(0,217,255,0.03)',
-            border: '1px solid rgba(0,217,255,0.10)',
+            background: 'rgba(255,255,255,0.02)',
+            border: '1px solid rgba(255,255,255,0.08)',
           }}
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="font-mono text-xs font-bold" style={{ color: 'var(--data-cyan, #00D9FF)', opacity: 0.9 }}>YOUR_RANK</p>
+              <p className="font-mono text-xs font-bold" style={{ color: 'rgba(255,255,255,0.5)', opacity: 0.9 }}>YOUR_RANK</p>
               <p className="font-mono-label text-muted-foreground/70 mt-1">Where you stand</p>
             </div>
-            <span className="h-2 w-2 rounded-full mt-1" style={{ background: 'var(--data-cyan, #00D9FF)' }} />
+            <span className="h-2 w-2 rounded-full mt-1" style={{ background: 'rgba(255,255,255,0.5)' }} />
           </div>
           <p className="mt-3 text-base font-bold text-foreground">
             Top {topPct}% of competitive strength athletes
@@ -152,7 +152,7 @@ export function PersonalizedUpsellStrip({ rankResult }: PersonalizedUpsellStripP
           <a
             href="#inline-signup-gate"
             className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-light"
-            style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
+            style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)' }}
             onClick={() => trackEvent('upsell_strip_cta_clicked', {
               overallPct: rankResult.overallPct,
               tier: rankResult.tier,

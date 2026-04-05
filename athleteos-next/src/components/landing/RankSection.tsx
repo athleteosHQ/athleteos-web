@@ -103,10 +103,10 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
           viewport={{ once: true }}
           className="mb-8"
         >
-          <motion.span variants={staggerItem} className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 border border-accent/20 px-3 py-1 font-mono-label text-accent mb-3">Step 1</motion.span>
-          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">See where you stand</motion.h2>
+          <motion.span variants={staggerItem} className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.04] border border-white/10 px-3 py-1 font-mono-label text-accent mb-3">Step 1</motion.span>
+          <motion.h2 variants={staggerItem} className="text-3xl font-display font-bold text-foreground md:text-4xl">Generate your baseline signal</motion.h2>
           <motion.p variants={staggerItem} className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            Rank tells you where you stand. AthleteOS turns that into a system read:
+            Your rank is not the answer — it&apos;s the first data point. AthleteOS uses it to build a system read:
             <span className="text-foreground"> what&apos;s limiting progress</span>, <span className="text-foreground">what to change</span>, and <span className="text-foreground">what outcome to track next</span>.
           </motion.p>
           <motion.div
@@ -114,16 +114,16 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
             className="mt-5 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-3"
           >
             {[
-              'Rank',
+              'Baseline',
               'Limiter',
               'Correction',
-              'Projected gain',
+              'Outcome',
             ].map((step, index) => (
               <div key={step} className="inline-flex items-center gap-2">
                 <span className="rounded-full bg-white/[0.05] px-2.5 py-1 font-mono-label text-muted-foreground">
                   {step}
                 </span>
-                {index < 3 && <span className="text-accent/70">→</span>}
+                {index < 3 && <span className="text-white/40">→</span>}
               </div>
             ))}
           </motion.div>
@@ -165,6 +165,29 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
               transition={{ duration: 0.32, ease: EASE_OUT }}
               className="space-y-5"
             >
+              {/* Initial Audit header */}
+              <div className="rounded-xl px-4 py-3 mb-1 surface-inset border border-white/5">
+                <p className="font-mono-label text-accent mb-1">Initial audit</p>
+                <p className="text-sm text-foreground font-medium">
+                  Your baseline is set. This is the starting signal — not the answer.
+                </p>
+                {(() => {
+                  const lifts = [
+                    { name: 'Squat', pct: result.squat.percentile, est: result.squat.estimated1RM },
+                    { name: 'Bench', pct: result.bench.percentile, est: result.bench.estimated1RM },
+                    { name: 'Deadlift', pct: result.deadlift.percentile, est: result.deadlift.estimated1RM },
+                  ].filter(l => l.est > 0)
+                  const weakest = lifts.reduce((min, l) => l.pct < min.pct ? l : min, lifts[0])
+                  const strongest = lifts.reduce((max, l) => l.pct > max.pct ? l : max, lifts[0])
+                  if (!weakest || !strongest || weakest.name === strongest.name) return null
+                  return (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      <span className="font-mono-label text-muted-foreground/60">System observation:</span>{' '}
+                      {strongest.name} is your strongest signal (Top {100 - strongest.pct}%), but {weakest.name} is a structural outlier (Top {100 - weakest.pct}%). The full diagnostic loop identifies whether the gap is training distribution, nutrition timing, or recovery debt.
+                    </p>
+                  )
+                })()}
+              </div>
               <div className="grid md:grid-cols-2 gap-6 items-start">
                 <AthleteScoreCard
                   score={result.athleteScore}

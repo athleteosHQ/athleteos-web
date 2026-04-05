@@ -53,7 +53,7 @@ export function ModeSelector({ mode, onModeChange }: ModeSelectorProps) {
                   layoutId="mode-pill"
                   className="absolute inset-0 rounded-md"
                   style={{
-                    background: 'var(--accent)',
+                    background: 'rgba(255,255,255,0.15)',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)',
                   }}
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}

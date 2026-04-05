@@ -72,7 +72,7 @@ export function AthleteScoreCard({
       {isHero && (
         <div
           className="pointer-events-none absolute top-0 right-0 w-32 h-32 rounded-tr-2xl"
-          style={{ background: 'radial-gradient(circle at top right, rgba(94,106,210,0.18), transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle at top right, rgba(255,255,255,0.06), transparent 70%)' }}
         />
       )}
 
@@ -100,7 +100,7 @@ export function AthleteScoreCard({
         </motion.div>
         <div className="text-right">
           <p className="font-mono-label text-muted-foreground mb-1">Score</p>
-          <p className="text-4xl font-display font-bold text-accent tabular-nums">
+          <p className="text-4xl font-display font-bold text-[#fafafa] tabular-nums">
             <AnimatedCounter value={score} />
           </p>
         </div>
@@ -110,11 +110,11 @@ export function AthleteScoreCard({
       <div className="mb-5 space-y-1.5">
         <div className="flex justify-between text-xs">
           <span className="font-mono-label text-muted-foreground">Overall Performance</span>
-          <span className="font-mono text-accent font-bold">{score}/100</span>
+          <span className="font-mono text-[#fafafa] font-bold">{score}/100</span>
         </div>
         <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
           <motion.div
-            className="h-full rounded-full bg-accent"
+            className="h-full rounded-full bg-white/30"
             initial={{ width: 0 }}
             animate={{ width: `${score}%` }}
             transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
@@ -131,7 +131,7 @@ export function AthleteScoreCard({
       <div className="mt-5 pt-5 border-t border-white/[0.06]">
         <p className="text-sm leading-relaxed text-muted-foreground">
           Compared against competitive strength-athlete records in your weight class.
-          The score is secondary. The rank tells you where you stand first.
+          This baseline is the first input to your diagnosis.
         </p>
       </div>
     </Wrapper>
