@@ -59,11 +59,11 @@ export function ReferralEntryBanner() {
       <div
         className="rounded-2xl p-5 md:p-6"
         style={{
-          background: 'linear-gradient(135deg, rgba(94,106,210,0.10), rgba(255,255,255,0.02))',
-          border: '1px solid rgba(94,106,210,0.18)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02))',
+          border: '1px solid rgba(255,255,255,0.10)',
         }}
       >
-        <p className="font-mono-label text-accent mb-2">{state.eyebrow}</p>
+        <p className="font-mono-label text-[#fafafa] mb-2">{state.eyebrow}</p>
         <p className="text-2xl font-display font-bold text-foreground md:text-3xl">{state.headline}</p>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">{state.body}</p>
         <a

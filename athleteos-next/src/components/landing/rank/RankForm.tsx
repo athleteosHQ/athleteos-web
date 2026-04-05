@@ -7,6 +7,12 @@ import { GlassInput, LiftRow } from './SystemInput'
 import { type AthleteMode } from '../ModeSelector'
 import { EASE_OUT } from '@/lib/motion'
 
+const QUICK_PRESETS = [
+  { label: 'Beginner', bw: '75', sqW: '80', sqR: '5', bpW: '55', bpR: '5', dlW: '100', dlR: '5' },
+  { label: 'Intermediate', bw: '83', sqW: '120', sqR: '3', bpW: '85', bpR: '3', dlW: '150', dlR: '3' },
+  { label: 'Advanced', bw: '93', sqW: '170', sqR: '2', bpW: '120', bpR: '2', dlW: '210', dlR: '2' },
+] as const
+
 export interface RankFormFields {
   bw: string; sqW: string; sqR: string; bpW: string; bpR: string
   dlW: string; dlR: string; runMin: string; runSec: string
@@ -49,7 +55,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
             <div
               className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-300"
               style={{
-                background: stage === s ? 'var(--accent)' : ((['profile', 'lifts', 'ready'].indexOf(stage) > i) ? 'rgba(45,220,143,0.15)' : 'rgba(255,255,255,0.05)'),
+                background: stage === s ? 'rgba(255,255,255,0.15)' : ((['profile', 'lifts', 'ready'].indexOf(stage) > i) ? 'rgba(45,220,143,0.15)' : 'rgba(255,255,255,0.05)'),
                 color: stage === s ? '#fff' : ((['profile', 'lifts', 'ready'].indexOf(stage) > i) ? 'var(--success)' : 'var(--muted-foreground)'),
                 border: stage === s ? 'none' : '1px solid rgba(255,255,255,0.06)',
               }}
@@ -81,6 +87,37 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.25, ease: EASE_OUT }}
           >
+            <div className="mb-6">
+              <p className="text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/40 mb-3">Quick start — pick the closest</p>
+              <div className="flex gap-2">
+                {QUICK_PRESETS.map((preset) => (
+                  <button
+                    key={preset.label}
+                    type="button"
+                    onClick={() => {
+                      upd('bw')(preset.bw)
+                      upd('sqW')(preset.sqW)
+                      upd('sqR')(preset.sqR)
+                      upd('bpW')(preset.bpW)
+                      upd('bpR')(preset.bpR)
+                      upd('dlW')(preset.dlW)
+                      upd('dlR')(preset.dlR)
+                      setStage('ready')
+                    }}
+                    className="flex-1 rounded-lg px-3 py-3 text-center transition-all duration-200 hover:bg-white/[0.06] hover:border-white/[0.12]"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
+                  >
+                    <span className="block text-xs font-medium text-foreground">{preset.label}</span>
+                    <span className="block text-[10px] text-muted-foreground/50 mt-1">{preset.bw}kg · S{preset.sqW} B{preset.bpW} D{preset.dlW}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-3 my-4">
+                <div className="flex-1 h-px bg-white/[0.06]" />
+                <span className="text-[10px] text-muted-foreground/30 uppercase tracking-widest">or enter manually</span>
+                <div className="flex-1 h-px bg-white/[0.06]" />
+              </div>
+            </div>
             <p className="text-sm text-muted-foreground mb-4">
               The system needs your weight class to calibrate the baseline.
             </p>
@@ -196,7 +233,7 @@ export function RankForm({ mode, fields: f, onFieldChange: upd, onSubmit, error,
                 type="button"
                 onClick={onSubmit}
                 className="flex-1 cursor-pointer bg-accent text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 group transition-all hover:bg-accent-light"
-                style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
+                style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)' }}
               >
                 Run First Read
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

@@ -5,15 +5,15 @@ import { Activity } from 'lucide-react'
 import { type AthleteMode } from '../ModeSelector'
 
 const GYM_BARS = [
-  { label: 'Squat',    color: '#6B7AED', pct: 78 },
-  { label: 'Bench',    color: '#F59E0B', pct: 55 },
-  { label: 'Deadlift', color: '#EF4444', pct: 84 },
+  { label: 'Squat',    color: 'rgba(255,255,255,0.25)', pct: 78 },
+  { label: 'Bench',    color: 'rgba(255,255,255,0.18)', pct: 55 },
+  { label: 'Deadlift', color: 'rgba(255,255,255,0.22)', pct: 84 },
 ]
 
 const HYBRID_BARS = [
-  { label: 'Squat',    color: '#6B7AED', pct: 78 },
-  { label: 'Deadlift', color: '#EF4444', pct: 84 },
-  { label: '5K Run',   color: '#2DDC8F', pct: 62 },
+  { label: 'Squat',    color: 'rgba(255,255,255,0.25)', pct: 78 },
+  { label: 'Deadlift', color: 'rgba(255,255,255,0.22)', pct: 84 },
+  { label: '5K Run',   color: 'rgba(255,255,255,0.18)', pct: 62 },
 ]
 
 export function GhostTierPreview({ mode }: { mode: AthleteMode }) {
@@ -38,7 +38,7 @@ export function GhostTierPreview({ mode }: { mode: AthleteMode }) {
           <div
             className="relative flex-shrink-0 w-20 h-20 rounded-full"
             style={{
-              background: 'conic-gradient(#5E6AD2 0deg 270deg, rgba(255,255,255,0.06) 270deg 360deg)',
+              background: 'conic-gradient(rgba(255,255,255,0.2) 0deg 270deg, rgba(255,255,255,0.06) 270deg 360deg)',
             }}
           >
             <div
@@ -83,7 +83,7 @@ export function GhostTierPreview({ mode }: { mode: AthleteMode }) {
       >
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: 'rgba(107,122,237,0.12)', border: '1px solid rgba(107,122,237,0.26)', boxShadow: '0 0 20px rgba(94,106,210,0.15)' }}
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 0 20px rgba(255,255,255,0.05)' }}
         >
           <Activity className="w-5 h-5 text-accent" />
         </div>

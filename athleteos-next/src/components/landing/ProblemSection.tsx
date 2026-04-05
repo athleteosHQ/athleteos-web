@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { blurUp, clipReveal } from '@/lib/motion'
+import { RevealText } from '@/components/landing/RevealText'
 import { Smartphone, Zap, Activity } from 'lucide-react'
 
 const BLIND_SPOTS = [
@@ -10,24 +11,24 @@ const BLIND_SPOTS = [
     problem: '27.3% Protein Deficit',
     detail: 'MyFitnessPal values are consistently lower than the national reference standard for Indian food. You are likely under-eating protein even when your app says "on target."',
     evidence: 'Source: IFCT 2017 vs. MFP data drift in South Asian pulses.',
-    color: '#F59E0B',
+    color: 'rgba(255,255,255,0.5)',
     Icon: Smartphone,
     delta: '-27.3%',
   },
   {
     stream: 'Training',
-    problem: '12.4% CNS Volume Drift',
-    detail: 'Standard logs only show sets and reps. They miss the "Fatigue Overlap" where a 12% drift in Squat:Deadlift volume ratio predicts a lower-back plateau 4 weeks before failure.',
+    problem: '12.4% CNS Fatigue Trend',
+    detail: 'Standard logs only show sets and reps. They miss the "Fatigue Overlap" where a 12% shift in Squat:Deadlift volume ratio predicts a lower-back plateau 4 weeks before failure.',
     evidence: 'Source: RPE Correlation vs. Volume Load Trends.',
-    color: 'var(--accent)',
+    color: 'rgba(255,255,255,0.3)',
     Icon: Activity,
     delta: '12.4%',
   },
   {
     stream: 'Recovery',
-    problem: '72-Hour Metabolic Lag',
+    problem: '3-Day Recovery Lag',
     detail: 'Sleep scores and HRV are lagging indicators. They show the crash after it has already started. Metabolic debt shows in Heart Rate Recovery (HRR) 3 days before it impacts HRV.',
-    evidence: 'Source: 72-Hour HRR Lead Time Correlation.',
+    evidence: 'Source: Heart Rate Recovery (HRR) lead time analysis.',
     color: '#2DDC8F',
     Icon: Zap,
     delta: '72hr',
@@ -36,8 +37,13 @@ const BLIND_SPOTS = [
 
 export function ProblemSection() {
   return (
-    <section id="problem" className="px-6 py-20 md:px-10 overflow-hidden">
-      <div className="mx-auto max-w-6xl relative">
+    <section id="problem" className="relative isolate px-6 py-32 md:px-10 overflow-hidden min-h-[90vh] flex items-center justify-center">
+      <div
+        className="absolute inset-0 z-0"
+        style={{ background: 'linear-gradient(180deg, rgba(9,9,11,0.96) 0%, rgba(9,9,11,0.985) 100%)' }}
+        aria-hidden="true"
+      />
+      <div className="mx-auto max-w-6xl relative z-10">
         
         {/* Background Decorative Element */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-full opacity-[0.03] pointer-events-none">
@@ -48,13 +54,12 @@ export function ProblemSection() {
         </div>
 
         <div className="mb-12 text-center relative z-10">
-          <p className="font-mono-label text-accent mb-3">The Diagnostic Gap</p>
-          <motion.h2
-            {...clipReveal()}
-            className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4"
-          >
-            Your apps see numbers.<br className="hidden md:block" /> They don&apos;t see the stall.
-          </motion.h2>
+          <p className="font-mono-label text-[#a1a1aa] mb-3">The Diagnostic Gap</p>
+          <RevealText as="h2" className="text-3xl md:text-5xl font-display font-semibold tracking-[-0.02em] leading-[1.2] text-foreground mb-4">
+            <span style={{ background: 'linear-gradient(180deg, #ededed 0%, #a1a1a1 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Your apps see numbers.<br className="hidden md:block" /> They don&apos;t see the stall.
+            </span>
+          </RevealText>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             You see the numbers, but you miss the correlations that actually cause the stall. Most athletes fail because their inputs are fragmented across three different apps.
           </p>
@@ -102,42 +107,42 @@ export function ProblemSection() {
 
           {/* 2. The Bridge/Transition */}
           <div className="flex flex-col items-center gap-4 py-4">
-            <div className="h-12 w-px bg-gradient-to-b from-transparent via-accent/50 to-accent" />
-            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center shadow-[0_0_20px_rgba(107,122,237,0.5)]">
-              <Zap size={14} className="text-white fill-white" />
+            <div className="h-12 w-px bg-gradient-to-b from-transparent via-white/20 to-white/40" />
+            <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center shadow-[0_0_25px_rgba(45,220,143,0.3)] border border-success/40">
+              <Zap size={14} className="text-success fill-success" />
             </div>
-            <div className="h-12 w-px bg-gradient-to-t from-transparent via-accent/50 to-accent" />
+            <div className="h-12 w-px bg-gradient-to-t from-transparent via-white/20 to-white/40" />
           </div>
 
           {/* 3. Unified Side */}
           <div className="flex-1 w-full">
-            <p className="font-mono-label text-accent text-center mb-4">Unified Diagnosis</p>
+            <p className="font-mono-label text-[#a1a1aa] text-center mb-4">Unified Diagnosis</p>
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              className="surface-card p-8 border-accent/30 bg-accent/[0.02] shadow-[0_0_40px_rgba(107,122,237,0.05)] relative overflow-hidden"
+              className="surface-card p-8 border-success/30 bg-success/[0.02] shadow-[0_0_40px_rgba(45,220,143,0.05)] relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-4 opacity-5">
-                <Activity size={80} className="text-accent" />
+                <Activity size={80} className="text-success" />
               </div>
               
-              <h3 className="text-2xl font-display font-bold text-foreground mb-4 relative z-10">The Connected Read</h3>
+              <h3 className="text-2xl font-display font-bold text-foreground mb-4 relative z-10">System Pulse</h3>
               <p className="text-base text-muted-foreground leading-relaxed mb-6 relative z-10">
                 AthleteOS connects the dots between your apps to find the one variable actually causing the stall. It correlates your intake, volume, and recovery signals to catch plateaus before they happen.
               </p>
               
               <div className="space-y-4 relative z-10 mb-6">
-                <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/20">
-                  <p className="text-xs font-mono-label text-accent uppercase mb-2">Sample Correlation</p>
+                <div className="p-3.5 rounded-xl bg-success/5 border border-success/20">
+                  <p className="text-xs font-mono-label text-success uppercase mb-2">Sample Correlation</p>
                   <p className="text-sm text-foreground/90 font-medium italic">
-                    "Recovery Lag detected: Bench 1RM projected to drop 2.5kg unless intake increases by 40g today."
+                    "Recovery Gap detected: Bench 1RM projected to drop 2.5kg unless intake increases by 40g today."
                   </p>
                 </div>
                 <div className="space-y-2">
-                  {['Real protein vs IFCT 2017', 'CNS debt vs Volume Load', 'Metabolic recovery trends'].map(item => (
+                  {['Real protein vs IFCT 2017', 'CNS fatigue vs Volume Load', 'Metabolic recovery patterns'].map(item => (
                     <div key={item} className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-success/60" />
                       <span className="text-sm text-foreground/90 font-medium">{item}</span>
                     </div>
                   ))}

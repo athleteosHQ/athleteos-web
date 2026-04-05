@@ -15,7 +15,7 @@ export function getInlineSignupGateContent(overallPct: number | null): InlineSig
   if (overallPct === null) {
     return {
       ...SHARED_GATE_CONTENT,
-      headline: "Your training data tells a story. The full system reads it.",
+      headline: "The system is ready for your data. Stop tracking. Start correcting.",
     }
   }
 

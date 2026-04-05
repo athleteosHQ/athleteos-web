@@ -201,7 +201,7 @@ export const RankShareCard = React.forwardRef<
             <Bar label="Squat" pct={result.squat.percentile} est1rm={result.squat.estimated1RM} color="#5E6AD2" />
           )}
           {result.bench.estimated1RM > 0 && (
-            <Bar label="Bench" pct={result.bench.percentile} est1rm={result.bench.estimated1RM} color="#F59E0B" />
+            <Bar label="Bench" pct={result.bench.percentile} est1rm={result.bench.estimated1RM} color="rgba(255,255,255,0.5)" />
           )}
           {result.deadlift.estimated1RM > 0 && (
             <Bar label="Deadlift" pct={result.deadlift.percentile} est1rm={result.deadlift.estimated1RM} color="#EF4444" />

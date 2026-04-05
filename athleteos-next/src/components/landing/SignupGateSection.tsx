@@ -280,7 +280,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
               type="submit"
               disabled={loading}
               className="w-full cursor-pointer rounded-xl bg-accent py-4 text-base font-bold text-white transition-all hover:bg-accent-light disabled:opacity-50 flex items-center justify-center gap-2 group"
-              style={{ boxShadow: '0 2px 8px rgba(107,122,237,0.25), 0 1px 2px rgba(0,0,0,0.4)' }}
+              style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)' }}
             >
               {loading ? (
                 <>
@@ -292,7 +292,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
                 </>
               ) : (
                 <>
-                  Reserve My Diagnosis
+                  LOCK IN CORRECTION PATH
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
@@ -302,7 +302,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
           {/* Pricing — supporting context below form, not leading */}
           <div
             className="mt-5 rounded-xl px-4 py-3"
-            style={{ background: 'rgba(107,122,237,0.04)', border: '1px solid rgba(107,122,237,0.08)' }}
+            style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
           >
             <div className="flex items-baseline justify-between gap-3">
               <p className="text-sm text-muted-foreground">

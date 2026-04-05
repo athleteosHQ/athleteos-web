@@ -74,7 +74,7 @@ const SCENARIOS: Scenario[] = [
     row2: {
       label: 'Current percentile rank',
       value: 'Top 18%',
-      valueClass: 'text-accent-light',
+      valueClass: 'text-[#a1a1aa]',
       subtext: 'Gap to top 10%: 2 competition lifts',
     },
     row3: {
@@ -155,8 +155,8 @@ export function DiagnosticCard() {
         <AnimatePresence mode="wait">
           <motion.div key={`hdr-${idx}`} {...FADE} className="mb-5">
             <div className="flex items-center gap-2 mb-2.5">
-              <span style={{ width: 7, height: 7, borderRadius: 999, background: 'var(--accent)', flexShrink: 0 }} />
-              <p className="font-mono-label text-[11px] text-accent-light/80 leading-none">
+              <span style={{ width: 7, height: 7, borderRadius: 999, background: 'rgba(255,255,255,0.4)', flexShrink: 0 }} />
+              <p className="font-mono-label text-[11px] text-[#a1a1aa] leading-none">
                 {s.tag}
               </p>
             </div>
@@ -176,7 +176,7 @@ export function DiagnosticCard() {
             <div>
               <div className="mb-3 flex items-center justify-between gap-3">
                 <p className="font-mono-label text-muted-foreground/70">{s.eyebrow}</p>
-                <span className="font-mono-label text-sm font-bold text-accent-light">{s.activeRow.value}</span>
+                <span className="font-mono-label text-sm font-bold text-[#a1a1aa]">{s.activeRow.value}</span>
               </div>
               <div
                 className="rounded-2xl px-4 py-4"
@@ -228,7 +228,7 @@ export function DiagnosticCard() {
             <div
               className="rounded-2xl border px-4 py-4 sm:px-5 surface-card-muted"
             >
-              <p className="mb-4 font-mono-label text-[11px] text-accent-light">
+              <p className="mb-4 font-mono-label text-[11px] text-[#a1a1aa]">
                 Diagnosis
               </p>
 
@@ -247,7 +247,7 @@ export function DiagnosticCard() {
                 </div>
                 <div className="rounded-xl border px-3 py-3 surface-card-muted">
                   <p className="mb-0.5 font-mono-label text-[10px] text-muted-foreground">{s.metricLabel}</p>
-                  <p className="font-display text-2xl font-bold leading-none text-accent-light">{s.metricValue}</p>
+                  <p className="font-display text-2xl font-bold leading-none text-[#a1a1aa]">{s.metricValue}</p>
                   <p className="mt-0.5 font-mono-label text-[10px] text-muted-foreground">{s.metricSub}</p>
                 </div>
               </div>
@@ -273,7 +273,7 @@ export function DiagnosticCard() {
                 style={{
                   width: i === idx ? 18 : 5,
                   height: 5,
-                  background: i === idx ? 'var(--accent)' : 'rgba(255,255,255,0.14)',
+                  background: i === idx ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.14)',
                 }}
               />
             </button>

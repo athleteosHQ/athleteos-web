@@ -194,7 +194,7 @@ export function WelcomePage() {
     return (
       <main className="grid-bg relative min-h-screen px-6 py-24 md:px-10">
         <div className="mx-auto max-w-3xl rounded-3xl border border-white/8 bg-white/[0.02] p-8 text-center">
-          <p className="font-mono-label text-accent mb-3">Welcome</p>
+          <p className="font-mono-label text-[#fafafa] mb-3">Welcome</p>
           <h1 className="text-4xl font-display font-bold text-foreground mb-3">Your founder status will appear here.</h1>
           <p className="text-base leading-relaxed text-muted-foreground mb-6">
             Claim your founding spot first, then come back here to unlock your early-athlete welcome page.
@@ -222,7 +222,7 @@ export function WelcomePage() {
       )}
 
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/10 blur-[120px]" />
+        <div className="absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-white/[0.04] blur-[120px]" />
         <div className="absolute right-[8%] top-[22%] h-48 w-48 rounded-full bg-success/6 blur-[100px]" />
       </div>
 
@@ -234,7 +234,7 @@ export function WelcomePage() {
           className="rounded-[2rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-8 shadow-[0_24px_90px_rgba(0,0,0,0.38)] md:p-12"
         >
           <div className="max-w-4xl">
-            <p className="font-mono-label text-accent mb-4">Athletes are joining fast.</p>
+            <p className="font-mono-label text-[#fafafa] mb-4">Athletes are joining fast.</p>
             <h1 className="text-5xl font-display font-bold tracking-tight text-foreground md:text-7xl">You&apos;re early.</h1>
             <p className="mt-3 font-display text-2xl font-bold text-foreground md:text-4xl">Founding Member #{welcomeState.founderNumber}</p>
             <p className="mt-3 text-lg text-muted-foreground md:text-xl">You train with intent.</p>
@@ -245,15 +245,15 @@ export function WelcomePage() {
               <p className="text-sm text-muted-foreground md:text-base">{welcomeState.helperLine}</p>
               {diagnosis && (
                 <div className="max-w-2xl rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4">
-                  <p className="font-mono-label text-accent mb-2">{diagnosis.label}</p>
+                  <p className="font-mono-label text-[#fafafa] mb-2">{diagnosis.label}</p>
                   <p className="text-base font-semibold text-foreground md:text-lg">{diagnosis.headline}</p>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground md:text-base">{diagnosis.body}</p>
                 </div>
               )}
               {welcomeState.hasResult ? (
-                <p className="font-display text-2xl font-bold text-accent md:text-3xl">Next stop: Top 1%.</p>
+                <p className="font-display text-2xl font-bold text-[#fafafa] md:text-3xl">Next stop: Top 1%.</p>
               ) : (
-                <p className="font-display text-2xl font-bold text-accent md:text-3xl">
+                <p className="font-display text-2xl font-bold text-[#fafafa] md:text-3xl">
                   Your benchmark is the starting point for everything that comes next.
                 </p>
               )}
@@ -297,11 +297,11 @@ export function WelcomePage() {
             >
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono-label text-accent mb-2">Performance Card</p>
+                  <p className="font-mono-label text-[#fafafa] mb-2">Performance Card</p>
                   <p className="text-3xl font-display font-bold text-foreground md:text-5xl">{welcomeState.percentileLabel}</p>
                   <p className="mt-2 text-base text-muted-foreground">{welcomeState.percentileSubline}</p>
                 </div>
-                <div className="rounded-full border border-accent/25 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent">
+                <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-[#fafafa]">
                   {sharePayload?.badgeLabel ?? 'Early Athlete'}
                 </div>
               </div>
@@ -311,7 +311,7 @@ export function WelcomePage() {
               >
                 <div className="mb-5 flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-mono-label text-accent mb-2">{sharePayload?.badgeLabel ?? 'Early Athlete'}</p>
+                    <p className="font-mono-label text-[#fafafa] mb-2">{sharePayload?.badgeLabel ?? 'Early Athlete'}</p>
                     <p className="text-4xl font-display font-bold text-foreground">{welcomeState.percentileLabel}</p>
                     <p className="mt-2 text-sm text-muted-foreground">{welcomeState.helperLine}</p>
                   </div>
@@ -324,7 +324,7 @@ export function WelcomePage() {
                 <div className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4">
                   <p className="text-base font-semibold text-foreground">{welcomeState.percentileSubline}</p>
                   {diagnosis && <p className="mt-2 text-sm text-muted-foreground">{diagnosis.headline}</p>}
-                  <p className="mt-2 text-sm text-accent">Next stop: Top 1%.</p>
+                  <p className="mt-2 text-sm text-[#fafafa]">Next stop: Top 1%.</p>
                 </div>
               </div>
 
@@ -355,7 +355,7 @@ export function WelcomePage() {
             </div>
 
             <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
-              <p className="font-mono-label text-accent mb-2">{welcomeState.bridgeLine}</p>
+              <p className="font-mono-label text-[#fafafa] mb-2">{welcomeState.bridgeLine}</p>
               <h2 className="text-3xl font-display font-bold text-foreground">Move up the founding list</h2>
               <p className="mt-2 text-base text-muted-foreground">{welcomeState.momentumLine}</p>
 
@@ -373,11 +373,11 @@ export function WelcomePage() {
               <div className="mt-6 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
                 <div className="mb-2 flex items-center justify-between gap-4">
                   <p className="text-sm font-semibold text-foreground">Progress to Elite</p>
-                  <p className="font-mono text-xs font-bold text-accent">{welcomeState.progressPercent}%</p>
+                  <p className="font-mono text-xs font-bold text-[#fafafa]">{welcomeState.progressPercent}%</p>
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
                   <div
-                    className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent),#B8D4FF)] transition-all duration-700"
+                    className="h-full rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.3),rgba(255,255,255,0.1))] transition-all duration-700"
                     style={{ width: `${welcomeState.progressPercent}%` }}
                   />
                 </div>
@@ -418,7 +418,7 @@ export function WelcomePage() {
         {!rankResult && (
           <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="rounded-[2rem] border border-white/8 bg-white/[0.03] p-6 md:p-8">
-              <p className="font-mono-label text-accent mb-2">Early Athlete</p>
+              <p className="font-mono-label text-[#fafafa] mb-2">Early Athlete</p>
               <h2 className="text-4xl font-display font-bold text-foreground">Now see where you stand.</h2>
               <p className="mt-3 max-w-xl text-lg leading-relaxed text-muted-foreground">
                 Most founding members have already checked their benchmark. Yours is the starting point for everything that comes next.
@@ -434,7 +434,7 @@ export function WelcomePage() {
             </div>
 
             <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
-              <p className="font-mono-label text-accent mb-2">{welcomeState.bridgeLine}</p>
+              <p className="font-mono-label text-[#fafafa] mb-2">{welcomeState.bridgeLine}</p>
               <h2 className="text-3xl font-display font-bold text-foreground">Move up the founding list</h2>
               <p className="mt-2 text-base text-muted-foreground">{welcomeState.momentumLine}</p>
 
@@ -452,11 +452,11 @@ export function WelcomePage() {
               <div className="mt-6 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
                 <div className="mb-2 flex items-center justify-between gap-4">
                   <p className="text-sm font-semibold text-foreground">Progress to Elite</p>
-                  <p className="font-mono text-xs font-bold text-accent">{welcomeState.progressPercent}%</p>
+                  <p className="font-mono text-xs font-bold text-[#fafafa]">{welcomeState.progressPercent}%</p>
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
                   <div
-                    className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent),#B8D4FF)] transition-all duration-700"
+                    className="h-full rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.3),rgba(255,255,255,0.1))] transition-all duration-700"
                     style={{ width: `${welcomeState.progressPercent}%` }}
                   />
                 </div>
@@ -493,7 +493,7 @@ export function WelcomePage() {
 
         <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
-            <p className="font-mono-label text-accent mb-2">Founding Status</p>
+            <p className="font-mono-label text-[#fafafa] mb-2">Founding Status</p>
             <h2 className="text-3xl font-display font-bold text-foreground">Only founding members get this. Forever.</h2>
             <div className="mt-6 grid gap-3">
               {[
@@ -504,8 +504,8 @@ export function WelcomePage() {
                 'Private athlete community',
               ].map((benefit) => (
                 <div key={benefit} className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/10">
-                    <Check className="h-4 w-4 text-accent" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.04]">
+                    <Check className="h-4 w-4 text-[#fafafa]" />
                   </div>
                   <p className="text-sm font-medium text-foreground">{benefit}</p>
                 </div>
@@ -515,7 +515,7 @@ export function WelcomePage() {
           </div>
 
           <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
-            <p className="font-mono-label text-accent mb-2">What Happens Next</p>
+            <p className="font-mono-label text-[#fafafa] mb-2">What Happens Next</p>
             <h2 className="text-3xl font-display font-bold text-foreground">You&apos;ll get access before public launch.</h2>
             <div className="mt-6 space-y-4">
               {[
@@ -524,7 +524,7 @@ export function WelcomePage() {
                 "You'll get access before everyone else",
               ].map((step, index) => (
                 <div key={step} className="flex items-start gap-4 rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4">
-                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white/[0.04] font-mono text-sm font-bold text-accent">
+                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white/[0.04] font-mono text-sm font-bold text-[#fafafa]">
                     0{index + 1}
                   </div>
                   <p className="pt-1 text-sm font-medium text-foreground">{step}</p>
@@ -536,13 +536,13 @@ export function WelcomePage() {
         </section>
 
         <section className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
-          <p className="font-mono-label text-accent mb-2">Early Circle</p>
+          <p className="font-mono-label text-[#fafafa] mb-2">Early Circle</p>
           <h2 className="text-3xl font-display font-bold text-foreground">You&apos;re in early with athletes who train seriously.</h2>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
             We&apos;ll open a private channel for founding members before launch. Selective, not noisy.
           </p>
           <div className="mt-5 inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-foreground">
-            <Users className="h-4 w-4 text-accent" />
+            <Users className="h-4 w-4 text-[#fafafa]" />
             Community access opens soon.
           </div>
         </section>
