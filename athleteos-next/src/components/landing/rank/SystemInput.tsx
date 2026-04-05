@@ -18,10 +18,11 @@ export function GlassInput({ id, label, value, onChange, placeholder, min, max, 
       step={step}
       onChange={e => {
         const raw = e.target.value
-        // Strip leading zeros (prevent "080" → octal confusion)
-        const cleaned = raw.replace(/^0+(?=\d)/, '')
+        // Block negatives + strip leading zeros
+        const cleaned = raw.replace(/-/g, '').replace(/^0+(?=\d)/, '')
         onChange(cleaned)
       }}
+      onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault() }}
       onFocus={onFocus}
       className="system-input font-mono"
     />
