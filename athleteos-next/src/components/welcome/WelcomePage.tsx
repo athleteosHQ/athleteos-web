@@ -14,6 +14,8 @@ import { getFounderCount } from '@/lib/supabase'
 import type { RankResult } from '@/lib/rankCalc'
 
 import { getWelcomeState, type StoredFounderData } from './welcomeState'
+import { STORY_CARD_FILENAME } from './storyShareConfig'
+import { StoryShareCard } from './StoryShareCard'
 import { getWelcomeSharePayload } from './welcomeSharePayload'
 
 function parseFounderData(raw: string | null): StoredFounderData | null {
@@ -45,6 +47,7 @@ export function WelcomePage() {
   const [copied, setCopied] = useState(false)
   const [downloading, setDownloading] = useState(false)
   const shareCardRef = useRef<HTMLDivElement>(null)
+  const storyCardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setFounder(parseFounderData(localStorage.getItem('aos_founder_data')))
@@ -66,7 +69,6 @@ export function WelcomePage() {
   const sharePayload = useMemo(() => {
     if (!rankResult || !diagnosis || !founder) return null
     return getWelcomeSharePayload({
-      founderNumber: founder.num,
       diagnosisHeadline: diagnosis.headline,
     })
   }, [diagnosis, founder, rankResult])
@@ -94,16 +96,16 @@ export function WelcomePage() {
     window.setTimeout(() => setCopied(false), 1800)
   }
 
-  async function generateCardImage(): Promise<File | null> {
-    if (!shareCardRef.current) return null
-    const canvas = await html2canvas(shareCardRef.current, {
+  async function generateCardImage(node: HTMLDivElement | null, filename: string): Promise<File | null> {
+    if (!node) return null
+    const canvas = await html2canvas(node, {
       backgroundColor: null,
       scale: 2,
     })
     return new Promise((resolve) => {
       canvas.toBlob((blob) => {
         if (!blob) { resolve(null); return }
-        resolve(new File([blob], 'athleteos-rank-card.png', { type: 'image/png' }))
+        resolve(new File([blob], filename, { type: 'image/png' }))
       }, 'image/png')
     })
   }
@@ -138,7 +140,7 @@ export function WelcomePage() {
     })
     setDownloading(true)
     try {
-      const file = await generateCardImage()
+      const file = await generateCardImage(storyCardRef.current, STORY_CARD_FILENAME)
       if (!file) { setDownloading(false); return }
 
       // Web Share API with file — opens native share sheet with Instagram Stories as an option on mobile
@@ -153,7 +155,7 @@ export function WelcomePage() {
         const url = URL.createObjectURL(file)
         const link = document.createElement('a')
         link.href = url
-        link.download = 'athleteos-rank-card.png'
+        link.download = STORY_CARD_FILENAME
         link.click()
         URL.revokeObjectURL(url)
       }
@@ -210,14 +212,24 @@ export function WelcomePage() {
   return (
     <main className="grid-bg relative min-h-screen overflow-hidden bg-background px-6 py-10 md:px-10 md:py-14">
       {rankResult && sharePayload && diagnosis && (
-        <RankShareCard
-          ref={shareCardRef}
-          result={rankResult}
-          founderLabel={sharePayload.foundingLabel}
-          badgeLabel={sharePayload.badgeLabel}
-          diagnosisLabel={sharePayload.diagnosisLabel}
-          diagnosisHeadline={diagnosis.headline}
-        />
+        <>
+          <RankShareCard
+            ref={shareCardRef}
+            result={rankResult}
+            founderLabel={sharePayload.foundingLabel}
+            badgeLabel={sharePayload.badgeLabel}
+            diagnosisLabel={sharePayload.diagnosisLabel}
+            diagnosisHeadline={diagnosis.headline}
+          />
+          <StoryShareCard
+            ref={storyCardRef}
+            result={rankResult}
+            founderLabel={sharePayload.badgeLabel}
+            cohortLabel={sharePayload.foundingLabel}
+            diagnosisLabel={sharePayload.diagnosisLabel}
+            diagnosisHeadline={diagnosis.headline}
+          />
+        </>
       )}
 
       <div className="pointer-events-none absolute inset-0">
@@ -235,7 +247,8 @@ export function WelcomePage() {
           <div className="max-w-4xl">
             <p className="font-mono-label text-[#fafafa] mb-4">Athletes are joining fast.</p>
             <h1 className="text-5xl font-display font-bold tracking-tight text-foreground md:text-7xl">You&apos;re early.</h1>
-            <p className="mt-3 font-display text-2xl font-bold text-foreground md:text-4xl">Founding Member #{welcomeState.founderNumber}</p>
+            <p className="mt-3 font-display text-2xl font-bold text-foreground md:text-4xl">Founding Member</p>
+            <p className="mt-2 font-mono-label text-muted-foreground">First Cohort</p>
             <p className="mt-3 text-lg text-muted-foreground md:text-xl">You train with intent.</p>
 
             <div className="mt-10 space-y-3">
@@ -316,7 +329,7 @@ export function WelcomePage() {
                   </div>
                   <div className="text-right">
                     <p className="font-mono-label text-muted-foreground mb-1">Founding Status</p>
-                    <p className="text-lg font-bold text-foreground">{sharePayload?.foundingLabel ?? `#${welcomeState.founderNumber}`}</p>
+                    <p className="text-lg font-bold text-foreground">{sharePayload?.foundingLabel ?? 'First Cohort'}</p>
                   </div>
                 </div>
 
@@ -355,13 +368,13 @@ export function WelcomePage() {
 
             <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
               <p className="font-mono-label text-[#fafafa] mb-2">{welcomeState.bridgeLine}</p>
-              <h2 className="text-3xl font-display font-bold text-foreground">Move up the founding list</h2>
+              <h2 className="text-3xl font-display font-bold text-foreground">Unlock Elite status</h2>
               <p className="mt-2 text-base text-muted-foreground">{welcomeState.momentumLine}</p>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
-                  <p className="font-mono-label text-muted-foreground mb-2">Position</p>
-                  <p className="text-3xl font-display font-bold text-foreground">#{Math.max(1, welcomeState.founderNumber - welcomeState.shareCount * 100)}</p>
+                  <p className="font-mono-label text-muted-foreground mb-2">Cohort</p>
+                  <p className="text-3xl font-display font-bold text-foreground">First Cohort</p>
                 </div>
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
                   <p className="font-mono-label text-muted-foreground mb-2">Tier</p>
@@ -434,13 +447,13 @@ export function WelcomePage() {
 
             <div className="rounded-[2rem] border border-white/8 bg-white/[0.02] p-6 md:p-8">
               <p className="font-mono-label text-[#fafafa] mb-2">{welcomeState.bridgeLine}</p>
-              <h2 className="text-3xl font-display font-bold text-foreground">Move up the founding list</h2>
+              <h2 className="text-3xl font-display font-bold text-foreground">Unlock Elite status</h2>
               <p className="mt-2 text-base text-muted-foreground">{welcomeState.momentumLine}</p>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
-                  <p className="font-mono-label text-muted-foreground mb-2">Position</p>
-                  <p className="text-3xl font-display font-bold text-foreground">#{welcomeState.founderNumber}</p>
+                  <p className="font-mono-label text-muted-foreground mb-2">Cohort</p>
+                  <p className="text-3xl font-display font-bold text-foreground">First Cohort</p>
                 </div>
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
                   <p className="font-mono-label text-muted-foreground mb-2">Tier</p>

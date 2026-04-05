@@ -309,7 +309,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
                 Founding rate: <span className="text-foreground font-semibold">{'\u20B9'}2,999/year</span> <span className="text-muted-foreground/60">({'\u20B9'}250/mo)</span>
               </p>
               <span className="shrink-0 text-xs text-muted-foreground/50">
-                {founderCount !== null && founderCount > 0 ? `${Math.max(0, 50 - founderCount)} of 50 left` : 'Limited spots'}
+                First Cohort access
               </span>
             </div>
             <p className="mt-1 text-xs text-muted-foreground/50">Regular price will be {'\u20B9'}599/month after launch.</p>

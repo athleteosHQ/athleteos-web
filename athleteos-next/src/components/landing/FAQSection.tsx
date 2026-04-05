@@ -36,7 +36,7 @@ const FAQS: FAQ[] = [
     q: 'What does founding membership cost?',
     a: (
       <>
-        <span>Founding members lock in ₹2,999/year (₹250/month) — 58% off the regular ₹599/month. Only 50 spots. No payment is required now — you pay only when the product activates.</span>
+        <span>Founding members lock in ₹2,999/year (₹250/month) — 58% off the regular ₹599/month. No payment is required now — you pay only when the product activates.</span>
         <span className="block mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.15)' }}>Your founding rate is locked forever. When pricing goes up, yours stays.</span>
       </>
     ),

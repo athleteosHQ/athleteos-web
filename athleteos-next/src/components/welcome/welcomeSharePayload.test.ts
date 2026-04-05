@@ -20,26 +20,22 @@ const result: RankResult = {
 describe('getWelcomeSharePayload', () => {
   it('builds a share message that includes status and diagnosis', () => {
     const payload = getWelcomeSharePayload({
-      founderNumber: 23,
-      result,
       diagnosisHeadline: 'Bench is the clearest gap in your current profile.',
     })
 
-    expect(payload.shareMessage).toContain('Top 6%')
+    expect(payload.shareMessage).toContain('Founding Member')
     expect(payload.shareMessage).toContain('bench')
-    expect(payload.shareMessage).toContain('Founding Member #23')
+    expect(payload.shareMessage).toContain('First Cohort')
     expect(payload.shareMessage).toContain('athleteos.io')
   })
 
   it('builds card labels that reinforce identity and next-step utility', () => {
     const payload = getWelcomeSharePayload({
-      founderNumber: 23,
-      result,
       diagnosisHeadline: 'Bench is the clearest gap in your current profile.',
     })
 
-    expect(payload.badgeLabel).toBe('Early Athlete')
-    expect(payload.foundingLabel).toBe('Founding Member #23')
+    expect(payload.badgeLabel).toBe('Founding Member')
+    expect(payload.foundingLabel).toBe('First Cohort')
     expect(payload.diagnosisLabel).toBe('Primary Constraint')
   })
 })
