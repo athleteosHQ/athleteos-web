@@ -58,7 +58,7 @@ export function SignupGateSection({ overallPct }: SignupGateSectionProps) {
   }, [])
 
   useEffect(() => {
-    getFounderCount().then(setFounderCount)
+    getFounderCount().then(c => { if (c !== null) setFounderCount(c) })
   }, [])
 
   useEffect(() => {

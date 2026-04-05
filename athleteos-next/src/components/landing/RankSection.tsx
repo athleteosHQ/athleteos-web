@@ -9,6 +9,7 @@ import { AthleteScoreCard } from './AthleteScoreCard'
 import { getFirstReadDiagnosis } from './firstReadDiagnosis'
 import { ShareActions } from './ShareActions'
 import { RankForm, type RankFormFields } from './rank/RankForm'
+import { getRankFormValidation } from './rank/rankValidation'
 import { DiagnosticBars, ResultInsightPanel } from './rank/RankResult'
 import { GhostTierPreview } from './rank/GhostTierPreview'
 import { type AthleteMode, ModeSelector } from './ModeSelector'
@@ -55,6 +56,17 @@ export function RankSection({ mode, onModeChange, onRankResult }: RankSectionPro
     trackEvent('rank_check_started', { trainingType })
     const bw = parseFloat(f.bw)
     if (isNaN(bw) || bw < 40 || bw > 250) { setError('Enter a valid bodyweight (40–250 kg)'); trackEvent('rank_form_error', { error_type: 'invalid_bodyweight', mode: trainingType, fields_filled: Object.values(f).filter(v => v !== '').length }); return }
+    const validation = getRankFormValidation({ fields: f, trainingType })
+    if (validation.error) {
+      setError(validation.error)
+      trackEvent('rank_form_error', {
+        error_type: 'invalid_lift_data',
+        error_message: validation.error,
+        mode: trainingType,
+        fields_filled: Object.values(f).filter(v => v !== '').length,
+      })
+      return
+    }
     const input: RankInput = {
       bodyweight: bw,
       trainingType,

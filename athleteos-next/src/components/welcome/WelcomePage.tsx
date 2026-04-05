@@ -49,7 +49,7 @@ export function WelcomePage() {
   useEffect(() => {
     setFounder(parseFounderData(localStorage.getItem('aos_founder_data')))
     setRankResult(parseRankResult(localStorage.getItem('aos_rank_result')))
-    getFounderCount().then(setFounderCount).catch(() => {})
+    getFounderCount().then(c => { if (c !== null) setFounderCount(c) }).catch(() => {})
   }, [])
 
   const welcomeState = useMemo(() => {
@@ -67,7 +67,6 @@ export function WelcomePage() {
     if (!rankResult || !diagnosis || !founder) return null
     return getWelcomeSharePayload({
       founderNumber: founder.num,
-      result: rankResult,
       diagnosisHeadline: diagnosis.headline,
     })
   }, [diagnosis, founder, rankResult])
