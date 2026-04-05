@@ -67,7 +67,6 @@ export function WelcomePage() {
     if (!rankResult || !diagnosis || !founder) return null
     return getWelcomeSharePayload({
       founderNumber: founder.num,
-      result: rankResult,
       diagnosisHeadline: diagnosis.headline,
     })
   }, [diagnosis, founder, rankResult])

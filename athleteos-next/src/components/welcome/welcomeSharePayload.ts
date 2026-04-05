@@ -1,8 +1,5 @@
-import type { RankResult } from '@/lib/rankCalc'
-
 interface WelcomeSharePayloadInput {
   founderNumber: number
-  result: RankResult
   diagnosisHeadline: string
 }
 
@@ -15,16 +12,15 @@ interface WelcomeSharePayload {
 
 export function getWelcomeSharePayload({
   founderNumber,
-  result,
   diagnosisHeadline,
 }: WelcomeSharePayloadInput): WelcomeSharePayload {
-  const topPercent = Math.max(1, 100 - result.overallPct)
+  const primaryConstraint = diagnosisHeadline.split(' ')[0].toLowerCase()
 
   return {
     badgeLabel: 'Early Athlete',
     foundingLabel: `Founding Member #${founderNumber}`,
     diagnosisLabel: 'Primary Constraint',
-    shareMessage: `Top ${topPercent}% of competitive strength athletes. AthleteOS flagged my ${diagnosisHeadline.split(' ')[0].toLowerCase()} as the gap. Founding Member #${founderNumber} — check where you stand: athleteos.io`,
+    shareMessage: `Been training hard and still stuck? AthleteOS showed me what was actually holding my performance back: ${primaryConstraint}. I got in early as Founding Member #${founderNumber}. Check yours: athleteos.io`,
   }
 }
 

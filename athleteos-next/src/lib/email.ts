@@ -14,7 +14,7 @@ export async function sendFounderWelcomeEmail({ to, founderNumber }: FounderWelc
     const { error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to,
-      subject: `🏋️ You're Founding Member #${founderNumber} — Welcome to AthleteOS`,
+      subject: `You're in: Founding Member #${founderNumber}`,
       html: buildFounderEmailHtml(founderNumber),
     })
 
@@ -31,11 +31,13 @@ export async function sendFounderWelcomeEmail({ to, founderNumber }: FounderWelc
 }
 
 function buildFounderEmailHtml(founderNumber: number): string {
-  // Personalized founder note based on how early they are
   const earlyBird = founderNumber <= 10
   const founderNote = earlyBird
-    ? `You're one of the first ${founderNumber} people on the planet to bet on this. That's not a marketing line — I literally built this because I was tired of staring at 3 apps that couldn't tell me why my squat stalled for 4 months. Turns out it was a 27% protein drift my tracker never flagged. That's the moment AthleteOS was born. And now you're part of it before anyone else even knows it exists.`
-    : `${founderNumber} athletes have now joined before the system is even live. Not because of a landing page — because they've felt the same frustration. You track everything. You train hard. And still, something isn't moving. That gap between effort and result? That's what we're building to close. You're here early enough to shape how.`
+    ? `You're early because you've felt the same thing I did: you train hard, track everything, and still don't know why performance gets stuck.`
+    : `You're in because you've felt the same thing most athletes never get an answer to: you train hard, track everything, and still something refuses to move.`
+  const founderContext = earlyBird
+    ? `I built AthleteOS after getting tired of switching between training logs, nutrition apps, and recovery metrics that could show me numbers but not the reason my progress stalled.`
+    : `AthleteOS exists to close that gap between effort and result with one clear diagnosis instead of more disconnected dashboards.`
 
   return `<!DOCTYPE html>
 <html>
@@ -53,13 +55,17 @@ function buildFounderEmailHtml(founderNumber: number): string {
 
       <!-- 🔥 Personal founder note — the screenshot moment -->
       <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;margin-bottom:32px;">
-        <p style="margin:0 0 12px;font-size:13px;color:#FAFAFA;font-weight:700;">A personal note from the founder 👋</p>
+        <p style="margin:0 0 12px;font-size:13px;color:#FAFAFA;font-weight:700;">A personal note from the founder</p>
         <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#a1a1aa;">
           ${founderNote}
         </p>
-        <p style="margin:0;font-size:14px;line-height:1.7;color:#FAFAFA;font-weight:600;">
-          This email is my personal commitment: I'll build something worth your trust. If I don't — full refund, no questions. 🤝
+        <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#a1a1aa;">
+          ${founderContext}
         </p>
+        <p style="margin:0;font-size:14px;line-height:1.7;color:#FAFAFA;font-weight:600;">
+          Not with more tracking. With one clear answer: what's limiting progress, and what to change next.
+        </p>
+        <p style="margin:12px 0 0;font-size:13px;color:#71717A;">As a founding member, you'll have direct access to me while we build it.</p>
         <p style="margin:12px 0 0;font-size:13px;color:#71717A;">— Swetabh, Founder</p>
       </div>
 
@@ -81,17 +87,17 @@ function buildFounderEmailHtml(founderNumber: number): string {
 
         <div style="padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;">
           <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ ₹250/mo founding rate — locked forever</p>
-          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">Regular price will be ₹599/mo. Yours never changes.</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">Regular price will be ₹599/mo. Yours stays fixed.</p>
         </div>
 
         <div style="padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;">
-          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ Direct WhatsApp access to the founder</p>
-          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">First 90 days. Not a support bot — the actual founder.</p>
+          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ Direct WhatsApp line to the founder</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">First 90 days. Not a support bot. Me.</p>
         </div>
 
         <div style="padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
-          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ You shape what gets built</p>
-          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">Your feedback directly influences the product roadmap.</p>
+          <p style="margin:0;font-size:14px;color:#FAFAFA;">✅ Your feedback shapes the system before public launch</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#71717A;">The first version gets built with founding-member input.</p>
         </div>
       </div>
 
@@ -124,7 +130,7 @@ function buildFounderEmailHtml(founderNumber: number): string {
       <!-- The thesis -->
       <div style="background:rgba(255,255,255,0.02);border-left:2px solid rgba(255,255,255,0.1);padding:16px 20px;margin-bottom:32px;border-radius:0 8px 8px 0;">
         <p style="font-size:15px;line-height:1.7;color:#FAFAFA;margin:0 0 8px;font-weight:600;">
-          Most athletes have the data. The insight is missing.
+          Most athletes already have the data. They just don't have the diagnosis.
         </p>
         <p style="font-size:13px;line-height:1.6;color:#71717A;margin:0;">
           AthleteOS reads your training, nutrition, and recovery as one system — finds the one thing limiting progress — and tells you exactly what to change. Not more numbers. One decision.
@@ -133,7 +139,7 @@ function buildFounderEmailHtml(founderNumber: number): string {
 
       <!-- Sign off -->
       <p style="font-size:16px;color:#FAFAFA;margin:0 0 32px;font-weight:700;">
-        Train hard. We'll handle the rest. 💪
+        Train hard. We'll find the limiter.
       </p>
 
       <!-- Signature -->
