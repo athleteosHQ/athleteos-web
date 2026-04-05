@@ -13,6 +13,12 @@ interface RankFieldsLike {
 type TrainingType = 'strength' | 'hybrid'
 type RankFieldKey = keyof RankFieldsLike
 type RankFieldErrors = Partial<Record<RankFieldKey, string>>
+type LiftFieldPair = {
+  weight: string
+  reps: string
+  weightKey: RankFieldKey
+  repsKey: RankFieldKey
+}
 
 const MIN_BODYWEIGHT = 40
 const MAX_BODYWEIGHT = 250
@@ -47,7 +53,7 @@ export function getRankFormValidation({
   fields: RankFieldsLike
   trainingType: TrainingType
 }): { error: string | null; hasCompleteLift: boolean; fieldErrors: RankFieldErrors } {
-  const lifts = [
+  const lifts: LiftFieldPair[] = [
     { weight: fields.sqW, reps: fields.sqR, weightKey: 'sqW', repsKey: 'sqR' },
     { weight: fields.bpW, reps: fields.bpR, weightKey: 'bpW', repsKey: 'bpR' },
     { weight: fields.dlW, reps: fields.dlR, weightKey: 'dlW', repsKey: 'dlR' },
