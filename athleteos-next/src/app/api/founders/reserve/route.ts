@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendFounderWelcomeEmail } from '@/lib/email'
+import { checkRateLimit, getClientIp, isAllowedOrigin, ALLOWED_DOMAINS } from '@/lib/rate-limit'
+
+/** Strip HTML tags to prevent stored XSS */
+function stripHtml(v: string): string {
+  return v.replace(/<[^>]*>/g, '').trim()
+}
 
 interface ReserveBody {
   name?: string
@@ -11,6 +17,7 @@ interface ReserveBody {
   discipline?: string
   experience?: string
   referrer_id?: string
+  website?: string  // honeypot — bots fill this, real users don't see it
 }
 
 const VALID_DISCIPLINES = ['POWERLIFTING', 'WEIGHTLIFTING', 'HYBRID', 'BODYBUILDING']
@@ -29,16 +36,37 @@ function getMissingOptionalColumns(message: string) {
   return OPTIONAL_COLUMNS.filter((column) => message.includes(`'${column}' column`))
 }
 
-async function insertFounderRow(insertData: Record<string, string>) {
+async function insertFounderRow(insertData: Record<string, string | null>) {
   return supabaseAdmin.from('founders_waitlist').insert(insertData).select('id, founder_number').single()
 }
 
 export async function POST(req: NextRequest) {
+  // ── Rate limiting (5 attempts per IP per minute) ──
+  const ip = getClientIp(req.headers)
+  const limit = checkRateLimit(ip, { maxRequests: 5, windowMs: 60_000 })
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(limit.resetIn / 1000)) } },
+    )
+  }
+
+  // ── Origin check ──
+  if (!isAllowedOrigin(req.headers, ALLOWED_DOMAINS)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   let body: ReserveBody
   try {
     body = await req.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  // ── Honeypot — if 'website' field is filled, it's a bot ──
+  if (body.website) {
+    // Silently accept to not tip off the bot, but don't insert
+    return NextResponse.json({ id: 'ok', founder_number: 0 })
   }
 
   const { name, email, whatsapp, country, source, discipline, experience, referrer_id } = body
@@ -51,7 +79,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Valid WhatsApp number is required' }, { status: 400 })
   }
   // Validate source against allowlist
-  const VALID_SOURCES = ['rank-gate', 'hero', 'sticky-bar', 'direct']
+  const VALID_SOURCES = ['rank-gate', 'hero', 'sticky-bar', 'direct', 'inline_rank_result']
   if (!source?.trim() || !VALID_SOURCES.includes(source.trim())) {
     return NextResponse.json({ error: 'Invalid source' }, { status: 400 })
   }
@@ -79,11 +107,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid referrer' }, { status: 400 })
   }
 
-  const insertData: Record<string, string> = {
-    name: name?.trim() || '',
-    email: email.trim(),
-    whatsapp: whatsapp?.trim() || '',
-    country: country?.trim() || '',
+  const insertData: Record<string, string | null> = {
+    name: name ? stripHtml(name) : '',
+    email: email.trim().toLowerCase(),
+    whatsapp: whatsapp?.trim() || null,  // null not '' — avoids unique constraint clash on empty strings
+    country: country ? stripHtml(country) : '',
     source: source.trim(),
   }
   if (discipline) insertData.discipline = discipline
